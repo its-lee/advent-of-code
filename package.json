@@ -1,0 +1,26 @@
+{
+  "name": "advent-of-code",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "lint": "eslint src/**/*.js",
+    "run": "npm run index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/its-lee/advent-of-code.git"
+  },
+  "author": "Lee Crosby",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/its-lee/advent-of-code/issues"
+  },
+  "homepage": "https://github.com/its-lee/advent-of-code#readme",
+  "devDependencies": {
+    "eslint": "^8.29.0",
+    "eslint-config-prettier": "^8.5.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.0"
+  }
+}
