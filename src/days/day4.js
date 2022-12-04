@@ -1001,15 +1001,19 @@ const input = `54-59,17-62
 41-63,40-63
 87-90,89-90`.split('\n');
 
+const parseRanges = s =>
+  s.split(',').map(r => {
+    const [s, e] = r.split('-');
+    return range(parseInt(s), parseInt(e) + 1);
+  });
+
 export default [
   input
-    .map(s => {
-      const a = s.split(',').map(r => {
-        const [s, e] = r.split('-');
-        return range(parseInt(s), parseInt(e) + 1);
-      });
-      const u = union(...a);
-      return u.length === Math.max(...a.map(v => v.length));
-    })
+    .map(parseRanges)
+    .map(v => union(...v).length === Math.max(...v.map(a => a.length)))
+    .reduce(...sumReducer()),
+  input
+    .map(parseRanges)
+    .map(v => !!intersect(...v).length)
     .reduce(...sumReducer())
 ];
