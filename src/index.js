@@ -932,14 +932,14 @@ CfzPVzCfPBzPBqvWqgBwjNLjjS`.split('\n');
 const sumReducer = () => [(acc, v) => acc + v, 0];
 
 const chunkReducer = size => {
+  let chunk = [];
   return [
     (acc, v) => {
-      let chunk = acc[acc.length - 1];
-      if (!chunk || chunk.length === size) {
-        chunk = [];
-        acc.push(chunk);
-      }
       chunk.push(v);
+      if (chunk.length === size) {
+        acc.push(chunk);
+        chunk = [];
+      }
       return acc;
     },
     []
