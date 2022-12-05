@@ -1,3 +1,3 @@
-import result from './days/day4.js';
+import result from './days/day5.js';
 
 console.log(result);
