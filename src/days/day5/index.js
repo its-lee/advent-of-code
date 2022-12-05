@@ -1,4 +1,4 @@
-import { sumReducer } from '../helpers.js';
+import { sumReducer } from '../../helpers.js';
 
 const input = `[P]     [L]         [T]            
 [L]     [M] [G]     [G]     [S]    

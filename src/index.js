@@ -1,3 +1,5 @@
-import result from './days/day5.js';
+const day = process.argv[2];
 
-console.log(result);
+const module = await import(`./days/day${day}/index.js`);
+
+console.log(module.default);

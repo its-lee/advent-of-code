@@ -1,4 +1,4 @@
-import { sumReducer, chunkReducer, intersect, charCode } from '../helpers.js';
+import { sumReducer, chunkReducer, intersect, charCode } from '../../helpers.js';
 
 const input = `NLBLfrNNLvqwbMfDqSjSzzSJjjggcdVs
 lTRGPPZnRRHszcsZdSsccZ

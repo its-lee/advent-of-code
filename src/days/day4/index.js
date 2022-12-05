@@ -1,4 +1,4 @@
-import { sumReducer, chunkReducer, intersect, charCode, range, union } from '../helpers.js';
+import { sumReducer, chunkReducer, intersect, charCode, range, union } from '../../helpers.js';
 
 const input = `54-59,17-62
 20-93,57-92
