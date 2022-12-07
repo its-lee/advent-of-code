@@ -46,7 +46,4 @@ const sizeUnder100000 = Object.values(recursiveSizes).filter(size => size <= 100
 
 // path === '/ftj' is too small
 
-export default [
-  pathSizes
-  //, recursiveSizes, sizeUnder100000
-];
+export default [pathSizes, recursiveSizes, sizeUnder100000];
