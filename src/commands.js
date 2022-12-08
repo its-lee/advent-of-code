@@ -58,18 +58,18 @@ export const handleTestCommand = async () => {
   const addFail = (dayIndex, message) => fails.push(`Day #${dayIndex}: ${message}`);
 
   const days = await getAllDays();
-  Object.entries(days).forEach(([index, { day, error }]) => {
+  Object.entries(days).forEach(([dayIndex, { day, error }]) => {
     if (error) {
-      addFail(index, error);
+      addFail(dayIndex, error);
     }
 
     if (!day) {
       return;
     }
 
-    day.parts.forEach(({ actual, expected }) => {
+    day.parts.forEach(({ actual, expected }, partIndex) => {
       if (expected !== undefined && expected !== actual) {
-        addFail(index, `Returns ${actual} != ${expected}`);
+        addFail(dayIndex, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
     });
   });
