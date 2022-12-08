@@ -1,5 +1,8 @@
+import { promises as fs } from 'fs';
+
 const readData = async (day, input) => {
-  return (await import(`../days/day${day}/${input ? 'input' : 'demo'}.js`)).default;
+  const path = `src/days/day${day}/${input ? 'input' : 'demo'}.txt`;
+  return (await fs.readFile(path, 'utf-8')).trim();
 };
 
 export default dayCallback => {

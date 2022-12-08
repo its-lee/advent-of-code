@@ -1,4 +1,4 @@
-export default `[P]     [L]         [T]            
+[P]     [L]         [T]            
 [L]     [M] [G]     [G]     [S]    
 [M]     [Q] [W]     [H] [R] [G]    
 [N]     [F] [M]     [D] [V] [R] [N]
@@ -509,4 +509,4 @@ move 2 from 4 to 8
 move 2 from 5 to 8
 move 5 from 7 to 9
 move 27 from 7 to 5
-move 2 from 9 to 6`;
+move 2 from 9 to 6

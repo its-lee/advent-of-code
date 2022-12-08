@@ -1,4 +1,4 @@
-export default `NLBLfrNNLvqwbMfDqSjSzzSJjjggcdVs
+NLBLfrNNLvqwbMfDqSjSzzSJjjggcdVs
 lTRGPPZnRRHszcsZdSsccZ
 CFTTFtFHTtCtDDzrmBtrBD
 BJldgBWnRgWNWtllSlWShMcLcVSvVjbVVVvDVVVL
@@ -297,4 +297,4 @@ tlhbHbmNTbQgbGRvbZGrcg
 tVFLQNVlmTmQLQhpzMCBzCpzjjFMnz
 qhWHwNqLHrLJjqgHddFchMdnnGnRhMcR
 pTzTPVfZQPffNVtVVZfptRGsRbbbbcDsMMZsMZMdRn
-CfzPVzCfPBzPBqvWqgBwjNLjjS`;
+CfzPVzCfPBzPBqvWqgBwjNLjjS

@@ -33,7 +33,7 @@ export const handleDayCommand = async ([day]) => {
   requireDayParameter(day);
 
   const parts = await getDay(day);
-  console.log(parts);
+  console.log(JSON.stringify(parts));
 };
 
 export const handleTestCommand = async () => {

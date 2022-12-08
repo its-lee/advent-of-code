@@ -1,4 +1,4 @@
-export default `$ cd /
+$ cd /
 $ ls
 dir blrnnv
 dir ctfjwl
@@ -988,4 +988,4 @@ $ ls
 $ cd ..
 $ cd ztrz
 $ ls
-187968 fzjdz.thw`;
+187968 fzjdz.thw
