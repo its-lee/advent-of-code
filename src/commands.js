@@ -1,5 +1,5 @@
 import { range } from './helpers/utility.js';
-import { copyDir } from './helpers/files.js';
+import { fileExists, copyDir } from './helpers/files.js';
 
 const getDay = async (day, options) => {
   const runner = (await import(`./days/day${day}/index.js`)).default;
@@ -84,7 +84,10 @@ export const handleNewCommand = async ([day]) => {
   day = parseDayParameter(day);
 
   const dest = `src/days/day${day}`;
-  await copyDir(`src/templates/day`, dest);
+  if (fileExists(dest)) {
+    throw new Error(`${dest} already exists.`);
+  }
 
+  await copyDir(`src/templates/day`, dest);
   console.log(`Created new folder ${dest}`);
 };
