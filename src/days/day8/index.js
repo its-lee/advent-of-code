@@ -20,14 +20,14 @@ export default day(({ answer, source }) => {
     ];
   };
 
-  const countVisibleCells = () => {
+  const getVisibleCells = () => {
     return cells.filter(({ value, x, y }) => {
       const tallerOrEqualCells = cells.filter(c => c.value >= value);
       return computeDirections(tallerOrEqualCells, x, y).some(d => d.length === 0);
-    }).length;
+    });
   };
 
-  answer(countVisibleCells(), 1796);
+  answer(getVisibleCells().length, 1796);
 
   const scoreCells = () => {
     return cells.map(({ value, x, y }) => {
