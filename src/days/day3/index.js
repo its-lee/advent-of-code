@@ -3,8 +3,8 @@ import { charCode } from '../../helpers/utility.js';
 import { intersect } from '../../helpers/logic.js';
 import { sumReducer, chunkReducer } from '../../helpers/reducers.js';
 
-export default day(({ part, input }) => {
-  const lines = input.split('\n');
+export default day(({ part, source }) => {
+  const lines = source.split('\n');
 
   part(
     lines

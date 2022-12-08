@@ -1,10 +1,10 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, input }) => {
+export default day(({ part, source }) => {
   let currentPath = [];
   const pathSizes = {};
 
-  input.split('\n').forEach(l => {
+  source.split('\n').forEach(l => {
     //console.log(l);
     if (l.startsWith('$')) {
       // cd or ls

@@ -1,8 +1,8 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, input }) => {
+export default day(({ part, source }) => {
   const sumOfTop = limit =>
-    input
+    source
       .split('\n\n')
       .map(s => s.split('\n'))
       .map(g => g.reduce((prev, curr) => prev + parseInt(curr), 0))

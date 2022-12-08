@@ -1,20 +1,19 @@
 import { promises as fs } from 'fs';
 
-const readData = async (day, input) => {
-  const path = `src/days/day${day}/${input ? 'input' : 'demo'}.txt`;
+const readData = async (day, source) => {
+  const path = `src/days/day${day}/${source}.txt`;
   return (await fs.readFile(path, 'utf-8')).trim();
 };
 
 export default dayCallback => {
-  return async day => {
+  return async (day, { source = 'input' } = {}) => {
     const parts = [];
 
     dayCallback({
+      source: await readData(day, source),
       part(actual, expected = undefined) {
         parts.push({ actual, expected });
-      },
-      input: await readData(day, true),
-      demo: await readData(day, false)
+      }
     });
 
     return { parts };

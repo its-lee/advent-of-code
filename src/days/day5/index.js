@@ -1,7 +1,7 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, input }) => {
-  const [stringizedInitialState, moves] = input.split('\n\n');
+export default day(({ part, source }) => {
+  const [stringizedInitialState, moves] = source.split('\n\n');
 
   const computeInitialState = () => {
     const stateRows = stringizedInitialState.split('\n').slice(0, -1).reverse();

@@ -1,9 +1,9 @@
 import { range } from './helpers/utility.js';
 import { copyDir } from './helpers/files.js';
 
-const getDay = async day => {
+const getDay = async (day, options) => {
   const runner = (await import(`./days/day${day}/index.js`)).default;
-  return await runner(day);
+  return await runner(day, options);
 };
 
 const getAllDays = async () => {
@@ -23,16 +23,33 @@ const getAllDays = async () => {
   return loaded;
 };
 
-const requireDayParameter = day => {
+const parseDayParameter = day => {
   if (!day || isNaN(parseInt(day))) {
-    throw new Error('A numeric day parameter is required');
+    throw new Error(`A numeric day parameter is required - received ${day}`);
   }
+
+  return day;
 };
 
-export const handleDayCommand = async ([day]) => {
-  requireDayParameter(day);
+const parseSourceParameter = source => {
+  const sources = {
+    i: 'input',
+    d: 'demo'
+  };
 
-  const parts = await getDay(day);
+  if (!(source in sources)) {
+    const valid = Object.keys(sources).join(', ');
+    throw new Error(`A valid source parameter is required (one of ${valid}) - received ${source}`);
+  }
+
+  return sources[source];
+};
+
+export const handleDayCommand = async ([day, source = 'i']) => {
+  day = parseDayParameter(day);
+  source = parseSourceParameter(source);
+
+  const parts = await getDay(day, { source });
   console.log(JSON.stringify(parts));
 };
 
@@ -64,7 +81,7 @@ export const handleTestCommand = async () => {
 };
 
 export const handleNewCommand = async ([day]) => {
-  requireDayParameter(day);
+  day = parseDayParameter(day);
 
   const dest = `src/days/day${day}`;
   await copyDir(`src/templates/day`, dest);

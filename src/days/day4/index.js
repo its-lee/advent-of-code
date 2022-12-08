@@ -3,8 +3,8 @@ import { range } from '../../helpers/utility.js';
 import { intersect, union } from '../../helpers/logic.js';
 import { sumReducer } from '../../helpers/reducers.js';
 
-export default day(({ part, input }) => {
-  const lines = input.split('\n');
+export default day(({ part, source }) => {
+  const lines = source.split('\n');
 
   const parseRanges = s =>
     s.split(',').map(r => {

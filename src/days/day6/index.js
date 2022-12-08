@@ -1,10 +1,10 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, input }) => {
+export default day(({ part, source }) => {
   const findPacketIndex = markerLength => {
     const cyclicBuffer = [];
 
-    for (const [i, c] of input.split('').entries()) {
+    for (const [i, c] of source.split('').entries()) {
       if (new Set(cyclicBuffer).size === markerLength) {
         return i;
       }
