@@ -5,7 +5,9 @@ import { sumReducer } from '../../helpers/reducers.js';
 
 export default day(({ answer, source }) => {
   const gameScore = (them, us) => {
-    const winDrawLose = (3 + us - them) % 3;
+    // winDrawLose = -1 = lose, 0 = draw, 1 = win
+    let winDrawLose = (3 + us - them) % 3;
+    winDrawLose = winDrawLose === 2 ? -1 : winDrawLose;
     return (winDrawLose + 1) * 3;
   };
 
@@ -15,12 +17,9 @@ export default day(({ answer, source }) => {
       .map(l => {
         let [them, us] = l.toLowerCase().split(' ').map(charCode);
         us -= 23;
-
-        console.log(them, us, 'score: ', us, '+', gameScore(them, us));
         return us + gameScore(them, us);
-
-        // final score = us + (score for winning)
       })
-      .reduce(...sumReducer())
+      .reduce(...sumReducer()),
+    15523
   );
 });

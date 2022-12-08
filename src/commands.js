@@ -50,7 +50,7 @@ export const handleDayCommand = async ([day, source = 'i']) => {
   source = parseSourceParameter(source);
 
   const parts = await getDay(day, { source });
-  console.log(JSON.stringify(parts));
+  console.log(JSON.stringify(parts, null, 2));
 };
 
 export const handleTestCommand = async () => {
