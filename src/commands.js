@@ -1,3 +1,4 @@
+const { promises: fs } = require('fs');
 import { range } from './helpers.js';
 
 const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
@@ -59,8 +60,23 @@ export const handleTestCommand = async () => {
   }
 };
 
-export const handleNewCommand = ([day]) => {
+const copyDir = async (src, dest) => {
+  await fs.mkdir(dest, { recursive: true });
+  const entries = await fs.readdir(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+    const destPath = path.join(dest, entry.name);
+
+    entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
+  }
+};
+
+export const handleNewCommand = async ([day]) => {
   requireDayParameter(day);
 
+  const src = `./templates/day`;
+  const dest = `./days/day${day}`;
+  copyDir(src, dest);
   console.log(day);
 };
