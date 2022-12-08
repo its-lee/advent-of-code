@@ -84,7 +84,7 @@ export const handleNewCommand = async ([day]) => {
   day = parseDayParameter(day);
 
   const dest = `src/days/day${day}`;
-  if (fileExists(dest)) {
+  if (await fileExists(dest)) {
     throw new Error(`${dest} already exists.`);
   }
 
