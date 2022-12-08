@@ -73,10 +73,27 @@ const copyDir = async (src, dest) => {
   }
 };
 
+const removeExtension = async (src, ext) => {
+  const entries = await fs.readdir(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const srcPath = path.join(src, entry.name);
+
+    const index = srcPath.lastIndexOf(ext);
+    if (index < 0) {
+      return;
+    }
+
+    await fs.rename(srcPath, srcPath.slice(0, index));
+  }
+};
+
 export const handleNewCommand = async ([day]) => {
   requireDayParameter(day);
 
   const dest = `src/days/day${day}`;
-  copyDir(`src/templates/day`, dest);
+  await copyDir(`src/templates/day`, dest);
+  await removeExtension(dest, '.template');
+
   console.log(`Created new folder ${dest}`);
 };
