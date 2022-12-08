@@ -1,6 +1,5 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { range } from './helpers.js';
+import { copyDir } from './helpers/files.js';
 
 const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
 
@@ -61,39 +60,11 @@ export const handleTestCommand = async () => {
   }
 };
 
-const copyDir = async (src, dest) => {
-  await fs.mkdir(dest, { recursive: true });
-  const entries = await fs.readdir(src, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-    const destPath = path.join(dest, entry.name);
-
-    entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
-  }
-};
-
-const removeExtension = async (src, ext) => {
-  const entries = await fs.readdir(src, { withFileTypes: true });
-
-  for (const entry of entries) {
-    const srcPath = path.join(src, entry.name);
-
-    const index = srcPath.lastIndexOf(ext);
-    if (index < 0) {
-      return;
-    }
-
-    await fs.rename(srcPath, srcPath.slice(0, index));
-  }
-};
-
 export const handleNewCommand = async ([day]) => {
   requireDayParameter(day);
 
   const dest = `src/days/day${day}`;
   await copyDir(`src/templates/day`, dest);
-  await removeExtension(dest, '.template');
 
   console.log(`Created new folder ${dest}`);
 };
