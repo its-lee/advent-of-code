@@ -6,7 +6,9 @@ const readData = async (day, source) => {
 };
 
 export default dayCallback => {
-  return async (day, { source = 'input' } = {}) => {
+  return async (day, options) => {
+    const { source = 'input' } = options || {};
+
     const parts = [];
 
     dayCallback({
