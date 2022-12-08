@@ -1,4 +1,5 @@
-const { promises: fs } = require('fs');
+import { promises as fs } from 'fs';
+import path from 'path';
 import { range } from './helpers.js';
 
 const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
@@ -75,8 +76,7 @@ const copyDir = async (src, dest) => {
 export const handleNewCommand = async ([day]) => {
   requireDayParameter(day);
 
-  const src = `./templates/day`;
-  const dest = `./days/day${day}`;
-  copyDir(src, dest);
-  console.log(day);
+  const dest = `src/days/day${day}`;
+  copyDir(`src/templates/day`, dest);
+  console.log(`Created new folder ${dest}`);
 };
