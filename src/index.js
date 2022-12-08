@@ -4,7 +4,7 @@ const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)
 
 const getAllDaySubmissions = async () => {
   const loaded = {};
-  for (const day of range(1, 26)) {
+  for (const day of range(1, 25)) {
     loaded[day] = {};
     try {
       loaded[day].submission = await getDaySubmission(day);

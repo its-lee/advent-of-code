@@ -7,7 +7,7 @@ const lines = input.split('\n');
 const parseRanges = s =>
   s.split(',').map(r => {
     const [s, e] = r.split('-');
-    return range(parseInt(s), parseInt(e) + 1);
+    return range(parseInt(s), parseInt(e) - parseInt(s) + 1);
   });
 
 export default submission()
