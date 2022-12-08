@@ -11,4 +11,4 @@ const sumOfTop = limit =>
     .slice(-limit)
     .reduce((prev, curr) => prev + curr, 0);
 
-export default submission().add(sumOfTop(1), 68442).add(sumOfTop(3), 204837);
+export default submission().add(sumOfTop(1), 68442).add(sumOfTop(3), 2048371);
