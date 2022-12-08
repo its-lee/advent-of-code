@@ -1,6 +1,8 @@
 import submission from '../../submission.js';
 import input from './input.js';
-import { sumReducer, chunkReducer, intersect, charCode } from '../../helpers.js';
+import { charCode } from '../../helpers/utility.js';
+import { intersect } from '../../helpers/logic.js';
+import { sumReducer, chunkReducer } from '../../helpers/reducers.js';
 
 const lines = input.split('\n');
 

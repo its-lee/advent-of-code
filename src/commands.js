@@ -1,4 +1,4 @@
-import { range } from './helpers.js';
+import { range } from './helpers/utility.js';
 import { copyDir } from './helpers/files.js';
 
 const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
