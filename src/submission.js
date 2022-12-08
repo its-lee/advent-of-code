@@ -1,8 +1,8 @@
 export default () => {
   return {
-    submissions: [],
+    items: [],
     add(actual, expected = undefined) {
-      this.submissions.push({ actual, expected });
+      this.items.push({ actual, expected });
       return this;
     }
   };

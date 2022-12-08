@@ -3,38 +3,45 @@ import { range } from './helpers.js';
 const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
 
 const getAllDaySubmissions = async () => {
-  const submissions = [];
+  const loaded = {};
   for (const day of range(1, 26)) {
+    loaded[day] = {};
     try {
-      submissions.push(await getDaySubmission(day));
+      loaded[day].submission = await getDaySubmission(day);
     } catch (e) {
       // ignore instances where we haven't finished that test yet..
       if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
-        fails.push(`An error occurred while importing day #${day} - ${e}`);
+        loaded[day].error = `An error occurred while importing day #${day} - ${e}`;
       }
     }
   }
 
-  return submissions;
+  return loaded;
 };
 
 const handleDayCommand = async args => {
   const [day] = args;
   const submission = await getDaySubmission(day);
-  console.log(submission.submissions);
+  console.log(submission.items);
 };
 
 const handleTestCommand = async () => {
-  const submissions = await getAllDaySubmissions();
   const fails = [];
-  submissions.forEach(s => {
-    s.submissions.forEach(({ actual, expected }) => {
-      if (expected === undefined) {
-        return;
-      }
+  const addFail = (day, message) => fails.push(`Day #${day}: ${message}`);
 
-      if (expected !== actual) {
-        fails.push(`Day #${day}: Returns ${actual} != ${expected}`);
+  const loaded = await getAllDaySubmissions();
+  Object.entries(loaded).forEach(([day, { submission, error }]) => {
+    if (error) {
+      addFail(day, error);
+    }
+
+    if (!submission) {
+      return;
+    }
+
+    submission.items.forEach(({ actual, expected }) => {
+      if (expected !== undefined && expected !== actual) {
+        addFail(day, `Returns ${actual} != ${expected}`);
       }
     });
   });
