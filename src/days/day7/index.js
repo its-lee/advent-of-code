@@ -1,6 +1,6 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   let currentPath = [];
   const pathSizes = {};
 
@@ -47,5 +47,5 @@ export default day(({ part, source }) => {
 
   // path === '/ftj' is too small
 
-  part(sizeUnder100000);
+  answer(sizeUnder100000);
 });

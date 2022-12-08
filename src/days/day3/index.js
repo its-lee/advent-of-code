@@ -3,10 +3,10 @@ import { charCode } from '../../helpers/utility.js';
 import { intersect } from '../../helpers/logic.js';
 import { sumReducer, chunkReducer } from '../../helpers/reducers.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   const lines = source.split('\n');
 
-  part(
+  answer(
     lines
       .map(s => {
         const a = s.split('');
@@ -17,7 +17,7 @@ export default day(({ part, source }) => {
     7990
   );
 
-  part(
+  answer(
     lines
       .reduce(...chunkReducer(3))
       .map(v => charCode(intersect(...v.map(u => u.split('')))[0]))

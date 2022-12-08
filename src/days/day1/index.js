@@ -1,6 +1,6 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   const sumOfTop = limit =>
     source
       .split('\n\n')
@@ -11,6 +11,6 @@ export default day(({ part, source }) => {
       .slice(-limit)
       .reduce((prev, curr) => prev + curr, 0);
 
-  part(sumOfTop(1), 68442);
-  part(sumOfTop(3), 204837);
+  answer(sumOfTop(1), 68442);
+  answer(sumOfTop(3), 204837);
 });

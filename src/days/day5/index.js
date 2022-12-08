@@ -1,6 +1,6 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   const [stringizedInitialState, moves] = source.split('\n\n');
 
   const computeInitialState = () => {
@@ -40,6 +40,6 @@ export default day(({ part, source }) => {
       .reduce((acc, v) => acc + v);
   };
 
-  part(computeMutatedTop(true), 'WHTLRMZRC');
-  part(computeMutatedTop(false), 'CPZPMPBMM');
+  answer(computeMutatedTop(true), 'WHTLRMZRC');
+  answer(computeMutatedTop(false), 'CPZPMPBMM');
 });

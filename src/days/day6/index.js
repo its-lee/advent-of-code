@@ -1,6 +1,6 @@
 import day from '../../helpers/day.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   const findPacketIndex = markerLength => {
     const cyclicBuffer = [];
 
@@ -18,6 +18,6 @@ export default day(({ part, source }) => {
     return undefined;
   };
 
-  part(findPacketIndex(4), 1042);
-  part(findPacketIndex(14), 2980);
+  answer(findPacketIndex(4), 1042);
+  answer(findPacketIndex(14), 2980);
 });

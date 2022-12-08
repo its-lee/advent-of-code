@@ -3,7 +3,7 @@ import { range } from '../../helpers/utility.js';
 import { intersect, union } from '../../helpers/logic.js';
 import { sumReducer } from '../../helpers/reducers.js';
 
-export default day(({ part, source }) => {
+export default day(({ answer, source }) => {
   const lines = source.split('\n');
 
   const parseRanges = s =>
@@ -12,7 +12,7 @@ export default day(({ part, source }) => {
       return range(parseInt(s), parseInt(e) - parseInt(s) + 1);
     });
 
-  part(
+  answer(
     lines
       .map(parseRanges)
       .map(v => union(...v).length === Math.max(...v.map(a => a.length)))
@@ -20,7 +20,7 @@ export default day(({ part, source }) => {
     657
   );
 
-  part(
+  answer(
     lines
       .map(parseRanges)
       .map(v => !!intersect(...v).length)

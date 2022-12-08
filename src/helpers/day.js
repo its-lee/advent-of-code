@@ -11,7 +11,7 @@ export default dayCallback => {
 
     dayCallback({
       source: await readData(day, source),
-      part(actual, expected = undefined) {
+      answer(actual, expected = undefined) {
         parts.push({ actual, expected });
       }
     });
