@@ -31,14 +31,12 @@ export default day(({ answer, source }) => {
 
   const scoreCells = () => {
     return cells.map(({ value, x, y }) => {
-      const score = computeDirections(cells, x, y)
+      return computeDirections(cells, x, y)
         .map(d => {
           const index = d.findIndex(c => value <= c.value);
           return index < 0 ? d.length : index + 1;
         })
         .reduce((acc, v) => acc * v, 1);
-
-      return score;
     });
   };
 
