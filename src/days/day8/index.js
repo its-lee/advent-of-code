@@ -20,4 +20,32 @@ export default day(({ answer, source }) => {
   };
 
   answer(countVisibleCells(), 1796);
+
+  const by =
+    (getter, reverse = false) =>
+    (a, b) =>
+      (reverse ? -1 : 1) * (getter(a) - getter(b));
+
+  const scenicScoreCells = () => {
+    // Order is important here (it wasn't before!)
+    return cells.map(({ value, x, y }) => {
+      const directions = [
+        cells.filter(c => c.y === y && c.x < x).sort(by(v => v.x, true)),
+        cells.filter(c => c.y === y && c.x > x).sort(by(v => v.x, false)),
+        cells.filter(c => c.x === x && c.y > y).sort(by(v => v.y, false)),
+        cells.filter(c => c.x === x && c.y < y).sort(by(v => v.y, true))
+      ];
+
+      const score = directions
+        .map(d => {
+          const index = d.findIndex(c => value <= c.value);
+          return index < 0 ? d.length : index + 1;
+        })
+        .reduce((acc, v) => acc * v, 1);
+
+      return score;
+    });
+  };
+
+  answer(Math.max(...scenicScoreCells()), 288120);
 });
