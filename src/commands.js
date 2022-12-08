@@ -1,14 +1,17 @@
 import { range } from './helpers/utility.js';
 import { copyDir } from './helpers/files.js';
 
-const getDaySubmission = async day => (await import(`./days/day${day}/index.js`)).default;
+const getDay = async day => {
+  const runner = (await import(`./days/day${day}/index.js`)).default;
+  return await runner(day);
+};
 
-const getAllDaySubmissions = async () => {
+const getAllDays = async () => {
   const loaded = {};
   for (const day of range(1, 25)) {
     loaded[day] = {};
     try {
-      loaded[day].submission = await getDaySubmission(day);
+      loaded[day].day = await getDay(day);
     } catch (e) {
       // ignore instances where we haven't finished that test yet..
       if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
@@ -29,27 +32,27 @@ const requireDayParameter = day => {
 export const handleDayCommand = async ([day]) => {
   requireDayParameter(day);
 
-  const submission = await getDaySubmission(day);
-  console.log(submission.items);
+  const parts = await getDay(day);
+  console.log(parts);
 };
 
 export const handleTestCommand = async () => {
   const fails = [];
-  const addFail = (day, message) => fails.push(`Day #${day}: ${message}`);
+  const addFail = (dayIndex, message) => fails.push(`Day #${dayIndex}: ${message}`);
 
-  const loaded = await getAllDaySubmissions();
-  Object.entries(loaded).forEach(([day, { submission, error }]) => {
+  const days = await getAllDays();
+  Object.entries(days).forEach(([index, { day, error }]) => {
     if (error) {
-      addFail(day, error);
+      addFail(index, error);
     }
 
-    if (!submission) {
+    if (!day) {
       return;
     }
 
-    submission.items.forEach(({ actual, expected }) => {
+    day.parts.forEach(({ actual, expected }) => {
       if (expected !== undefined && expected !== actual) {
-        addFail(day, `Returns ${actual} != ${expected}`);
+        addFail(index, `Returns ${actual} != ${expected}`);
       }
     });
   });

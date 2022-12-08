@@ -1,4 +1,4 @@
 import input from './input.js';
-import submission from '../../helpers/submission.js';
+import day from '../../helpers/day.js';
 
-export default submission();
+export default day();

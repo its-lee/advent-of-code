@@ -1,21 +1,23 @@
-import submission from '../../helpers/submission.js';
-import input from './input.js';
+import day from '../../helpers/day.js';
 
-const findPacketIndex = markerLength => {
-  const cyclicBuffer = [];
+export default day(({ part, input }) => {
+  const findPacketIndex = markerLength => {
+    const cyclicBuffer = [];
 
-  for (const [i, c] of input.split('').entries()) {
-    if (new Set(cyclicBuffer).size === markerLength) {
-      return i;
+    for (const [i, c] of input.split('').entries()) {
+      if (new Set(cyclicBuffer).size === markerLength) {
+        return i;
+      }
+
+      cyclicBuffer.push(c);
+      if (cyclicBuffer.length > markerLength) {
+        cyclicBuffer.shift();
+      }
     }
 
-    cyclicBuffer.push(c);
-    if (cyclicBuffer.length > markerLength) {
-      cyclicBuffer.shift();
-    }
-  }
+    return undefined;
+  };
 
-  return undefined;
-};
-
-export default submission().add(findPacketIndex(4), 1042).add(findPacketIndex(14), 2980);
+  part(findPacketIndex(4), 1042);
+  part(findPacketIndex(14), 2980);
+});

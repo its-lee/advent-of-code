@@ -1,13 +1,12 @@
-import submission from '../../helpers/submission.js';
-import input from './input.js';
+import day from '../../helpers/day.js';
 import { charCode } from '../../helpers/utility.js';
 import { intersect } from '../../helpers/logic.js';
 import { sumReducer, chunkReducer } from '../../helpers/reducers.js';
 
-const lines = input.split('\n');
+export default day(({ part, input }) => {
+  const lines = input.split('\n');
 
-export default submission()
-  .add(
+  part(
     lines
       .map(s => {
         const a = s.split('');
@@ -16,11 +15,13 @@ export default submission()
       })
       .reduce(...sumReducer()),
     7990
-  )
-  .add(
+  );
+
+  part(
     lines
       .reduce(...chunkReducer(3))
       .map(v => charCode(intersect(...v.map(u => u.split('')))[0]))
       .reduce(...sumReducer()),
     2602
   );
+});
