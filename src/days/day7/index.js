@@ -1,4 +1,4 @@
-import submission from '../../submission.js';
+import submission from '../../helpers/submission.js';
 import input from './input.js';
 
 let currentPath = [];

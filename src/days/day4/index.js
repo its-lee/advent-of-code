@@ -1,4 +1,4 @@
-import submission from '../../submission.js';
+import submission from '../../helpers/submission.js';
 import input from './input.js';
 import { range } from '../../helpers/utility.js';
 import { intersect, union } from '../../helpers/logic.js';

@@ -1,4 +1,4 @@
 import input from './input.js';
-import submission from '../../submission.js';
+import submission from '../../helpers/submission.js';
 
 export default submission();

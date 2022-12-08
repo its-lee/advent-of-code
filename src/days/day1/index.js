@@ -1,5 +1,5 @@
 import input from './input.js';
-import submission from '../../submission.js';
+import submission from '../../helpers/submission.js';
 
 const sumOfTop = limit =>
   input
