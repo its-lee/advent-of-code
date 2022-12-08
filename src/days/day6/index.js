@@ -1,3 +1,4 @@
+import submission from '../../submission.js';
 import input from './input.js';
 
 const findPacketIndex = markerLength => {
@@ -17,4 +18,4 @@ const findPacketIndex = markerLength => {
   return undefined;
 };
 
-export default [findPacketIndex(4), findPacketIndex(14)];
+export default submission().add(findPacketIndex(4), 1042).add(findPacketIndex(14), 2980);

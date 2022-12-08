@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "lint": "eslint src/**/*.js",
-    "index": "node src/index.js"
+    "day": "node src/index.js day",
+    "test": "node src/index.js test"
   },
   "repository": {
     "type": "git",

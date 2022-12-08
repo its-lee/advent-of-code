@@ -1,3 +1,4 @@
+import submission from '../../submission.js';
 import input from './input.js';
 
 let currentPath = [];
@@ -46,4 +47,4 @@ const sizeUnder100000 = Object.values(recursiveSizes).filter(size => size <= 100
 
 // path === '/ftj' is too small
 
-export default [pathSizes, recursiveSizes, sizeUnder100000];
+export default submission().add(sizeUnder100000);

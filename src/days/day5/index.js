@@ -1,3 +1,4 @@
+import submission from '../../submission.js';
 import input from './input.js';
 
 const [stringizedInitialState, moves] = input.split('\n\n');
@@ -39,4 +40,6 @@ const computeMutatedTop = reverse => {
     .reduce((acc, v) => acc + v);
 };
 
-export default [computeMutatedTop(true), computeMutatedTop(false)];
+export default submission()
+  .add(computeMutatedTop(true), 'WHTLRMZRC')
+  .add(computeMutatedTop(false), 'CPZPMPBMM');

@@ -1,4 +1,5 @@
 import input from './input.js';
+import submission from '../../submission.js';
 
 const sumOfTop = limit =>
   input
@@ -10,7 +11,4 @@ const sumOfTop = limit =>
     .slice(-limit)
     .reduce((prev, curr) => prev + curr, 0);
 
-export default [
-  { expected: 68442, actual: sumOfTop(1) },
-  { expected: 204837, actual: sumOfTop(3) }
-];
+export default submission().add(sumOfTop(1), 68442).add(sumOfTop(3), 204837);
