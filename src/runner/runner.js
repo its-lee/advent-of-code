@@ -14,26 +14,40 @@ const loadDay = async day => {
   return result;
 };
 
+const runDay = async (day, runner, options) => {
+  const { tracePerformance, dayOptions = {} } = options;
+
+  let result;
+  if (!runner) {
+    return undefined;
+  }
+
+  const timerLabel = `Ended day #${day}`;
+  if (tracePerformance) {
+    console.log(`Started day #${day}`);
+    console.time(timerLabel);
+  }
+
+  result = await runner(day, dayOptions);
+
+  if (tracePerformance) {
+    console.timeEnd(timerLabel);
+  }
+
+  return result;
+};
+
 const runEach = async options => {
-  const { dayFilter, tracePerformance, dayOptions = {} } = options;
+  const { dayFilter } = options;
 
   const loaded = {};
   for (const day of range(1, 25).filter(d => !dayFilter || dayFilter === d)) {
-    const timerLabel = `Ended day #${day}`;
-    if (tracePerformance) {
-      console.log(`Started day #${day}`);
-      console.time(timerLabel);
-    }
-
     const { runner, error } = await loadDay(day);
+
     loaded[day] = {
-      day: runner ? await runner(day, dayOptions) : undefined,
+      day: await runDay(day, runner, options),
       error
     };
-
-    if (tracePerformance) {
-      console.timeEnd(timerLabel);
-    }
   }
 
   return loaded;
