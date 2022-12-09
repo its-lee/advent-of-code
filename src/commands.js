@@ -24,18 +24,18 @@ const parseSourceParameter = source => {
   return sources[source];
 };
 
-export const handleDayCommand = async ([day, source = 'i']) => {
+const handleDayCommand = async ([day, source = 'i']) => {
   const dayFilter = parseDayParameter(day);
   source = parseSourceParameter(source);
 
   await runDays({ dayFilter, logOutput: true, dayOptions: { source } });
 };
 
-export const handleTestCommand = async () => {
+const handleTestCommand = async () => {
   await runDays({ logOutput: false });
 };
 
-export const handleNewCommand = async ([day]) => {
+const handleNewCommand = async ([day]) => {
   day = parseDayParameter(day);
 
   const dest = `src/days/day${day}`;
@@ -45,4 +45,10 @@ export const handleNewCommand = async ([day]) => {
 
   await copyDir(`src/template`, dest);
   console.log(`Created new folder ${dest}`);
+};
+
+export default {
+  day: handleDayCommand,
+  test: handleTestCommand,
+  new: handleNewCommand
 };

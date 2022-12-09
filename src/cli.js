@@ -1,10 +1,4 @@
-import { handleDayCommand, handleTestCommand, handleNewCommand } from './commands.js';
-
-const commands = {
-  day: handleDayCommand,
-  test: handleTestCommand,
-  new: handleNewCommand
-};
+import commands from './commands.js';
 
 const [command, ...args] = process.argv.slice(2);
 const requestedCommand = commands[command];
