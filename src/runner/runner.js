@@ -73,12 +73,11 @@ export const runDays = async options => {
   options = { source: 'input', ...options };
   const { logOutput, source } = options;
 
-  const answers = await readJsonFile('src/days/answers.json');
   const fails = [];
   const addFail = (yearDay, message) => fails.push(`Day #${yearDay.id}: ${message}`);
 
   const days = await runEach({ ...options, tracePerformance: true });
-  days.forEach(({ yearDay, result, error }) => {
+  for (const { yearDay, result, error } of days) {
     if (error) {
       addFail(yearDay, error);
     }
@@ -91,13 +90,15 @@ export const runDays = async options => {
       console.log(JSON.stringify(result.parts, null, 2));
     }
 
+    const answers = await readJsonFile(`src/days/${yearDay.year}/answers.json`);
+
     result.parts.forEach((actual, partIndex) => {
       const expected = answers?.[yearDay.year]?.[yearDay.day]?.[source]?.[partIndex];
       if (expected !== undefined && expected !== actual) {
         addFail(yearDay, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
     });
-  });
+  }
 
   fails.forEach(f => console.error(f));
   if (fails.length) {
