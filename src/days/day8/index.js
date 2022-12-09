@@ -1,4 +1,4 @@
-import day from '../../helpers/day.js';
+import day from '../../runner/day.js';
 
 export default day(({ answer, source }) => {
   const grid = source.split('\n').map(row => row.split('').map(v => parseInt(v)));

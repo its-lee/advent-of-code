@@ -1,4 +1,5 @@
-import day from '../../helpers/day.js';
+import day from '../../runner/day.js';
+
 import { range } from '../../helpers/utility.js';
 import { intersect, union } from '../../helpers/logic.js';
 import { sumReducer } from '../../helpers/reducers.js';
