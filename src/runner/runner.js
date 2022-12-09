@@ -1,4 +1,5 @@
 import { range } from '../helpers/utility.js';
+import { readJsonFile } from '../helpers/files.js';
 
 const loadDay = async day => {
   const result = {};
@@ -56,6 +57,7 @@ const runEach = async options => {
 export const runDays = async options => {
   const { logOutput } = options;
 
+  const answers = await readJsonFile('src/days/answers.json');
   const fails = [];
   const addFail = (dayIndex, message) => fails.push(`Day #${dayIndex}: ${message}`);
 
@@ -73,7 +75,8 @@ export const runDays = async options => {
       console.log(JSON.stringify(day.parts, null, 2));
     }
 
-    day.parts.forEach(({ actual, expected }, partIndex) => {
+    day.parts.forEach((actual, partIndex) => {
+      const expected = answers?.[dayIndex]?.['input']?.[partIndex];
       if (expected !== undefined && expected !== actual) {
         addFail(dayIndex, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }

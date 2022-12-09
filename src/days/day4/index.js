@@ -17,15 +17,13 @@ export default day(({ answer, source }) => {
     lines
       .map(parseRanges)
       .map(v => union(...v).length === Math.max(...v.map(a => a.length)))
-      .reduce(...sumReducer()),
-    657
+      .reduce(...sumReducer())
   );
 
   answer(
     lines
       .map(parseRanges)
       .map(v => !!intersect(...v).length)
-      .reduce(...sumReducer()),
-    938
+      .reduce(...sumReducer())
   );
 });

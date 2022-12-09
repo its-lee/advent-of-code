@@ -19,7 +19,7 @@ export default day(({ answer, source }) => {
 
   const potentialMoves = [1, 2, 3];
 
-  answer(parsedSource.map(([them, us]) => us + gameScore(them, us)).reduce(...sumReducer()), 15523);
+  answer(parsedSource.map(([them, us]) => us + gameScore(them, us)).reduce(...sumReducer()));
 
   answer(
     parsedSource
@@ -28,7 +28,6 @@ export default day(({ answer, source }) => {
         const moveScore = potentialMoves.find(us => gameScore(them, us) === requiredGameScore);
         return requiredGameScore + moveScore;
       })
-      .reduce(...sumReducer()),
-    15702
+      .reduce(...sumReducer())
   );
 });

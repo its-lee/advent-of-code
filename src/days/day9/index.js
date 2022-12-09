@@ -70,6 +70,6 @@ export default day(({ answer, source }) => {
     return dedupePositions(tailPositions).length;
   };
 
-  answer(computeTailVisits(1), 5960);
-  answer(computeTailVisits(9), 2327);
+  answer(computeTailVisits(1));
+  answer(computeTailVisits(9));
 });

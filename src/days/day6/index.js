@@ -18,6 +18,6 @@ export default day(({ answer, source }) => {
     return undefined;
   };
 
-  answer(findPacketIndex(4), 1042);
-  answer(findPacketIndex(14), 2980);
+  answer(findPacketIndex(4));
+  answer(findPacketIndex(14));
 });

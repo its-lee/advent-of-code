@@ -21,3 +21,8 @@ export const copyDir = async (src, dest) => {
     entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
   }
 };
+
+export const readJsonFile = async filepath => {
+  const content = await fs.readFile(filepath, 'utf-8');
+  return JSON.parse(content);
+};

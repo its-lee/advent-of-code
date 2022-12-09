@@ -40,6 +40,6 @@ export default day(({ answer, source }) => {
       .reduce((acc, v) => acc + v);
   };
 
-  answer(computeMutatedTop(true), 'WHTLRMZRC');
-  answer(computeMutatedTop(false), 'CPZPMPBMM');
+  answer(computeMutatedTop(true));
+  answer(computeMutatedTop(false));
 });

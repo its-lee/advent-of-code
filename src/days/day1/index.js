@@ -11,6 +11,6 @@ export default day(({ answer, source }) => {
       .slice(-limit)
       .reduce((prev, curr) => prev + curr, 0);
 
-  answer(sumOfTop(1), 68442);
-  answer(sumOfTop(3), 204837);
+  answer(sumOfTop(1));
+  answer(sumOfTop(3));
 });

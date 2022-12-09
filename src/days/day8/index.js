@@ -27,7 +27,7 @@ export default day(({ answer, source }) => {
     });
   };
 
-  answer(getVisibleCells().length, 1796);
+  answer(getVisibleCells().length);
 
   const scoreCells = () => {
     return cells.map(({ value, x, y }) => {
@@ -40,5 +40,5 @@ export default day(({ answer, source }) => {
     });
   };
 
-  answer(Math.max(...scoreCells()), 288120);
+  answer(Math.max(...scoreCells()));
 });
