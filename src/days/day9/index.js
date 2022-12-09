@@ -68,11 +68,22 @@ export default day(({ answer, source }) => {
   answer(computeTailVisits(), 5960);
 
   const computeLongerTailVisits = () => {
-    let tail = range(1, 9).map(() => [0, 0]);
-    return [].length;
+    const tail = range(1, 9).map(() => [0, 0]);
+
+    const tailEndPositions = [];
+
+    headPositions.forEach(head => {
+      tail.forEach((_, i) => {
+        tail[i] = moveTail(i === 0 ? head : tail[i - 1], tail[i]);
+      });
+
+      tailEndPositions.push(tail[tail.length - 1]);
+    });
+
+    return dedupePositions(tailEndPositions).length;
   };
 
   // todo: pass length to the above & use it in both answers!
 
-  answer(computeLongerTailVisits());
+  answer(computeLongerTailVisits(), 2327);
 });
