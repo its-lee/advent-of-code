@@ -41,7 +41,7 @@ const runDay = async (yearDay, runner, options) => {
 const getFilteredDays = options => {
   const { yearFilter, dayFilter } = options;
 
-  return range(2000, 2100)
+  return range(2000, 100)
     .filter(y => !yearFilter || yearFilter === y)
     .flatMap(year => {
       return range(1, 25)
