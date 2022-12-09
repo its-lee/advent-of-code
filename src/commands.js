@@ -43,6 +43,6 @@ export const handleNewCommand = async ([day]) => {
     throw new Error(`${dest} already exists.`);
   }
 
-  await copyDir(`src/templates/day`, dest);
+  await copyDir(`src/template`, dest);
   console.log(`Created new folder ${dest}`);
 };
