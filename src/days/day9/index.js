@@ -10,12 +10,22 @@ export default day(({ answer, source }) => {
     D: [0, -1]
   };
 
-  const moves = source.split('\n').flatMap(l => {
-    const [direction, count] = l.split(' ');
-    return range(0, parseInt(count)).map(() => headMoves[direction]);
-  });
-
   const move = (p, direction) => p.map((v, i) => v + direction[i]);
+
+  const computeHeadPositions = () => {
+    const moves = source.split('\n').flatMap(l => {
+      const [direction, count] = l.split(' ');
+      return range(0, parseInt(count)).map(() => headMoves[direction]);
+    });
+
+    let head = [0, 0];
+    return moves.map(headMove => {
+      head = move(head, headMove);
+      return head;
+    });
+  };
+
+  const headPositions = computeHeadPositions();
 
   const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // ayyyy it's our good friend the L-infinity norm!
   const relative = (a, b) => b.map((v, i) => v - a[i]);
@@ -23,11 +33,9 @@ export default day(({ answer, source }) => {
 
   const computeTailPositions = () => {
     let tail = [0, 0];
-    let head = [0, 0];
     const tailPositions = [];
 
-    moves.forEach(headMove => {
-      head = move(head, headMove);
+    headPositions.forEach(head => {
       const tailRelativeToHead = relative(tail, head);
 
       if (infinityNorm(tailRelativeToHead) > 1) {
