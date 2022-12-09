@@ -1,10 +1,10 @@
 import { fileExists, copyDir } from './helpers/files.js';
 import { runDays } from './runner/runner.js';
 
-const parseDayParameter = day => {
-  const parsed = parseInt(day);
+const parseNumericParameter = value => {
+  const parsed = parseInt(value);
   if (isNaN(parsed)) {
-    throw new Error(`A numeric day parameter is required - received ${day}`);
+    throw new Error(`A numeric parameter is required - received ${value}`);
   }
 
   return parsed;
@@ -24,21 +24,23 @@ const parseSourceParameter = source => {
   return sources[source];
 };
 
-const handleDayCommand = async ([day, source = 'i']) => {
-  const dayFilter = parseDayParameter(day);
+const handleDayCommand = async ([year, day, source = 'i']) => {
+  const yearFilter = parseNumericParameter(year);
+  const dayFilter = parseNumericParameter(day);
   source = parseSourceParameter(source);
 
-  await runDays({ dayFilter, logOutput: true, source });
+  await runDays({ yearFilter, dayFilter, logOutput: true, source });
 };
 
 const handleTestCommand = async () => {
   await runDays({ logOutput: false });
 };
 
-const handleNewCommand = async ([day]) => {
-  day = parseDayParameter(day);
+const handleNewCommand = async ([year, day]) => {
+  year = parseNumericParameter(year);
+  day = parseNumericParameter(day);
 
-  const dest = `src/days/day${day}`;
+  const dest = `src/days/${year}/day${day}`;
   if (await fileExists(dest)) {
     throw new Error(`${dest} already exists.`);
   }

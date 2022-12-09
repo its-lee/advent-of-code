@@ -1,8 +1,8 @@
-import day from '../../runner/day.js';
+import day from '../../../runner/day.js';
 
-import { charCode } from '../../helpers/utility.js';
-import { intersect } from '../../helpers/logic.js';
-import { sumReducer, chunkReducer } from '../../helpers/reducers.js';
+import { charCode } from '../../../helpers/utility.js';
+import { intersect } from '../../../helpers/logic.js';
+import { sumReducer, chunkReducer } from '../../../helpers/reducers.js';
 
 export default day(({ answer, source }) => {
   const lines = source.split('\n');

@@ -1,4 +1,4 @@
-import day from '../../runner/day.js';
+import day from '../../../runner/day.js';
 
 export default day(({ answer, source }) => {
   const sumOfTop = limit =>

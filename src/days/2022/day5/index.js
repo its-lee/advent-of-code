@@ -1,4 +1,4 @@
-import day from '../../helpers/day.js';
+import day from '../../../helpers/day.js';
 
 export default day(({ answer, source }) => {
   const [stringizedInitialState, moves] = source.split('\n\n');

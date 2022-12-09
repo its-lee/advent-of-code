@@ -1,21 +1,21 @@
 import { range } from '../helpers/utility.js';
 import { readJsonFile } from '../helpers/files.js';
 
-const loadDay = async day => {
+const loadDay = async ({ year, day, id }) => {
   const result = {};
   try {
-    result.runner = (await import(`../days/day${day}/index.js`)).default;
+    result.runner = (await import(`../days/${year}/day${day}/index.js`)).default;
   } catch (e) {
     // ignore instances where we haven't finished that test yet..
     if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
-      result.error = `An error occurred while importing day #${day} - ${e}`;
+      result.error = `An error occurred while importing day #${id} - ${e}`;
     }
   }
 
   return result;
 };
 
-const runDay = async (day, runner, options) => {
+const runDay = async (yearDay, runner, options) => {
   const { tracePerformance, source } = options;
 
   let result;
@@ -23,13 +23,13 @@ const runDay = async (day, runner, options) => {
     return undefined;
   }
 
-  const timerLabel = `Ended day #${day}`;
+  const timerLabel = `Ended day #${yearDay.id}`;
   if (tracePerformance) {
-    console.log(`Started day #${day}`);
+    console.log(`Started day #${yearDay.id}`);
     console.time(timerLabel);
   }
 
-  result = await runner(day, source);
+  result = await runner(yearDay, source);
 
   if (tracePerformance) {
     console.timeEnd(timerLabel);
@@ -38,17 +38,32 @@ const runDay = async (day, runner, options) => {
   return result;
 };
 
+const getFilteredDays = options => {
+  const { yearFilter, dayFilter } = options;
+
+  return range(2000, 2100)
+    .filter(y => !yearFilter || yearFilter === y)
+    .flatMap(year => {
+      return range(1, 25)
+        .filter(d => !dayFilter || dayFilter === d)
+        .map(day => ({
+          year,
+          day,
+          id: [year, day].join('/')
+        }));
+    });
+};
+
 const runEach = async options => {
-  const { dayFilter } = options;
+  const loaded = [];
+  for (const yearDay of getFilteredDays(options)) {
+    const { runner, error } = await loadDay(yearDay);
 
-  const loaded = {};
-  for (const day of range(1, 25).filter(d => !dayFilter || dayFilter === d)) {
-    const { runner, error } = await loadDay(day);
-
-    loaded[day] = {
-      day: await runDay(day, runner, options),
+    loaded.push({
+      yearDay,
+      result: await runDay(yearDay, runner, options),
       error
-    };
+    });
   }
 
   return loaded;
@@ -60,26 +75,26 @@ export const runDays = async options => {
 
   const answers = await readJsonFile('src/days/answers.json');
   const fails = [];
-  const addFail = (dayIndex, message) => fails.push(`Day #${dayIndex}: ${message}`);
+  const addFail = (yearDay, message) => fails.push(`Day #${yearDay.id}: ${message}`);
 
   const days = await runEach({ ...options, tracePerformance: true });
-  Object.entries(days).forEach(([dayIndex, { day, error }]) => {
+  days.forEach(({ yearDay, result, error }) => {
     if (error) {
-      addFail(dayIndex, error);
+      addFail(yearDay, error);
     }
 
-    if (!day) {
+    if (!result) {
       return;
     }
 
     if (logOutput) {
-      console.log(JSON.stringify(day.parts, null, 2));
+      console.log(JSON.stringify(result.parts, null, 2));
     }
 
-    day.parts.forEach((actual, partIndex) => {
-      const expected = answers?.[dayIndex]?.[source]?.[partIndex];
+    result.parts.forEach((actual, partIndex) => {
+      const expected = answers?.[yearDay.year]?.[yearDay.day]?.[source]?.[partIndex];
       if (expected !== undefined && expected !== actual) {
-        addFail(dayIndex, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
+        addFail(yearDay, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
     });
   });

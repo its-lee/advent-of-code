@@ -1,6 +1,6 @@
-import day from '../../runner/day.js';
+import day from '../../../runner/day.js';
 
-import { range, dedupe } from '../../helpers/utility.js';
+import { range, dedupe } from '../../../helpers/utility.js';
 
 export default day(({ answer, source }) => {
   const headMoves = {

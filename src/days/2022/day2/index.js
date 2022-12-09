@@ -1,7 +1,7 @@
-import day from '../../runner/day.js';
+import day from '../../../runner/day.js';
 
-import { charCode } from '../../helpers/utility.js';
-import { sumReducer } from '../../helpers/reducers.js';
+import { charCode } from '../../../helpers/utility.js';
+import { sumReducer } from '../../../helpers/reducers.js';
 
 export default day(({ answer, source }) => {
   const parsedSource = source.split('\n').map(l => {
