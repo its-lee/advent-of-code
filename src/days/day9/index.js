@@ -3,9 +3,6 @@ import day from '../../runner/day.js';
 import { range, dedupe } from '../../helpers/utility.js';
 
 export default day(({ answer, source }) => {
-  let tail = [0, 0];
-  let head = [0, 0];
-
   const headMoves = {
     R: [1, 0],
     L: [-1, 0],
@@ -23,6 +20,8 @@ export default day(({ answer, source }) => {
   const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // ayyyy it's our good friend the L-infinity norm!
   const relative = (a, b) => b.map((v, i) => v - a[i]);
 
+  let tail = [0, 0];
+  let head = [0, 0];
   const tailPositions = [];
 
   moves.forEach(headMove => {
