@@ -1,16 +1,12 @@
 import { range } from '../helpers/utility.js';
 
-const runOne = async (day, options) => {
-  const runner = (await import(`../days/day${day}/index.js`)).default;
-  return await runner(day, options);
-};
-
-const runMultiple = async (dayFilter, options) => {
+const runEach = async (dayFilter, options) => {
   const loaded = {};
   for (const day of range(1, 25).filter(d => !dayFilter || dayFilter === d)) {
     loaded[day] = {};
     try {
-      loaded[day].day = await runOne(day, options);
+      const runner = (await import(`../days/day${day}/index.js`)).default;
+      loaded[day].day = await runner(day, options);
     } catch (e) {
       // ignore instances where we haven't finished that test yet..
       if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
@@ -26,7 +22,7 @@ export const runDays = async ({ dayFilter, logOutput, dayOptions = {} }) => {
   const fails = [];
   const addFail = (dayIndex, message) => fails.push(`Day #${dayIndex}: ${message}`);
 
-  const days = await runMultiple(dayFilter, dayOptions);
+  const days = await runEach(dayFilter, dayOptions);
   Object.entries(days).forEach(([dayIndex, { day, error }]) => {
     if (error) {
       addFail(dayIndex, error);
