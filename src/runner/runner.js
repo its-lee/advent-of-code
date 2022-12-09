@@ -1,30 +1,37 @@
 import { range } from '../helpers/utility.js';
 
+const loadDay = async day => {
+  const result = {};
+  try {
+    result.runner = (await import(`../days/day${day}/index.js`)).default;
+  } catch (e) {
+    // ignore instances where we haven't finished that test yet..
+    if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
+      result.error = `An error occurred while importing day #${day} - ${e}`;
+    }
+  }
+
+  return result;
+};
+
 const runEach = async options => {
   const { dayFilter, tracePerformance, dayOptions = {} } = options;
 
   const loaded = {};
   for (const day of range(1, 25).filter(d => !dayFilter || dayFilter === d)) {
-    loaded[day] = {};
-
-    const timerLabel = `#${day}`;
+    const timerLabel = `Ended day #${day}`;
     if (tracePerformance) {
       console.log(`Started day #${day}`);
       console.time(timerLabel);
     }
 
-    try {
-      const runner = (await import(`../days/day${day}/index.js`)).default;
-      loaded[day].day = await runner(day, dayOptions);
-    } catch (e) {
-      // ignore instances where we haven't finished that test yet..
-      if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
-        loaded[day].error = `An error occurred while importing day #${day} - ${e}`;
-      }
-    }
+    const { runner, error } = await loadDay(day);
+    loaded[day] = {
+      day: runner ? await runner(day, dayOptions) : undefined,
+      error
+    };
 
     if (tracePerformance) {
-      console.log(`Ended day #${day}`);
       console.timeEnd(timerLabel);
     }
   }
