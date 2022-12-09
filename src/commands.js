@@ -1,4 +1,4 @@
-import { fileExists, copyDir } from './helpers/files.js';
+import { fileExists, copyDir, listDir } from './helpers/files.js';
 import { runDays } from './runner/runner.js';
 
 const parseNumericParameter = value => {
@@ -36,9 +36,19 @@ const handleTestCommand = async () => {
   await runDays({ logOutput: false });
 };
 
+const regenerateDaysIndex = async () => {
+  await listDir('src/days');
+};
+
 const handleNewCommand = async ([year, day]) => {
   year = parseNumericParameter(year);
   day = parseNumericParameter(day);
+
+  // eslint-disable-next-line no-constant-condition
+  if (false) {
+    await regenerateDaysIndex();
+    return;
+  }
 
   const dest = `src/days/${year}/day${day}`;
   if (await fileExists(dest)) {

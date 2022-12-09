@@ -18,8 +18,25 @@ export const copyDir = async (src, dest) => {
     const srcPath = path.join(src, entry.name);
     const destPath = path.join(dest, entry.name);
 
-    entry.isDirectory() ? await copyDir(srcPath, destPath) : await fs.copyFile(srcPath, destPath);
+    if (entry.isDirectory()) {
+      await copyDir(srcPath, destPath);
+    } else {
+      await fs.copyFile(srcPath, destPath);
+    }
   }
+};
+
+export const listDir = async (src, dirs = []) => {
+  dirs.push(src);
+  const entries = await fs.readdir(src, { withFileTypes: true });
+
+  for (const entry of entries) {
+    if (entry.isDirectory()) {
+      await listDir([src, entry.name].join('/'), dirs);
+    }
+  }
+
+  return dirs;
 };
 
 export const readJsonFile = async filepath => {
