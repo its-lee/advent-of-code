@@ -19,6 +19,7 @@ export default day(({ answer, source }) => {
 
   const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // ayyyy it's our good friend the L-infinity norm!
   const relative = (a, b) => b.map((v, i) => v - a[i]);
+  const dedupePositions = array => dedupe(array, (a, b) => a.every((v, i) => v === b[i]));
 
   const computeTailPositions = () => {
     let tail = [0, 0];
@@ -46,8 +47,14 @@ export default day(({ answer, source }) => {
       tailPositions.push(tail);
     });
 
-    return dedupe(tailPositions, (a, b) => a.every((v, i) => v === b[i]));
+    return dedupePositions(tailPositions);
   };
 
   answer(computeTailPositions().length, 5960);
+
+  const computeLongerTailPositions = () => {
+    return [];
+  };
+
+  answer(computeLongerTailPositions().length);
 });
