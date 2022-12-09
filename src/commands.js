@@ -28,7 +28,7 @@ const handleDayCommand = async ([day, source = 'i']) => {
   const dayFilter = parseDayParameter(day);
   source = parseSourceParameter(source);
 
-  await runDays({ dayFilter, logOutput: true, dayOptions: { source } });
+  await runDays({ dayFilter, logOutput: true, source });
 };
 
 const handleTestCommand = async () => {

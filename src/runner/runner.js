@@ -16,7 +16,7 @@ const loadDay = async day => {
 };
 
 const runDay = async (day, runner, options) => {
-  const { tracePerformance, dayOptions = {} } = options;
+  const { tracePerformance, source } = options;
 
   let result;
   if (!runner) {
@@ -29,7 +29,7 @@ const runDay = async (day, runner, options) => {
     console.time(timerLabel);
   }
 
-  result = await runner(day, dayOptions);
+  result = await runner(day, source);
 
   if (tracePerformance) {
     console.timeEnd(timerLabel);
@@ -55,7 +55,8 @@ const runEach = async options => {
 };
 
 export const runDays = async options => {
-  const { logOutput } = options;
+  options = { source: 'input', ...options };
+  const { logOutput, source } = options;
 
   const answers = await readJsonFile('src/days/answers.json');
   const fails = [];
@@ -76,7 +77,7 @@ export const runDays = async options => {
     }
 
     day.parts.forEach((actual, partIndex) => {
-      const expected = answers?.[dayIndex]?.['input']?.[partIndex];
+      const expected = answers?.[dayIndex]?.[source]?.[partIndex];
       if (expected !== undefined && expected !== actual) {
         addFail(dayIndex, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
