@@ -27,13 +27,15 @@ export default day(({ answer, source }) => {
 
   const headPositions = computeHeadPositions();
 
-  const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // ayyyy it's our good friend the L-infinity norm!
+  const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // Ayyyy it's our good friend the L-infinity norm!
+
   const relative = (a, b) => b.map((v, i) => v - a[i]);
 
   const moveTail = (head, tail) => {
     const tailRelativeToHead = relative(tail, head);
 
     if (infinityNorm(tailRelativeToHead) <= 1) {
+      // We're close enough..
       return tail;
     }
 
@@ -53,37 +55,21 @@ export default day(({ answer, source }) => {
 
   const dedupePositions = array => dedupe(array, (a, b) => a.every((v, i) => v === b[i]));
 
-  const computeTailVisits = () => {
-    let tail = [0, 0];
+  const computeTailVisits = bodyLength => {
+    const body = range(1, bodyLength).map(() => [0, 0]);
     const tailPositions = [];
 
     headPositions.forEach(head => {
-      tail = moveTail(head, tail);
-      tailPositions.push(tail);
+      body.forEach((_, i) => {
+        body[i] = moveTail(i === 0 ? head : body[i - 1], body[i]);
+      });
+
+      tailPositions.push(body[body.length - 1]);
     });
 
     return dedupePositions(tailPositions).length;
   };
 
-  answer(computeTailVisits(), 5960);
-
-  const computeLongerTailVisits = () => {
-    const tail = range(1, 9).map(() => [0, 0]);
-
-    const tailEndPositions = [];
-
-    headPositions.forEach(head => {
-      tail.forEach((_, i) => {
-        tail[i] = moveTail(i === 0 ? head : tail[i - 1], tail[i]);
-      });
-
-      tailEndPositions.push(tail[tail.length - 1]);
-    });
-
-    return dedupePositions(tailEndPositions).length;
-  };
-
-  // todo: pass length to the above & use it in both answers!
-
-  answer(computeLongerTailVisits(), 2327);
+  answer(computeTailVisits(1), 5960);
+  answer(computeTailVisits(9), 2327);
 });
