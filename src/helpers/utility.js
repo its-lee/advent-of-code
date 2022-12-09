@@ -7,3 +7,13 @@ export const range = (start, length) => [...Array(length).keys()].map(v => start
 
 export const transposeMatrix = m =>
   range(0, Math.max(m.length, m[0]?.length || 0)).map(c => m.map(r => r[c]));
+
+export const dedupe = (array, equalityCallback) => {
+  return array.reduce((acc, v) => {
+    if (!acc.some(c => equalityCallback(c, v))) {
+      acc.push(v);
+    }
+
+    return acc;
+  }, []);
+};
