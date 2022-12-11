@@ -51,5 +51,5 @@ export const handleNewCommand = async ([year, day]) => {
   await regenerateDaysIndex();
   await updateAnswersFile(year, day);
 
-  console.log(`Created new folder ${dest} and added to index`);
+  console.log(`Added new day ${year}/${day}`);
 };
