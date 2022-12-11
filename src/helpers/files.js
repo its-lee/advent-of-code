@@ -46,3 +46,7 @@ export const readJsonFile = async filepath => {
   const content = await fs.readFile(filepath, 'utf-8');
   return JSON.parse(content);
 };
+
+export const writeJsonFile = async (filepath, content) => {
+  await fs.writeFile(filepath, JSON.stringify(content, null, 2));
+};

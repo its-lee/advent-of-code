@@ -1,6 +1,6 @@
 import days from '../days/index.js';
 import { range } from '../helpers/utility.js';
-import { readJsonFile } from '../helpers/files.js';
+import { readAnswers } from './answers.js';
 
 const runDay = async (yearDay, runner, options) => {
   const { tracePerformance, source } = options;
@@ -70,7 +70,7 @@ export const runDays = async options => {
       console.log(JSON.stringify(result.parts, null, 2));
     }
 
-    const answers = await readJsonFile(`src/days/${yearDay.year}/answers.json`);
+    const answers = await readAnswers(yearDay.year);
 
     result.parts.forEach((actual, partIndex) => {
       const expected = answers?.[yearDay.year]?.[yearDay.day]?.[source]?.[partIndex];
