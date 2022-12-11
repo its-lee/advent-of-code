@@ -11,13 +11,12 @@ export default day(({ answer, source }) => {
 
   const monkeys = source.split('\n\n').map(m => {
     const [, itemsStr, operationStr, divisorStr, trueStr, falseStr] = m.split('\n');
-
-    const [left, operator, right] = operationStr.split(' = ').slice(-1).split(' ');
+    const [left, operator, right] = operationStr.split(' = ').slice(-1)[0].split(' ');
 
     return {
       items: itemsStr
         .split(': ')
-        .slice(-1)
+        .slice(-1)[0]
         .split(', ')
         .map(v => parseInt(v)),
       operation: old => {
