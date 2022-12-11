@@ -48,15 +48,20 @@ export default day(({ answer, source }) => {
   const monkeys = computeInitialState();
 
   const applyRound = monkeys => {
-    monkeys.forEach(m => {
+    monkeys.forEach((m, index) => {
       const nextMonkeys = m.computeThrown();
       nextMonkeys.forEach(({ item, index }) => {
         monkeys[index].items.push(item);
       });
+      throws[index].push(...nextMonkeys);
     });
   };
 
-  range(0, 20).forEach(() => applyRound(monkeys));
+  const throws = range(0, monkeys.length).map(() => []);
+  range(0, 20).forEach(() => applyRound(monkeys, throws));
 
-  console.log(monkeys);
+  const throwCounts = throws.map(v => v.length).sort((a, b) => b - a);
+  const throwScore = throwCounts.slice(0, 2).reduce((acc, v) => acc * v, 1);
+
+  answer(throwScore);
 });
