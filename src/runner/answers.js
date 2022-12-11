@@ -11,7 +11,7 @@ export const readAnswers = async year => {
     return {};
   }
 
-  await readJsonFile(getAnswersPath(year));
+  return await readJsonFile(getAnswersPath(year));
 };
 
 export const writeAnswers = async (year, content) => {
