@@ -1,4 +1,4 @@
-import commands from './commands.js';
+import commands from './commands/index.js';
 
 const [command, ...args] = process.argv.slice(2);
 const requestedCommand = commands[command];

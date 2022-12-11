@@ -1,42 +1,7 @@
 import { promises as fs } from 'fs';
 
-import { fileExists, copyDir, listDir } from './helpers/files.js';
-import { runDays } from './runner/runner.js';
-
-const parseNumericParameter = value => {
-  const parsed = parseInt(value);
-  if (isNaN(parsed)) {
-    throw new Error(`A numeric parameter is required - received ${value}`);
-  }
-
-  return parsed;
-};
-
-const parseSourceParameter = source => {
-  const sources = {
-    i: 'input',
-    d: 'demo'
-  };
-
-  if (!(source in sources)) {
-    const valid = Object.keys(sources).join(', ');
-    throw new Error(`A valid source parameter is required (one of ${valid}) - received ${source}`);
-  }
-
-  return sources[source];
-};
-
-const handleDayCommand = async ([year, day, source = 'i']) => {
-  const yearFilter = parseNumericParameter(year);
-  const dayFilter = parseNumericParameter(day);
-  source = parseSourceParameter(source);
-
-  await runDays({ yearFilter, dayFilter, logOutput: true, source });
-};
-
-const handleTestCommand = async () => {
-  await runDays({ logOutput: false });
-};
+import { fileExists, copyDir, listDir } from '../helpers/files.js';
+import { parseNumericParameter } from './helpers.js';
 
 const regenerateDaysIndex = async () => {
   const days = (await listDir('src/days', 2))
@@ -66,7 +31,7 @@ const regenerateDaysIndex = async () => {
   await fs.writeFile('src/days/index.js', lines.join('\n'), { flag: 'w' });
 };
 
-const handleNewCommand = async ([year, day]) => {
+export const handleNewCommand = async ([year, day]) => {
   year = parseNumericParameter(year);
   day = parseNumericParameter(day);
 
@@ -80,10 +45,4 @@ const handleNewCommand = async ([year, day]) => {
   await regenerateDaysIndex();
 
   console.log(`Created new folder ${dest} and added to index`);
-};
-
-export default {
-  day: handleDayCommand,
-  test: handleTestCommand,
-  new: handleNewCommand
 };
