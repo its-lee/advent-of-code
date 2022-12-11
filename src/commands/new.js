@@ -6,11 +6,12 @@ import { parseNumericParameter } from './helpers.js';
 
 const regenerateDaysIndex = async () => {
   const days = (await listDir('src/days', 2))
+    .reduce((acc, dir) => [...acc, dir.split('/').slice(2)], [])
     // Ensure that we use a sorted array we're working from so that the output file is predictable,
     // and reduces the number of changes we need to make to the file.
-    .sort((a, b) => a - b)
-    .reduce((acc, dir) => {
-      dir = dir.split('/').slice(2).join('/');
+    .sort((a, b) => 10 * (a[0] - b[0]) + (a[1] - b[1]))
+    .reduce((acc, [year, day]) => {
+      const dir = `${year}/${day}`;
       acc.push({ variable: `index${dir.replace('/', '')}`, dir });
       return acc;
     }, []);
