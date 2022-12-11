@@ -51,8 +51,9 @@ const regenerateDaysIndex = async () => {
       ({ variable, dir }) => `import { default as ${variable} } from './${dir}/index.js';`
     ),
     '',
-    'const days = {};',
-    ...days.map(({ variable, dir }) => `days['${dir}'] = ${variable};`),
+    'const days = {',
+    days.map(({ variable, dir }) => `  '${dir}': ${variable}`).join(',\n'),
+    '};',
     '',
     `export default days;`,
     ''
@@ -65,21 +66,16 @@ const handleNewCommand = async ([year, day]) => {
   year = parseNumericParameter(year);
   day = parseNumericParameter(day);
 
-  // eslint-disable-next-line no-constant-condition
-
-  // relative paths, move this to after the new file generation has occurred, better obj gen.
-  if (true) {
-    await regenerateDaysIndex();
-    return;
-  }
-
   const dest = `src/days/${year}/${day}`;
   if (await fileExists(dest)) {
     throw new Error(`${dest} already exists.`);
   }
 
   await copyDir(`src/template`, dest);
-  console.log(`Created new folder ${dest}`);
+
+  await regenerateDaysIndex();
+
+  console.log(`Created new folder ${dest} and added to index`);
 };
 
 export default {

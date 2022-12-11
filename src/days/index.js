@@ -9,15 +9,16 @@ import { default as index20227 } from './2022/7/index.js';
 import { default as index20228 } from './2022/8/index.js';
 import { default as index20229 } from './2022/9/index.js';
 
-const days = {};
-days['2022/1'] = index20221;
-days['2022/2'] = index20222;
-days['2022/3'] = index20223;
-days['2022/4'] = index20224;
-days['2022/5'] = index20225;
-days['2022/6'] = index20226;
-days['2022/7'] = index20227;
-days['2022/8'] = index20228;
-days['2022/9'] = index20229;
+const days = {
+  '2022/1': index20221,
+  '2022/2': index20222,
+  '2022/3': index20223,
+  '2022/4': index20224,
+  '2022/5': index20225,
+  '2022/6': index20226,
+  '2022/7': index20227,
+  '2022/8': index20228,
+  '2022/9': index20229
+};
 
 export default days;
