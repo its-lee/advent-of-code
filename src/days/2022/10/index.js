@@ -28,4 +28,6 @@ export default day(({ answer, source }) => {
   console.log(registerHistory.length);
   console.log(registerHistory);
   console.log(periodicMeasurements);
+
+  answer(periodicMeasurements);
 });
