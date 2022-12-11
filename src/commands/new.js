@@ -1,6 +1,7 @@
 import { promises as fs } from 'fs';
 
 import { fileExists, copyDir, listDir } from '../helpers/files.js';
+import { readAnswers, writeAnswers } from '../runner/answers.js';
 import { parseNumericParameter } from './helpers.js';
 
 const regenerateDaysIndex = async () => {
@@ -31,6 +32,12 @@ const regenerateDaysIndex = async () => {
   await fs.writeFile('src/days/index.js', lines.join('\n'), { flag: 'w' });
 };
 
+const updateAnswersFile = async (year, day) => {
+  const answers = await readAnswers(year);
+  answers[day] = { input: [] };
+  await writeAnswers(year, answers);
+};
+
 export const handleNewCommand = async ([year, day]) => {
   year = parseNumericParameter(year);
   day = parseNumericParameter(day);
@@ -41,8 +48,8 @@ export const handleNewCommand = async ([year, day]) => {
   }
 
   await copyDir(`src/template`, dest);
-
   await regenerateDaysIndex();
+  await updateAnswersFile(year, day);
 
   console.log(`Created new folder ${dest} and added to index`);
 };
