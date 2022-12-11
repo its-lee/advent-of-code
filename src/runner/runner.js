@@ -73,7 +73,7 @@ export const runDays = async options => {
     const answers = await readAnswers(yearDay.year);
 
     result.parts.forEach((actual, partIndex) => {
-      const expected = answers?.[yearDay.year]?.[yearDay.day]?.[source]?.[partIndex];
+      const expected = answers?.[yearDay.day]?.[source]?.[partIndex];
       if (expected !== undefined && expected !== actual) {
         addFail(yearDay, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
