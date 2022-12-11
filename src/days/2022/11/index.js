@@ -47,7 +47,7 @@ export default day(({ answer, source }) => {
 
   const monkeys = computeInitialState();
 
-  const applyRound = monkeys => {
+  const applyRound = (monkeys, throws) => {
     monkeys.forEach((m, index) => {
       const nextMonkeys = m.computeThrown();
       nextMonkeys.forEach(({ item, index }) => {
@@ -57,11 +57,13 @@ export default day(({ answer, source }) => {
     });
   };
 
-  const throws = range(0, monkeys.length).map(() => []);
-  range(0, 20).forEach(() => applyRound(monkeys, throws));
+  const computeScore = () => {
+    const throws = range(0, monkeys.length).map(() => []);
+    range(0, 20).forEach(() => applyRound(monkeys, throws));
 
-  const throwCounts = throws.map(v => v.length).sort((a, b) => b - a);
-  const throwScore = throwCounts.slice(0, 2).reduce((acc, v) => acc * v, 1);
+    const throwCounts = throws.map(v => v.length).sort((a, b) => b - a);
+    return throwCounts.slice(0, 2).reduce((acc, v) => acc * v, 1);
+  };
 
-  answer(throwScore);
+  answer(computeScore());
 });
