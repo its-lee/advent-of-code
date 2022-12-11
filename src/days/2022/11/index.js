@@ -29,11 +29,15 @@ export default day(({ answer, source }) => {
         divisor: readLastInt(divisorStr),
         falseMonkeyIndex: readLastInt(falseStr),
         trueMonkeyIndex: readLastInt(trueStr),
-        computeThrown() {
+        computeThrown(applyDivisor) {
           const thrown = [];
           let item;
           while ((item = this.items.shift()) !== undefined) {
-            const updated = Math.floor(this.operation(item) / 3);
+            let updated = this.operation(item);
+            if (applyDivisor) {
+              updated = Math.floor(updated / 3);
+            }
+
             thrown.push({
               item: updated,
               index: updated % this.divisor === 0 ? this.trueMonkeyIndex : this.falseMonkeyIndex
@@ -45,24 +49,24 @@ export default day(({ answer, source }) => {
     });
   };
 
-  const applyRound = (monkeys, throws) => {
+  const applyRound = (monkeys, applyDivisor, throws) => {
     monkeys.forEach((m, index) => {
-      const nextMonkeys = m.computeThrown();
-      nextMonkeys.forEach(({ item, index }) => {
-        monkeys[index].items.push(item);
-      });
+      const nextMonkeys = m.computeThrown(applyDivisor);
+      nextMonkeys.forEach(({ item, index }) => monkeys[index].items.push(item));
       throws[index].push(...nextMonkeys);
     });
   };
 
-  const computeScore = () => {
+  const computeScore = (rounds, applyDivisor) => {
     const monkeys = computeInitialState();
     const throws = range(0, monkeys.length).map(() => []);
-    range(0, 20).forEach(() => applyRound(monkeys, throws));
+    range(0, rounds).forEach(() => applyRound(monkeys, applyDivisor, throws));
 
     const throwCounts = throws.map(v => v.length).sort((a, b) => b - a);
     return throwCounts.slice(0, 2).reduce((acc, v) => acc * v, 1);
   };
 
-  answer(computeScore());
+  answer(computeScore(20, true));
+
+  answer(computeScore(10000, false));
 });
