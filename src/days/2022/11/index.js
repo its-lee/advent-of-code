@@ -45,8 +45,6 @@ export default day(({ answer, source }) => {
     });
   };
 
-  const monkeys = computeInitialState();
-
   const applyRound = (monkeys, throws) => {
     monkeys.forEach((m, index) => {
       const nextMonkeys = m.computeThrown();
@@ -58,6 +56,7 @@ export default day(({ answer, source }) => {
   };
 
   const computeScore = () => {
+    const monkeys = computeInitialState();
     const throws = range(0, monkeys.length).map(() => []);
     range(0, 20).forEach(() => applyRound(monkeys, throws));
 
