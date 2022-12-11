@@ -12,7 +12,7 @@ if (!requestedCommand) {
   try {
     await requestedCommand(args);
   } catch (e) {
-    console.log(e);
+    console.error(e);
     process.exit(1);
   }
 })();

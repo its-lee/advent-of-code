@@ -1,27 +1,9 @@
+import days from '../days/index.js';
 import { range } from '../helpers/utility.js';
 import { readJsonFile } from '../helpers/files.js';
 
-const loadDay = async ({ year, day, id }) => {
-  const result = {};
-  try {
-    result.runner = (await import(`../days/${year}/day${day}/index.js`)).default;
-  } catch (e) {
-    // ignore instances where we haven't finished that test yet..
-    if (!(e instanceof Error && e.code === 'ERR_MODULE_NOT_FOUND')) {
-      result.error = `An error occurred while importing day #${id} - ${e}`;
-    }
-  }
-
-  return result;
-};
-
 const runDay = async (yearDay, runner, options) => {
   const { tracePerformance, source } = options;
-
-  let result;
-  if (!runner) {
-    return undefined;
-  }
 
   const timerLabel = `Ended day #${yearDay.id}`;
   if (tracePerformance) {
@@ -29,13 +11,13 @@ const runDay = async (yearDay, runner, options) => {
     console.time(timerLabel);
   }
 
-  result = await runner(yearDay, source);
-
-  if (tracePerformance) {
-    console.timeEnd(timerLabel);
+  try {
+    return await runner(yearDay, source);
+  } finally {
+    if (tracePerformance) {
+      console.timeEnd(timerLabel);
+    }
   }
-
-  return result;
 };
 
 const getFilteredDays = options => {
@@ -57,12 +39,14 @@ const getFilteredDays = options => {
 const runEach = async options => {
   const loaded = [];
   for (const yearDay of getFilteredDays(options)) {
-    const { runner, error } = await loadDay(yearDay);
+    const runner = days[yearDay.id];
+    if (!runner) {
+      continue;
+    }
 
     loaded.push({
       yearDay,
-      result: await runDay(yearDay, runner, options),
-      error
+      result: await runDay(yearDay, runner, options)
     });
   }
 
@@ -77,11 +61,7 @@ export const runDays = async options => {
   const addFail = (yearDay, message) => fails.push(`Day #${yearDay.id}: ${message}`);
 
   const days = await runEach({ ...options, tracePerformance: true });
-  for (const { yearDay, result, error } of days) {
-    if (error) {
-      addFail(yearDay, error);
-    }
-
+  for (const { yearDay, result } of days) {
     if (!result) {
       return;
     }

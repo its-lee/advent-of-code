@@ -26,13 +26,16 @@ export const copyDir = async (src, dest) => {
   }
 };
 
-export const listDir = async (src, dirs = []) => {
-  dirs.push(src);
+export const listDir = async (src, atDepth, dirs = []) => {
+  if (!atDepth) {
+    dirs.push(src);
+  }
+
   const entries = await fs.readdir(src, { withFileTypes: true });
 
   for (const entry of entries) {
     if (entry.isDirectory()) {
-      await listDir([src, entry.name].join('/'), dirs);
+      await listDir([src, entry.name].join('/'), atDepth - 1, dirs);
     }
   }
 
