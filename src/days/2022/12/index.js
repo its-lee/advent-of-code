@@ -103,8 +103,7 @@ export default day(({ answer, source }) => {
   const bfs = (goal, root = vertices[0]) => {
     let adj = adjacent;
 
-    const queue = [];
-    queue.push(root);
+    const queue = [root];
 
     const discovered = [];
     discovered[root] = true;
@@ -116,8 +115,7 @@ export default day(({ answer, source }) => {
     predecessors[root] = null;
 
     const buildPath = (goal, root, predecessors) => {
-      const stack = [];
-      stack.push(goal);
+      const stack = [goal];
 
       let u = predecessors[goal];
 
@@ -135,26 +133,23 @@ export default day(({ answer, source }) => {
       let v = queue.shift();
 
       if (v === goal) {
-        return {
-          distance: edges[goal],
-          path: buildPath(goal, root, predecessors)
-        };
+        return buildPath(goal, root, predecessors);
       }
 
-      for (let i = 0; i < adj[v].length; i++) {
-        if (!discovered[adj[v][i]]) {
-          discovered[adj[v][i]] = true;
-          queue.push(adj[v][i]);
-          edges[adj[v][i]] = edges[v] + 1;
-          predecessors[adj[v][i]] = v;
+      adj[v].forEach(adjv => {
+        if (!discovered[adjv]) {
+          discovered[adjv] = true;
+          queue.push(adjv);
+          edges[adjv] = edges[v] + 1;
+          predecessors[adjv] = v;
         }
-      }
+      });
     }
 
     return false;
   };
 
-  answer(bfs(end.index, start.index).distance);
+  answer(bfs(end.index, start.index).length - 1); // don't include the start
 
   // https://jarednielsen.com/data-structure-graph-shortest-path/
 });
