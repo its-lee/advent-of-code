@@ -39,13 +39,29 @@ export default day(({ answer, source }) => {
       if (applyInspectionChange) {
         updated = Math.floor(updated / 3);
       } else {
-        const someCommonMultiple = monkeys.reduce((acc, v) => acc * v.divisor, 1);
-        updated %= someCommonMultiple;
+        // Reduce the updated value down to mod (product of divisors).
+        // This works as each monkey only looks at the result after additions and multiplications
+        // mod their divisor - so if there's an additive part that's a multiple of this divisor product
+        // they're not going to see it anyway (as it'll be 0 mod their divisor).
+        //
+        // This lets us reduce the values passed down to a value always less than this product -
+        // rather than having to contend with absolutely colossal values (that using BigInt will
+        // support) which crash my machine as the amount of memory required to store all the digits
+        // is wayyyy too much. Even this is assuming that using BigInt wouldn't truncate (I don't
+        // think it would, we're only perform integral operations and it essentially stores digits
+        // in a string).
+        //
+        // This only works because we're using integral operations (+, *), if we were still doing
+        // integer division by 3 it wouldn't as that's a lossy operation.
+        //
+        // Note: We could optimise this further by using the LCM (or by not computing this every
+        // single time..)
+        updated %= monkeys.reduce((acc, v) => acc * v.divisor, 1);
       }
 
       return {
         item: updated,
-        index: updated % monkey.divisor === 0 ? monkey.trueMonkeyIndex : monkey.falseMonkeyIndex
+        index: updated % monkey.divisor ? monkey.falseMonkeyIndex : monkey.trueMonkeyIndex
       };
     });
 
