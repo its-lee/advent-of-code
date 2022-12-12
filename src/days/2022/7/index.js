@@ -55,7 +55,7 @@ export default day(({ answer, source }) => {
     console.log(JSON.stringify(tree, null, 2));
   };
 
-  print(getRecursivePathSizes(), 100000);
+  print(getNonRecursivePathSizes(), Infinity);
 
   const sizeUnder100000 = Object.values(getRecursivePathSizes())
     .filter(size => size <= 100000)
