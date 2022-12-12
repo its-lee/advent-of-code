@@ -44,9 +44,7 @@ export default day(({ answer, source }) => {
     Object.entries(pathSizes).forEach(([key, size]) => {
       const parts = key.split('/');
       let ptr = tree;
-      parts.forEach(part => {
-        ptr = ptr[part] = ptr[part] || {};
-      });
+      parts.forEach(part => (ptr = ptr[part] = ptr[part] || {}));
       ptr['$size'] = size;
     });
 
