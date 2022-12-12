@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-import { charCode } from '../../../helpers/utility.js';
+import { charCode, range } from '../../../helpers/utility.js';
 import { relative, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ answer, source }) => {
@@ -47,12 +47,14 @@ export default day(({ answer, source }) => {
   //   });
   // });
 
-  const recursePaths = paths => {
+  const recursePaths = (paths, succeedingPaths = []) => {
     paths.forEach(path => {
       // console.log(path[path.length - 1].value, 'E=', charCode('E'));
       // check if we're at the end
       if (isDestination(path[path.length - 1])) {
-        console.log('found successful path - length', path.length);
+        succeedingPaths.push(path);
+        //console.log('found successful path - length', path.length);
+        return;
       }
 
       // Ignore those paths which have stopped growing - they're at a dead end.
@@ -60,9 +62,31 @@ export default day(({ answer, source }) => {
 
       // console.log(newPaths);
 
-      recursePaths(newPaths);
+      recursePaths(newPaths, succeedingPaths);
     });
+
+    return succeedingPaths;
   };
 
-  recursePaths([initialPath]);
+  const printPath = path => {
+    const width = Math.max(...grid.map(c => c.position[0])) + 1;
+    const height = Math.max(...grid.map(c => c.position[1])) + 1;
+
+    range(0, height).forEach((_, y) => {
+      console.log(
+        range(0, width)
+          .map((_, x) => {
+            const cell = path.find(p => areEqualVectors(p.position, [x, y]));
+            return cell ? String.fromCharCode(97 + cell.value) : '.';
+          })
+          .join('')
+      );
+    });
+
+    console.log(path.length);
+  };
+
+  recursePaths([initialPath])
+    .sort((a, b) => b.length - a.length)
+    .forEach(printPath);
 });
