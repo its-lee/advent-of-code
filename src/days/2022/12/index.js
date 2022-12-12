@@ -5,7 +5,7 @@ import { relative, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ answer, source }) => {
   // TODO: dedupe this linearization from #8, move value map to end
-  const grid = source
+  let grid = source
     .split('\n')
     .map(row => row.split(''))
     .flatMap((row, y) =>
@@ -28,17 +28,25 @@ export default day(({ answer, source }) => {
       .map(v => Math.abs(v))
       .reduce((acc, v) => acc + v, 0) === 1;
 
-  const findNextSteps = path => {
-    const current = path[path.length - 1];
-    return grid
-      .filter(c => areAdjacent(current.position, c.position))
-      .filter(c => c.value <= current.value + 1) // ignore cells which are too step
-      .filter(c => !path.some(p => areEqualVectors(p.position, c.position))); // don't go where we've already gone to avoid infinite cycles
+  grid = grid.map(cell => {
+    cell.available = grid
+      .filter(c => areAdjacent(cell.position, c.position))
+      .filter(c => c.value <= cell.value + 1); // ignore cells which are too steep
+
+    return cell;
+  });
+
+  const extendAndBifurcatePath = path => {
+    // don't go where we've already gone to avoid infinite cycles
+    const nextSteps = path[path.length - 1].available.filter(
+      c => !path.some(p => areEqualVectors(p.position, c.position))
+    );
+
+    return nextSteps.map(step => [...path, step]);
   };
 
-  const extendAndBifurcatePath = path => findNextSteps(path).map(step => [...path, step]);
-
-  const recursePaths = (paths, succeedingPaths = []) => {
+  const recursePaths = (paths, succeedingPaths = [], depth = 0) => {
+    console.log('at depth', depth);
     paths.forEach(path => {
       // Check if we're at the end
       if (isDestination(path[path.length - 1])) {
@@ -49,7 +57,8 @@ export default day(({ answer, source }) => {
       recursePaths(
         // Ignore those paths which have stopped growing - they're at a dead end.
         extendAndBifurcatePath(path).filter(newPath => newPath.length > path.length),
-        succeedingPaths
+        succeedingPaths,
+        depth + 1
       );
     });
 
