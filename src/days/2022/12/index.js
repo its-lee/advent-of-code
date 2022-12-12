@@ -38,38 +38,19 @@ export default day(({ answer, source }) => {
 
   const extendAndBifurcatePath = path => findNextSteps(path).map(step => [...path, step]);
 
-  // todo: need to detect terminuses - either the end is E OR the end hasn't changed
-  // todo: need to progress each path in turn
-
-  // const paths = extendAndBifurcatePath(initialPath);
-  // paths.forEach(path => {
-  //   // check if we're at the end
-  //   if (path[path.length - 1].value === charCode('E')) {
-  //     console.log('found successful path');
-  //   }
-
-  //   const newPaths = extendAndBifurcatePath(path).filter(newPath => newPath.length === path.length);
-  //   // check for termination
-  //   // remove finished paths
-  //   newPaths.forEach(np => {
-  //     // ...
-  //   });
-  // });
-
   const recursePaths = (paths, succeedingPaths = []) => {
     paths.forEach(path => {
-      // check if we're at the end
+      // Check if we're at the end
       if (isDestination(path[path.length - 1])) {
         succeedingPaths.push(path);
         return;
       }
 
-      // Ignore those paths which have stopped growing - they're at a dead end.
-      const newPaths = extendAndBifurcatePath(path).filter(newPath => newPath.length > path.length);
-
-      // console.log(newPaths);
-
-      recursePaths(newPaths, succeedingPaths);
+      recursePaths(
+        // Ignore those paths which have stopped growing - they're at a dead end.
+        extendAndBifurcatePath(path).filter(newPath => newPath.length > path.length),
+        succeedingPaths
+      );
     });
 
     return succeedingPaths;
