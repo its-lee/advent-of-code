@@ -43,48 +43,40 @@ export default day(({ answer, source }) => {
   });
 
   const breadthFirstShortestPath = (end, start = vertices[0]) => {
-    let adj = adjacent;
-
     const queue = [start];
-
-    const discovered = [];
-    discovered[start] = true;
-
-    const edges = [];
-    edges[start] = 0;
-
-    const predecessors = [];
-    predecessors[start] = null;
+    const visited = { [start]: true };
+    const edges = { [start]: 0 };
+    const predecessors = { [start]: null };
 
     const buildPath = (end, start, predecessors) => {
       const stack = [end];
 
       let u = predecessors[end];
-
       while (u != start) {
         stack.push(u);
         u = predecessors[u];
       }
 
       stack.push(start);
-
       return stack.reverse();
     };
 
     while (queue.length) {
-      let v = queue.shift();
+      const v = queue.shift();
 
       if (v === end) {
         return buildPath(end, start, predecessors);
       }
 
-      adj[v].forEach(adjv => {
-        if (!discovered[adjv]) {
-          discovered[adjv] = true;
-          queue.push(adjv);
-          edges[adjv] = edges[v] + 1;
-          predecessors[adjv] = v;
+      adjacent[v].forEach(adjv => {
+        if (visited[adjv]) {
+          return;
         }
+
+        visited[adjv] = true;
+        queue.push(adjv);
+        edges[adjv] = edges[v] + 1;
+        predecessors[adjv] = v;
       });
     }
 
