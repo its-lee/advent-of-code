@@ -30,19 +30,19 @@ export default day(({ answer, source }) => {
         falseMonkeyIndex: readLastInt(falseStr),
         trueMonkeyIndex: readLastInt(trueStr),
         computeThrown(applyInspectionChange) {
-          const thrown = [];
-          let item;
-          while ((item = this.items.shift()) !== undefined) {
+          const thrown = this.items.map(item => {
             let updated = this.operation(item);
             if (applyInspectionChange) {
               updated = Math.floor(updated / 3);
             }
 
-            thrown.push({
+            return {
               item: updated,
               index: updated % this.divisor === 0 ? this.trueMonkeyIndex : this.falseMonkeyIndex
-            });
-          }
+            };
+          });
+
+          this.items = [];
           return thrown;
         }
       };
