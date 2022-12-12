@@ -17,3 +17,15 @@ export const dedupe = (array, equalityCallback) => {
     return acc;
   }, []);
 };
+
+export const parseGrid = s =>
+  s
+    .split('\n')
+    .map(row => row.split(''))
+    .flatMap((row, y) =>
+      row.map((char, x) => ({
+        char,
+        position: [x, y]
+      }))
+    )
+    .map((cell, index) => ({ ...cell, index }));

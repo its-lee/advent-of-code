@@ -1,38 +1,27 @@
 import day from '../../../runner/day.js';
 
-import { charCode } from '../../../helpers/utility.js';
+import { charCode, parseGrid } from '../../../helpers/utility.js';
 import { relative } from '../../../helpers/vector.js';
 
 export default day(({ answer, source }) => {
-  let grid = source
-    .split('\n')
-    .map(row => row.split(''))
-    .flatMap((row, y) =>
-      row.map((char, x) => ({
-        char,
-        value: charCode(char === 'E' ? 'z' : char),
-        position: [x, y]
-      }))
-    );
-
   const areAdjacent = (a, b) =>
     relative(a, b)
       .map(v => Math.abs(v))
       .reduce((acc, v) => acc + v, 0) === 1;
 
-  grid = grid.map((cell, index) => {
-    cell.index = index;
-    cell.adjacent = grid
-      .filter(c => areAdjacent(cell.position, c.position))
-      .filter(c => c.value <= cell.value + 1); // ignore cells which are too steep
+  const extractGrid = () => {
+    let grid = parseGrid(source).map(v => ({
+      ...v,
+      value: charCode(v.char === 'E' ? 'z' : v.char)
+    }));
 
-    return cell;
-  });
-
-  const locateByChar = m => grid.find(({ char }) => char === m);
-
-  const start = locateByChar('S');
-  const end = locateByChar('E');
+    return grid.map(cell => ({
+      ...cell,
+      adjacent: grid
+        .filter(c => areAdjacent(cell.position, c.position))
+        .filter(c => c.value <= cell.value + 1) // ignore cells which are too steep
+    }));
+  };
 
   const breadthFirstSearch = () => {
     return {
@@ -52,6 +41,8 @@ export default day(({ answer, source }) => {
         stack.push(start);
         return stack.reverse();
       },
+      // Note that there may be multiple shortest-paths, this algoritm just returns the first detected.
+      // Originally aided by the docs on https://jarednielsen.com/data-structure-graph-shortest-path/
       compute(start, end) {
         const queue = [start];
         const visited = { [start]: true };
@@ -82,14 +73,19 @@ export default day(({ answer, source }) => {
 
   const search = breadthFirstSearch();
 
+  const grid = extractGrid();
   grid.forEach(cell => {
     search.addVertex(
       cell.index,
       cell.adjacent.map(c => c.index)
     );
   });
-  const path = search.compute(start.index, end.index);
-  answer(path.length - 1); // don't include the start
 
-  // https://jarednielsen.com/data-structure-graph-shortest-path/
+  const locateByChar = m => grid.find(({ char }) => char === m);
+  const start = locateByChar('S');
+  const end = locateByChar('E');
+
+  const path = search.compute(start.index, end.index);
+
+  answer(path.length - 1); // don't include the start in the length computation
 });
