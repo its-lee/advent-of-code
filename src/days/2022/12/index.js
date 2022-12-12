@@ -34,56 +34,62 @@ export default day(({ answer, source }) => {
   const start = locateByChar('S');
   const end = locateByChar('E');
 
-  const vertices = [];
-  const adjacent = {};
+  const breadthFirstSearch = () => {
+    return {
+      adjacent: {},
+      addVertex(vertex, adjacentVertices) {
+        this.adjacent[vertex] = adjacentVertices;
+      },
+      buildPath(end, start, predecessors) {
+        const stack = [end];
 
-  grid.forEach(cell => {
-    vertices.push(cell.index);
-    adjacent[cell.index] = cell.adjacent.map(c => c.index);
-  });
-
-  const breadthFirstShortestPath = (end, start = vertices[0]) => {
-    const queue = [start];
-    const visited = { [start]: true };
-    const edges = { [start]: 0 };
-    const predecessors = { [start]: null };
-
-    const buildPath = (end, start, predecessors) => {
-      const stack = [end];
-
-      let u = predecessors[end];
-      while (u != start) {
-        stack.push(u);
-        u = predecessors[u];
-      }
-
-      stack.push(start);
-      return stack.reverse();
-    };
-
-    while (queue.length) {
-      const v = queue.shift();
-
-      if (v === end) {
-        return buildPath(end, start, predecessors);
-      }
-
-      adjacent[v].forEach(adjv => {
-        if (visited[adjv]) {
-          return;
+        let u = predecessors[end];
+        while (u != start) {
+          stack.push(u);
+          u = predecessors[u];
         }
 
-        visited[adjv] = true;
-        queue.push(adjv);
-        edges[adjv] = edges[v] + 1;
-        predecessors[adjv] = v;
-      });
-    }
+        stack.push(start);
+        return stack.reverse();
+      },
+      compute(start, end) {
+        const queue = [start];
+        const visited = { [start]: true };
+        const predecessors = { [start]: null };
 
-    return false;
+        while (queue.length) {
+          const v = queue.shift();
+
+          if (v === end) {
+            return this.buildPath(end, start, predecessors);
+          }
+
+          this.adjacent[v].forEach(adjv => {
+            if (visited[adjv]) {
+              return;
+            }
+
+            visited[adjv] = true;
+            queue.push(adjv);
+            predecessors[adjv] = v;
+          });
+        }
+
+        return undefined;
+      }
+    };
   };
 
-  answer(breadthFirstShortestPath(end.index, start.index).length - 1); // don't include the start
+  const search = breadthFirstSearch();
+
+  grid.forEach(cell => {
+    search.addVertex(
+      cell.index,
+      cell.adjacent.map(c => c.index)
+    );
+  });
+  const path = search.compute(start.index, end.index);
+  answer(path.length - 1); // don't include the start
 
   // https://jarednielsen.com/data-structure-graph-shortest-path/
 });
