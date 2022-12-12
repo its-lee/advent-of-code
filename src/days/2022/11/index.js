@@ -28,30 +28,34 @@ export default day(({ answer, source }) => {
         },
         divisor: readLastInt(divisorStr),
         falseMonkeyIndex: readLastInt(falseStr),
-        trueMonkeyIndex: readLastInt(trueStr),
-        computeThrown(applyInspectionChange) {
-          const thrown = this.items.map(item => {
-            let updated = this.operation(item);
-            if (applyInspectionChange) {
-              updated = Math.floor(updated / 3);
-            }
-
-            return {
-              item: updated,
-              index: updated % this.divisor === 0 ? this.trueMonkeyIndex : this.falseMonkeyIndex
-            };
-          });
-
-          this.items = [];
-          return thrown;
-        }
+        trueMonkeyIndex: readLastInt(trueStr)
       };
     });
   };
 
+  const computeThrown = (monkeys, monkey, applyInspectionChange) => {
+    const thrown = monkey.items.map(item => {
+      let updated = monkey.operation(item);
+      if (applyInspectionChange) {
+        updated = Math.floor(updated / 3);
+      } else {
+        const someCommonMultiple = monkeys.reduce((acc, v) => acc * v.divisor, 1);
+        updated %= someCommonMultiple;
+      }
+
+      return {
+        item: updated,
+        index: updated % monkey.divisor === 0 ? monkey.trueMonkeyIndex : monkey.falseMonkeyIndex
+      };
+    });
+
+    monkey.items = [];
+    return thrown;
+  };
+
   const applyRound = (monkeys, applyInspectionChange, throws) => {
     monkeys.forEach((m, index) => {
-      const nextMonkeys = m.computeThrown(applyInspectionChange);
+      const nextMonkeys = computeThrown(monkeys, m, applyInspectionChange);
       nextMonkeys.forEach(({ item, index }) => monkeys[index].items.push(item));
       throws[index].push(...nextMonkeys);
     });
@@ -67,4 +71,6 @@ export default day(({ answer, source }) => {
   };
 
   answer(computeScore(20, true));
+
+  answer(computeScore(10000, false));
 });
