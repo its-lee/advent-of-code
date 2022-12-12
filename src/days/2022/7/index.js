@@ -1,7 +1,7 @@
 import day from '../../../runner/day.js';
 
 export default day(({ answer, source }) => {
-  const getNonRecursiveDirectorySizes = () => {
+  const getNonRecursivePathSizes = () => {
     let currentPath = [];
     const pathSizes = {};
 
@@ -28,19 +28,35 @@ export default day(({ answer, source }) => {
   };
 
   const getRecursivePathSizes = () => {
-    const pathSizes = getNonRecursiveDirectorySizes();
+    const pathSizes = getNonRecursivePathSizes();
 
     return Object.keys(pathSizes).reduce((acc, path) => {
-      const recursiveSize = Object.keys(pathSizes).reduce((overall, subPath) => {
-        return overall + (subPath.startsWith(path) ? pathSizes[subPath] : 0);
-      }, 0);
+      const recursiveSize = Object.keys(pathSizes)
+        .filter(key => key.startsWith(path))
+        .reduce((overall, key) => overall + pathSizes[key], 0);
 
       return { ...acc, [path]: recursiveSize };
     }, {});
   };
 
+  const print = pathSizes => {
+    const tree = {};
+    Object.entries(pathSizes).forEach(([key, size]) => {
+      const parts = key.split('/');
+      let ptr = tree;
+      parts.forEach(part => {
+        ptr = ptr[part] = ptr[part] || {};
+      });
+      ptr['$size'] = size;
+    });
+
+    console.log(JSON.stringify(tree, null, 2));
+  };
+
+  print(getRecursivePathSizes());
+
   const sizeUnder100000 = Object.values(getRecursivePathSizes()).filter(size => size <= 100000);
   //.reduce((acc, size) => acc + size, 0);
 
-  answer(sizeUnder100000);
+  //answer(sizeUnder100000);
 });
