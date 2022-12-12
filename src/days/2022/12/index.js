@@ -7,10 +7,10 @@ export default day(({ answer, source }) => {
   // TODO: dedupe this linearization from #8, move value map to end
   const grid = source
     .split('\n')
-    .map(row => row.split('').map(v => charCode(v)))
-    .flatMap((row, y) => row.map((value, x) => ({ value, position: [x, y] })));
+    .map(row => row.split(''))
+    .flatMap((row, y) => row.map((s, x) => ({ value: charCode(s), position: [x, y] })));
 
-  const start = grid.find(({ value }) => value === charCode('S'));
+  const initialPath = [grid.find(({ value }) => value === charCode('S'))];
 
   const areAdjacent = (a, b) =>
     relative(a, b)
@@ -25,5 +25,8 @@ export default day(({ answer, source }) => {
       .filter(c => !path.some(p => areEqualVectors(p.position, c.position))); // don't go where we've already gone to avoid infinite cycles
   };
 
-  console.log(findNextSteps([start]));
+  // todo: need to detect terminuses - either the end is E OR the end hasn't changed
+  // todo: need to progress each path in turn
+
+  const paths = findNextSteps(initialPath);
 });
