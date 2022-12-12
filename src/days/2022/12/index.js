@@ -42,7 +42,7 @@ export default day(({ answer, source }) => {
     adjacent[cell.index] = cell.adjacent.map(c => c.index);
   });
 
-  const bfs = (goal, root = vertices[0]) => {
+  const breadthFirstShortestPath = (goal, root = vertices[0]) => {
     let adj = adjacent;
 
     const queue = [root];
@@ -91,7 +91,7 @@ export default day(({ answer, source }) => {
     return false;
   };
 
-  answer(bfs(end.index, start.index).length - 1); // don't include the start
+  answer(breadthFirstShortestPath(end.index, start.index).length - 1); // don't include the start
 
   // https://jarednielsen.com/data-structure-graph-shortest-path/
 });
