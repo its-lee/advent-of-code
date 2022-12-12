@@ -1,6 +1,7 @@
 import day from '../../../runner/day.js';
 
 import { range, dedupe } from '../../../helpers/utility.js';
+import { relative, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ answer, source }) => {
   const headMoves = {
@@ -27,10 +28,6 @@ export default day(({ answer, source }) => {
 
   const headPositions = computeHeadPositions();
 
-  const infinityNorm = p => Math.max(...p.map(v => Math.abs(v))); // Ayyyy it's our good friend the L-infinity norm!
-
-  const relative = (a, b) => b.map((v, i) => v - a[i]);
-
   const moveTail = (head, tail) => {
     const tailRelativeToHead = relative(tail, head);
 
@@ -53,7 +50,7 @@ export default day(({ answer, source }) => {
     return move(tail, tailMove);
   };
 
-  const dedupePositions = array => dedupe(array, (a, b) => a.every((v, i) => v === b[i]));
+  const dedupePositions = array => dedupe(array, areEqualVectors);
 
   const computeTailVisits = bodyLength => {
     const body = range(1, bodyLength).map(() => [0, 0]);
