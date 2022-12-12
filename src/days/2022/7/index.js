@@ -23,7 +23,6 @@ export default day(({ answer, source }) => {
         }
       }
     });
-
     return pathSizes;
   };
 
@@ -31,9 +30,11 @@ export default day(({ answer, source }) => {
     const pathSizes = getNonRecursivePathSizes();
 
     return Object.keys(pathSizes).reduce((acc, path) => {
-      const recursiveSize = Object.keys(pathSizes)
-        .filter(key => key.startsWith(path))
-        .reduce((overall, key) => overall + pathSizes[key], 0);
+      const subPaths = Object.keys(pathSizes).filter(key => key.startsWith(path));
+
+      const recursiveSize = subPaths.reduce((overall, key) => overall + pathSizes[key], 0);
+
+      console.log(path, 'contains', subPaths, 'with size', recursiveSize);
 
       return { ...acc, [path]: recursiveSize };
     }, {});
@@ -56,10 +57,42 @@ export default day(({ answer, source }) => {
   };
 
   print(getNonRecursivePathSizes(), Infinity);
-
   const sizeUnder100000 = Object.values(getRecursivePathSizes())
     .filter(size => size <= 100000)
     .reduce((acc, size) => acc + size, 0);
 
   answer(sizeUnder100000);
+
+  // const keyInto = (root, path) => {
+  //   let ptr = root;
+  //   path.forEach(p => (ptr = ptr[p] = ptr[p] || {}));
+  //   return ptr;
+  // };
+  // const getNonRecursivePathSizes = () => {
+  //   let currentPath = [];
+  //   const pathSizes = {};
+  //   source.split('\n').forEach(l => {
+  //     if (l.startsWith('$')) {
+  //       const [, dir] = /^\$ cd (.*)$/.exec(l) || [];
+  //       if (dir) {
+  //         if (dir !== '..') {
+  //           currentPath.push(dir === '/' ? '' : dir);
+  //         } else {
+  //           currentPath.pop();
+  //         }
+  //       }
+  //     } else {
+  //       if (!l.startsWith('dir')) {
+  //         const [, size] = /^(\d+) (.*)$/.exec(l) || [];
+  //         const ourPath = keyInto(pathSizes, currentPath);
+  //         ourPath['$size'] = (ourPath['$size'] || 0) + parseInt(size);
+  //       }
+  //     }
+  //   });
+  //   return pathSizes;
+  // };
+  // const getRecursivePathSizes = () => {
+  //   const pathSizes = getNonRecursivePathSizes();
+  // }
+  // console.log(JSON.stringify(getNonRecursivePathSizes(), null, 2));
 });
