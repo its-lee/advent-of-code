@@ -42,31 +42,31 @@ export default day(({ answer, source }) => {
     adjacent[cell.index] = cell.adjacent.map(c => c.index);
   });
 
-  const breadthFirstShortestPath = (goal, root = vertices[0]) => {
+  const breadthFirstShortestPath = (end, start = vertices[0]) => {
     let adj = adjacent;
 
-    const queue = [root];
+    const queue = [start];
 
     const discovered = [];
-    discovered[root] = true;
+    discovered[start] = true;
 
     const edges = [];
-    edges[root] = 0;
+    edges[start] = 0;
 
     const predecessors = [];
-    predecessors[root] = null;
+    predecessors[start] = null;
 
-    const buildPath = (goal, root, predecessors) => {
-      const stack = [goal];
+    const buildPath = (end, start, predecessors) => {
+      const stack = [end];
 
-      let u = predecessors[goal];
+      let u = predecessors[end];
 
-      while (u != root) {
+      while (u != start) {
         stack.push(u);
         u = predecessors[u];
       }
 
-      stack.push(root);
+      stack.push(start);
 
       return stack.reverse();
     };
@@ -74,8 +74,8 @@ export default day(({ answer, source }) => {
     while (queue.length) {
       let v = queue.shift();
 
-      if (v === goal) {
-        return buildPath(goal, root, predecessors);
+      if (v === end) {
+        return buildPath(end, start, predecessors);
       }
 
       adj[v].forEach(adjv => {
