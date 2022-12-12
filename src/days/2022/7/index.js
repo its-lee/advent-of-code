@@ -39,9 +39,13 @@ export default day(({ answer, source }) => {
     }, {});
   };
 
-  const print = pathSizes => {
+  const print = (pathSizes, limit) => {
     const tree = {};
     Object.entries(pathSizes).forEach(([key, size]) => {
+      if (size > limit) {
+        return;
+      }
+
       const parts = key.split('/');
       let ptr = tree;
       parts.forEach(part => (ptr = ptr[part] = ptr[part] || {}));
@@ -51,10 +55,11 @@ export default day(({ answer, source }) => {
     console.log(JSON.stringify(tree, null, 2));
   };
 
-  print(getRecursivePathSizes());
+  print(getRecursivePathSizes(), 100000);
 
-  const sizeUnder100000 = Object.values(getRecursivePathSizes()).filter(size => size <= 100000);
-  //.reduce((acc, size) => acc + size, 0);
+  const sizeUnder100000 = Object.values(getRecursivePathSizes())
+    .filter(size => size <= 100000)
+    .reduce((acc, size) => acc + size, 0);
 
-  //answer(sizeUnder100000);
+  answer(sizeUnder100000);
 });
