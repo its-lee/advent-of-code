@@ -82,10 +82,24 @@ export default day(({ answer, source }) => {
   });
 
   const locateByChar = m => grid.find(({ char }) => char === m);
-  const start = locateByChar('S');
   const end = locateByChar('E');
 
-  const path = search.compute(start.index, end.index);
+  const shortestPathLength = start => {
+    const path = search.compute(start.index, end.index);
+    // don't include the start in the length computation
+    return path?.length !== undefined ? path.length - 1 : undefined;
+  };
 
-  answer(path.length - 1); // don't include the start in the length computation
+  answer(shortestPathLength(locateByChar('S')));
+
+  const shortestPathFromLowestPoints = () => {
+    return Math.min(
+      ...grid
+        .filter(c => c.value === 1)
+        .map(start => shortestPathLength(start))
+        .filter(l => l !== undefined)
+    );
+  };
+
+  answer(shortestPathFromLowestPoints());
 });
