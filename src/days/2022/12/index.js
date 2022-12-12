@@ -8,9 +8,9 @@ export default day(({ answer, source }) => {
     .split('\n')
     .map(row => row.split(''))
     .flatMap((row, y) =>
-      row.map((s, x) => ({
-        mark: s,
-        value: charCode(s === 'E' ? 'z' : s),
+      row.map((char, x) => ({
+        char,
+        value: charCode(char === 'E' ? 'z' : char),
         position: [x, y]
       }))
     );
@@ -29,10 +29,10 @@ export default day(({ answer, source }) => {
     return cell;
   });
 
-  const locateByMark = m => grid.find(({ mark }) => mark === m);
+  const locateByChar = m => grid.find(({ char }) => char === m);
 
-  const start = locateByMark('S');
-  const end = locateByMark('E');
+  const start = locateByChar('S');
+  const end = locateByChar('E');
 
   const vertices = [];
   const adjacent = {};
