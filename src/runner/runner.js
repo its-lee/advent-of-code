@@ -1,6 +1,7 @@
 import days from '../days/index.js';
 import { range } from '../helpers/utility.js';
 import { readAnswers } from './answers.js';
+import { computeYearDayId } from '../commands/helpers.js';
 
 const runDay = async (yearDay, runner, options) => {
   const { tracePerformance, source } = options;
@@ -31,7 +32,7 @@ const getFilteredDays = options => {
         .map(day => ({
           year,
           day,
-          id: [year, day].join('/')
+          id: computeYearDayId(year, day)
         }));
     });
 };

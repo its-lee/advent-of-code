@@ -1,3 +1,5 @@
+export const computeYearDayId = (year, day) => [year, day].join('/');
+
 export const parseNumericParameter = value => {
   const parsed = parseInt(value);
   if (isNaN(parsed)) {

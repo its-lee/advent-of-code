@@ -2,7 +2,7 @@ import { promises as fs } from 'fs';
 
 import { fileExists, copyDir, listDir } from '../helpers/files.js';
 import { readAnswers, writeAnswers } from '../runner/answers.js';
-import { parseNumericParameter } from './helpers.js';
+import { computeYearDayId, parseNumericParameter } from './helpers.js';
 
 const regenerateDaysIndex = async () => {
   const days = (await listDir('src/days', 2))
@@ -11,7 +11,7 @@ const regenerateDaysIndex = async () => {
     // and reduces the number of changes we need to make to the file.
     .sort((a, b) => 10 * (a[0] - b[0]) + (a[1] - b[1]))
     .reduce((acc, [year, day]) => {
-      const dir = `${year}/${day}`;
+      const dir = computeYearDayId(year, day);
       acc.push({ variable: `index${dir.replace('/', '')}`, dir });
       return acc;
     }, []);
@@ -52,5 +52,5 @@ export const handleNewCommand = async ([year, day]) => {
   await regenerateDaysIndex();
   await updateAnswersFile(year, day);
 
-  console.log(`Added new day ${year}/${day}`);
+  console.log(`Added new day ${computeYearDayId(year, day)}`);
 };
