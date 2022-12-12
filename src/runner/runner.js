@@ -64,7 +64,7 @@ export const runDays = async options => {
   const days = await runEach({ ...options, tracePerformance: true });
   for (const { yearDay, result } of days) {
     if (!result) {
-      return;
+      continue;
     }
 
     if (logOutput) {
