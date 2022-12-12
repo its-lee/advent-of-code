@@ -55,15 +55,13 @@ export default day(({ answer, source }) => {
             return this.buildPath(end, start, predecessors);
           }
 
-          this.adjacent[v].forEach(adjv => {
-            if (visited[adjv]) {
-              return;
-            }
-
-            visited[adjv] = true;
-            queue.push(adjv);
-            predecessors[adjv] = v;
-          });
+          this.adjacent[v]
+            .filter(adjv => !visited[adjv])
+            .forEach(adjv => {
+              visited[adjv] = true;
+              queue.push(adjv);
+              predecessors[adjv] = v;
+            });
         }
 
         return undefined;
