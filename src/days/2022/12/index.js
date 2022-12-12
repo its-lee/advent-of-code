@@ -18,7 +18,8 @@ export default day(({ answer, source }) => {
 
   const locateByMark = m => grid.find(({ mark }) => mark === m);
 
-  const initialPath = [locateByMark('S')];
+  const start = locateByMark('S');
+  const initialPath = [start];
   const end = locateByMark('E');
 
   const isDestination = c => areEqualVectors(c.position, end.position);
@@ -28,7 +29,8 @@ export default day(({ answer, source }) => {
       .map(v => Math.abs(v))
       .reduce((acc, v) => acc + v, 0) === 1;
 
-  grid = grid.map(cell => {
+  grid = grid.map((cell, index) => {
+    cell.index = index;
     cell.available = grid
       .filter(c => areAdjacent(cell.position, c.position))
       .filter(c => c.value <= cell.value + 1); // ignore cells which are too steep
@@ -36,10 +38,13 @@ export default day(({ answer, source }) => {
     return cell;
   });
 
+  // https://jarednielsen.com/data-structure-graph-shortest-path/
+
   const extendAndBifurcatePath = path => {
     // don't go where we've already gone to avoid infinite cycles
     const nextSteps = path[path.length - 1].available.filter(
-      c => !path.some(p => areEqualVectors(p.position, c.position))
+      c => !path.map(p => p.index).includes(c.index)
+      //c => !path.some(p => areEqualVectors(p.position, c.position))
     );
 
     return nextSteps.map(step => [...path, step]);
@@ -83,7 +88,73 @@ export default day(({ answer, source }) => {
     console.log(path.length - 1); // we don't include the start
   };
 
-  recursePaths([initialPath])
-    .sort((a, b) => b.length - a.length)
-    .forEach(printPath);
+  // recursePaths([initialPath])
+  //   .sort((a, b) => b.length - a.length)
+  //   .forEach(printPath);
+
+  const vertices = [];
+  const adjacent = {};
+
+  grid.forEach(cell => {
+    vertices.push(cell.index);
+    adjacent[cell.index] = cell.available.map(c => c.index);
+  });
+
+  const bfs = (goal, root = vertices[0]) => {
+    let adj = adjacent;
+
+    const queue = [];
+    queue.push(root);
+
+    const discovered = [];
+    discovered[root] = true;
+
+    const edges = [];
+    edges[root] = 0;
+
+    const predecessors = [];
+    predecessors[root] = null;
+
+    const buildPath = (goal, root, predecessors) => {
+      const stack = [];
+      stack.push(goal);
+
+      let u = predecessors[goal];
+
+      while (u != root) {
+        stack.push(u);
+        u = predecessors[u];
+      }
+
+      stack.push(root);
+
+      return stack.reverse();
+    };
+
+    while (queue.length) {
+      let v = queue.shift();
+
+      if (v === goal) {
+        return {
+          distance: edges[goal],
+          path: buildPath(goal, root, predecessors)
+        };
+      }
+
+      for (let i = 0; i < adj[v].length; i++) {
+        if (!discovered[adj[v][i]]) {
+          discovered[adj[v][i]] = true;
+          queue.push(adj[v][i]);
+          edges[adj[v][i]] = edges[v] + 1;
+          predecessors[adj[v][i]] = v;
+        }
+      }
+    }
+
+    return false;
+  };
+
+  answer(bfs(end.index, start.index).distance);
+
+  // https://jarednielsen.com/data-structure-graph-shortest-path/
 });
