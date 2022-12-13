@@ -1,5 +1,7 @@
 import day from '../../../runner/day.js';
 
+import { range } from '../../../helpers/utility.js';
+
 export default day(({ answer, source }) => {
   const pairs = source
     .split('\n\n')
@@ -21,29 +23,45 @@ If the lists are the same length and no comparison makes a decision about the or
 
 */
 
-  // search for fails (that's easier!) then invert at the end
-  const isOrdered = (left, right) => {
+  const simpleCompare = (l, r) => (l < r ? 1 : l > r ? -1 : 0);
+
+  const compare = (left, right) => {
     [left, right] = [left, right].map(v => (Array.isArray(v) ? v : [v]));
 
-    const failingElement = left.find((l, index) => {
+    console.log('arrays', left, 'vs', right);
+
+    for (const index of range(0, Math.max(left.length, right.length))) {
+      const l = left[index];
       const r = right[index];
 
-      if (r === undefined) {
-        return true;
+      console.log(l, 'vs', r);
+
+      if (l === undefined) {
+        return 1;
+      } else if (r === undefined) {
+        return -1;
       }
 
       if (typeof l === 'number' && typeof r === 'number') {
-        return l > r;
+        const numberComparison = simpleCompare(l, r);
+        if (numberComparison) {
+          return numberComparison;
+        }
       } else {
-        return !isOrdered(l, r);
+        const comparison = compare(l, r);
+        if (comparison) {
+          return comparison;
+        }
       }
-    });
+    }
 
-    return failingElement === undefined;
+    return 1;
   };
 
-  const sumOfOrderedNumbers = pairs.filter(v => isOrdered(...v.pair)).map(v => v.number);
+  const sumOfOrderedNumbers = pairs.filter(v => compare(...v.pair) === 1).map(v => v.number);
   //.reduce((acc, v) => acc + v.number, 0);
+
+  // 6061 is too high
 
   answer(sumOfOrderedNumbers);
 });
