@@ -11,6 +11,7 @@ import { default as index20229 } from './2022/9/index.js';
 import { default as index202210 } from './2022/10/index.js';
 import { default as index202211 } from './2022/11/index.js';
 import { default as index202212 } from './2022/12/index.js';
+import { default as index202213 } from './2022/13/index.js';
 
 const days = {
   '2022/1': index20221,
@@ -24,7 +25,8 @@ const days = {
   '2022/9': index20229,
   '2022/10': index202210,
   '2022/11': index202211,
-  '2022/12': index202212
+  '2022/12': index202212,
+  '2022/13': index202213
 };
 
 export default days;
