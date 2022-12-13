@@ -32,8 +32,6 @@ If the lists are the same length and no comparison makes a decision about the or
         return true;
       }
 
-      // if they're both ints, we can do it
-      // if at least one is an array - recurse?
       if (typeof l === 'number' && typeof r === 'number') {
         return l > r;
       } else {
