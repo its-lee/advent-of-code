@@ -30,7 +30,9 @@ export default day(({ answer, source }) => {
     const pathSizes = getNonRecursivePathSizes();
 
     return Object.keys(pathSizes).reduce((acc, path) => {
-      const subPaths = Object.keys(pathSizes).filter(key => key.startsWith(path));
+      const subPaths = Object.keys(pathSizes).filter(
+        key => key === path || key.startsWith(`${path}/`)
+      );
 
       const recursiveSize = subPaths.reduce((overall, key) => overall + pathSizes[key], 0);
 
