@@ -26,13 +26,9 @@ If the lists are the same length and no comparison makes a decision about the or
   const compare = (left, right) => {
     [left, right] = [left, right].map(v => (Array.isArray(v) ? v : [v]));
 
-    console.log('Compare', left, 'vs', right);
-
     for (let i = 0; i < Math.max(left.length, right.length); ++i) {
       const l = left[i];
       const r = right[i];
-
-      console.log('Compare', l, 'vs', r);
 
       if (l === undefined) {
         return 1;
