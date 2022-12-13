@@ -4,7 +4,7 @@ export default day(({ answer, source }) => {
   const pairs = source
     .split('\n\n')
     .map(pair => pair.split('\n').map(eval))
-    .map((pair, index) => ({ pair, number: index + 1 }));
+    .map((pair, index) => ({ pair, index }));
 
   const simpleCompare = (l, r) => (l < r ? 1 : l > r ? -1 : 0);
 
@@ -15,31 +15,24 @@ export default day(({ answer, source }) => {
       const l = left[i];
       const r = right[i];
 
-      if (l === undefined) {
-        return 1;
-      } else if (r === undefined) {
-        return -1;
+      const lengthCompare = simpleCompare(l === undefined ? 0 : 1, r === undefined ? 0 : 1);
+      if (lengthCompare) {
+        return lengthCompare;
       }
 
-      if (typeof l === 'number' && typeof r === 'number') {
-        const numberComparison = simpleCompare(l, r);
-        if (numberComparison) {
-          return numberComparison;
-        }
-      } else {
-        const comparison = compare(l, r);
-        if (comparison) {
-          return comparison;
-        }
+      const comparer = typeof l === 'number' && typeof r === 'number' ? simpleCompare : compare;
+      const comparison = comparer(l, r);
+      if (comparison) {
+        return comparison;
       }
     }
 
     return 0;
   };
 
-  const sumOfOrderedNumbers = pairs
-    .filter(v => compare(...v.pair) === 1)
-    .reduce((acc, v) => acc + v.number, 0);
+  const computeSumOfOrderedIndices = () => {
+    return pairs.filter(v => compare(...v.pair) === 1).reduce((acc, v) => acc + v.index + 1, 0);
+  };
 
-  answer(sumOfOrderedNumbers);
+  answer(computeSumOfOrderedIndices());
 });
