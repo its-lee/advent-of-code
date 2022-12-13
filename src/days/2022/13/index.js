@@ -1,7 +1,5 @@
 import day from '../../../runner/day.js';
 
-import { range } from '../../../helpers/utility.js';
-
 export default day(({ answer, source }) => {
   const pairs = source
     .split('\n\n')
@@ -30,9 +28,9 @@ If the lists are the same length and no comparison makes a decision about the or
 
     console.log('arrays', left, 'vs', right);
 
-    for (const index of range(0, Math.max(left.length, right.length))) {
-      const l = left[index];
-      const r = right[index];
+    for (let i = 0; i < Math.max(left.length, right.length); ++i) {
+      const l = left[i];
+      const r = right[i];
 
       console.log(l, 'vs', r);
 
