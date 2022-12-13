@@ -25,7 +25,7 @@ If the lists are the same length and no comparison makes a decision about the or
   const isOrdered = (left, right) => {
     [left, right] = [left, right].map(v => (Array.isArray(v) ? v : [v]));
 
-    const failingElement = left.forEach((l, index) => {
+    const failingElement = left.find((l, index) => {
       const r = right[index];
 
       if (r === undefined) {
