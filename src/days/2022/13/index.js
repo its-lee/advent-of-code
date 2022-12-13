@@ -6,21 +6,6 @@ export default day(({ answer, source }) => {
     .map(pair => pair.split('\n').map(eval))
     .map((pair, index) => ({ pair, number: index + 1 }));
 
-  console.log(pairs);
-
-  /*
-If both values are integers, the lower integer should come first.
-If the left integer is lower than the right integer, the inputs are in the right order.
-If the left integer is higher than the right integer, the inputs are not in the right order.
-Otherwise, the inputs are the same integer; continue checking the next part of the input.
-
-If both values are lists, compare the first value of each list, then the second value, and so on.
-If the left list runs out of items first, the inputs are in the right order.
-If the right list runs out of items first, the inputs are not in the right order.
-If the lists are the same length and no comparison makes a decision about the order, continue checking the next part of the input.
-
-*/
-
   const simpleCompare = (l, r) => (l < r ? 1 : l > r ? -1 : 0);
 
   const compare = (left, right) => {
