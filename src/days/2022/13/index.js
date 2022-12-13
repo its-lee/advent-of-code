@@ -26,13 +26,13 @@ If the lists are the same length and no comparison makes a decision about the or
   const compare = (left, right) => {
     [left, right] = [left, right].map(v => (Array.isArray(v) ? v : [v]));
 
-    console.log('arrays', left, 'vs', right);
+    console.log('Compare', left, 'vs', right);
 
     for (let i = 0; i < Math.max(left.length, right.length); ++i) {
       const l = left[i];
       const r = right[i];
 
-      console.log(l, 'vs', r);
+      console.log('Compare', l, 'vs', r);
 
       if (l === undefined) {
         return 1;
@@ -53,13 +53,12 @@ If the lists are the same length and no comparison makes a decision about the or
       }
     }
 
-    return 1;
+    return 0;
   };
 
-  const sumOfOrderedNumbers = pairs.filter(v => compare(...v.pair) === 1).map(v => v.number);
-  //.reduce((acc, v) => acc + v.number, 0);
-
-  // 6061 is too high
+  const sumOfOrderedNumbers = pairs
+    .filter(v => compare(...v.pair) === 1)
+    .reduce((acc, v) => acc + v.number, 0);
 
   answer(sumOfOrderedNumbers);
 });
