@@ -35,4 +35,20 @@ export default day(({ answer, source }) => {
   };
 
   answer(computeSumOfOrderedIndices());
+
+  const computeDecoderKey = () => {
+    const addedPackets = [[[2]], [[6]]];
+    const allPackets = [...pairs.flatMap(p => p.pair), ...addedPackets];
+    const sortedPackets = allPackets.sort((a, b) => -compare(a, b));
+
+    return addedPackets
+      .map(ap =>
+        sortedPackets.findIndex(p => {
+          return p.length == ap.length && p[0].length === ap.length && p[0][0] === ap[0][0];
+        })
+      )
+      .reduce((acc, v) => acc * (v + 1), 1);
+  };
+
+  answer(computeDecoderKey());
 });
