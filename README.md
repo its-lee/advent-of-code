@@ -6,3 +6,5 @@ TODO:
 
 - better validation on year and day filtering
 - move to jest / vitest
+
+- parseNumericParameter, computeYearDayId, day.js, test.js
