@@ -1,7 +1,7 @@
 import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const commands = source.split('\n');
   const SCREEN_WIDTH = 40;
 

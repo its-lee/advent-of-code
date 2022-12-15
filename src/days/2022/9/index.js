@@ -3,7 +3,7 @@ import day from '../../../runner/day.js';
 import { range, dedupe } from '../../../helpers/utility.js';
 import { relative, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const headMoves = {
     R: [1, 0],
     L: [-1, 0],

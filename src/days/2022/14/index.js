@@ -2,7 +2,7 @@ import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
 import { relative, addVectors } from '../../../helpers/vector.js';
 
-export default day(source => {
+export default day(({ source, writeDebugFile }) => {
   const CONTENT = {
     AIR: '.',
     ROCK: '#',
@@ -43,7 +43,7 @@ export default day(source => {
       buffer.push(grid.map(v => v[y]).join(''));
     }
 
-    console.log(buffer.join('\n'));
+    writeDebugFile(buffer.join('\n'));
   };
 
   print();

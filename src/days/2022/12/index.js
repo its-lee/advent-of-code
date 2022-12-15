@@ -3,7 +3,7 @@ import day from '../../../runner/day.js';
 import { charCode, parseGrid } from '../../../helpers/utility.js';
 import { relative } from '../../../helpers/vector.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const areAdjacent = (a, b) =>
     relative(a, b)
       .map(v => Math.abs(v))

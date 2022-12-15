@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const grid = source.split('\n').map(row => row.split('').map(v => parseInt(v)));
   const cells = grid.flatMap((row, y) => row.map((value, x) => ({ value, x, y })));
 

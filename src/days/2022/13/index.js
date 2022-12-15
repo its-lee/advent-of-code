@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const pairs = source
     .split('\n\n')
     .map(pair => pair.split('\n').map(eval))

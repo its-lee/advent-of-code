@@ -4,7 +4,7 @@ import { range } from '../../../helpers/utility.js';
 import { intersect, union } from '../../../helpers/logic.js';
 import { sumReducer } from '../../../helpers/reducers.js';
 
-export default day(source => {
+export default day(({ source }) => {
   const parseRanges = s =>
     s.split(',').map(r => {
       const [s, e] = r.split('-');
