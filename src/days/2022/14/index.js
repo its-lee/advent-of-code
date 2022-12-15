@@ -54,8 +54,6 @@ export default day(({ source, writeDebugFile }) => {
       writeDebugFile(buffer.join('\n'));
     };
 
-    // print();
-
     const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
 
     const progressSand = sand => {
@@ -115,7 +113,6 @@ export default day(({ source, writeDebugFile }) => {
       while (true) {
         resting++;
         if (!applySand()) {
-          print();
           // This one didn't reach a point where it could rest, so we need to remove 1.
           // That's not the case when we're looking at dropped sand in part 2.
           return resting - (hasFloor ? 0 : 1);
