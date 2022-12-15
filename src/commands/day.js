@@ -1,14 +1,12 @@
-import { runDays } from '../runner/runner.js';
-
-import days from '../days/index.js';
+import { getFilteredDays } from '../runner/runner.js';
 import { parseSourceParameter } from './helpers.js';
 
-export const handleDayCommand = async ([yearDay, source = 'i']) => {
-  if (!(yearDay in days)) {
-    throw new Error(`Cannot find attempt for ${yearDay}`);
-  }
-
+export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {
   source = parseSourceParameter(source);
 
-  await runDays({ yearDayFilter: yearDay, logOutput: true, source });
+  const days = getFilteredDays(yearDayFilter);
+  for (const yearDay of days) {
+    const result = await yearDay.runner(yearDay, source);
+    console.log(JSON.stringify(result.parts, null, 2));
+  }
 };
