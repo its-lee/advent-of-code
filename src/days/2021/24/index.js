@@ -1,6 +1,7 @@
 import day from '../../../runner/day.js';
 
 export default day(({ answer, source }) => {
+  // eslint-disable-next-line no-unused-vars
   const compile = source => {
     const registers = ['w', 'x', 'y', 'z'];
 
@@ -59,7 +60,7 @@ export default day(({ answer, source }) => {
         console.log('running', line, machine.state, '->');
         console.log(resolvedArgs);
         machine[command](...resolvedArgs);
-        console.log(machine.state);
+        // console.log(machine.state);
       };
     });
 
@@ -71,20 +72,19 @@ export default day(({ answer, source }) => {
     };
   };
 
-  const program = compile(source);
+  // const program = compile(source);
 
-  console.log(program(9)); // should be w: 1 (8), x: 1 (4), y: 0 (2), z: 1
-  return;
+  // console.log(program(9)); // should be w: 1 (8), x: 1 (4), y: 0 (2), z: 1
 
-  for (let i = 100000000000000 - 1; i > 0; --i) {
-    // todo: check for 0s
-    // todo: add try catch
-    const output = program(i);
-    if (output.z === 0) {
-      console.log('success', i, output);
-      return;
-    } else {
-      console.log('fail', i);
-    }
-  }
+  // for (let i = 100000000000000 - 1; i > 0; --i) {
+  //   // todo: check for 0s
+  //   // todo: add try catch
+  //   const output = program(i);
+  //   if (output.z === 0) {
+  //     console.log('success', i, output);
+  //     return;
+  //   } else {
+  //     console.log('fail', i);
+  //   }
+  // }
 });

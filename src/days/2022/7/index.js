@@ -36,7 +36,7 @@ export default day(({ answer, source }) => {
 
       const recursiveSize = subPaths.reduce((overall, key) => overall + pathSizes[key], 0);
 
-      console.log(path, 'contains', subPaths, 'with size', recursiveSize);
+      // console.log(path, 'contains', subPaths, 'with size', recursiveSize);
 
       return { ...acc, [path]: recursiveSize };
     }, {});
@@ -55,15 +55,14 @@ export default day(({ answer, source }) => {
       ptr['$size'] = size;
     });
 
-    console.log(JSON.stringify(tree, null, 2));
+    // console.log(JSON.stringify(tree, null, 2));
   };
 
   print(getNonRecursivePathSizes(), Infinity);
+  // eslint-disable-next-line no-unused-vars
   const sizeUnder100000 = Object.values(getRecursivePathSizes())
     .filter(size => size <= 100000)
     .reduce((acc, size) => acc + size, 0);
-
-  answer(sizeUnder100000);
 
   // const keyInto = (root, path) => {
   //   let ptr = root;
