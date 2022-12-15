@@ -37,6 +37,64 @@ export default day(({ source, writeDebugFile }) => {
   // then add the rocks..
   rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
+  const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
+
+  const progressSand = sand => {
+    for (const move of moves) {
+      const moved = move(sand);
+
+      // Bounds check: I don't really think this will happen by design of the provided
+      // input - but it's a hunch, so let's notify if it does happen, and work out how
+      // factor it in if it happens.
+      if (moved[0] < 0 || moved[0] >= width || moved[1] < 0 || moved[1] >= height) {
+        throw new Error('Sand moved out of range of the grid');
+      }
+
+      if (grid[moved[0]][moved[1]] === CONTENT.AIR) {
+        return moved;
+      }
+    }
+
+    // if it's stuck, return null
+    // todo: bounds checks
+
+    return null;
+  };
+
+  const applySand = () => {
+    let sand = [500, 0];
+    let moveCount = 0;
+    while (true) {
+      const movedSand = progressSand(sand);
+      if (movedSand) {
+        ++moveCount;
+        sand = movedSand;
+      } else {
+        break;
+      }
+    }
+
+    if (sand) {
+      grid[sand[0]][sand[1]] = CONTENT.SAND;
+    }
+
+    return moveCount;
+  };
+
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+  applySand();
+
   const print = () => {
     const buffer = [];
     for (let y = 0; y < grid[0].length; ++y) {
