@@ -13,7 +13,7 @@ export default dayCallback => {
     const [year, day] = id.split('/');
     const dir = `src/days/${id}`;
 
-    const writeDebugFile = (data, name = 'debug') => writeData(`${dir}/debug/${name}.txt`, data);
+    const writeDebugFile = (data, name = 'debug.txt') => writeData(`${dir}/debug/${name}`, data);
 
     return {
       id,
