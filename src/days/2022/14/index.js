@@ -28,11 +28,12 @@ export default day(({ source, writeDebugFile }) => {
       });
     });
 
-  const computeGridDimensions = vectors =>
-    [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
-  const [width, height] = computeGridDimensions(rocks);
-
   const simulateSandfall = () => {
+    const computeGridDimensions = vectors =>
+      [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
+
+    const [width, height] = computeGridDimensions(rocks);
+
     // Initialise the grid as all air then add the rocks
     const grid = range(0, width).map(() => range(0, height).map(() => CONTENT.AIR));
     // then add the rocks..
