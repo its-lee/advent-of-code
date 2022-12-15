@@ -37,6 +37,7 @@ export default day(({ source, writeDebugFile }) => {
   // then add the rocks..
   rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
+  // eslint-disable-next-line no-unused-vars
   const print = () => {
     const buffer = [];
     for (let y = 0; y < grid[0].length; ++y) {
@@ -95,14 +96,15 @@ export default day(({ source, writeDebugFile }) => {
 
   const exhaustSand = () => {
     let drops = 0;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       drops++;
       if (!applySand()) {
-        print();
+        // print();
         return drops - 1;
       }
     }
   };
 
-  console.log(exhaustSand());
+  return [() => exhaustSand()];
 });
