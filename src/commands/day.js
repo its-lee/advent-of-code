@@ -1,5 +1,18 @@
 import { getFilteredDays } from '../runner/helpers.js';
-import { parseSourceParameter } from './helpers.js';
+
+const parseSourceParameter = source => {
+  const sources = {
+    i: 'input',
+    d: 'demo'
+  };
+
+  if (!(source in sources)) {
+    const valid = Object.keys(sources).join(', ');
+    throw new Error(`A valid source parameter is required (one of ${valid}) - received ${source}`);
+  }
+
+  return sources[source];
+};
 
 export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {
   source = parseSourceParameter(source);
