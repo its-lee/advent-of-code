@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
-import { relative, addVectors } from '../../../helpers/vector.js';
+import { relative, addVectors, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ source, writeDebugFile }) => {
   const CONTENT = {
@@ -28,21 +28,21 @@ export default day(({ source, writeDebugFile }) => {
       });
     });
 
-  const computeGrid = () => {
+  const simulateSandfall = hasFloor => {
     const computeGridDimensions = vectors =>
       [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
 
-    const [width, height] = computeGridDimensions(rocks);
+    const dimensions = computeGridDimensions(rocks);
+    const width = dimensions[0] * (hasFloor ? 2 : 1);
+    const height = dimensions[1] + (hasFloor ? 2 : 0);
 
     // Initialise the grid as all air then add the rocks
     const grid = range(0, width).map(() => range(0, height).map(() => CONTENT.AIR));
+    // then add the rocks..
     rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
-
-    return grid;
-  };
-
-  const simulateSandfall = () => {
-    const grid = computeGrid();
+    if (hasFloor) {
+      range(0, width).forEach(x => (grid[x][height - 1] = CONTENT.ROCK));
+    }
 
     // eslint-disable-next-line no-unused-vars
     const print = () => {
@@ -53,6 +53,8 @@ export default day(({ source, writeDebugFile }) => {
 
       writeDebugFile(buffer.join('\n'));
     };
+
+    // print();
 
     const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
 
@@ -78,8 +80,10 @@ export default day(({ source, writeDebugFile }) => {
     };
 
     const applySand = () => {
-      let sand = [500, 0];
+      const sandSource = [500, 0];
+      let sand = sandSource;
       let rests = true;
+
       // eslint-disable-next-line no-constant-condition
       while (true) {
         const movedSand = progressSand(sand);
@@ -90,6 +94,10 @@ export default day(({ source, writeDebugFile }) => {
             break;
           }
         } else {
+          if (hasFloor && areEqualVectors(sand, sandSource)) {
+            rests = false;
+          }
+
           break;
         }
       }
@@ -107,9 +115,10 @@ export default day(({ source, writeDebugFile }) => {
       while (true) {
         resting++;
         if (!applySand()) {
-          // print();
+          print();
           // This one didn't reach a point where it could rest, so we need to remove 1.
-          return resting - 1;
+          // That's not the case when we're looking at dropped sand in part 2.
+          return resting - (hasFloor ? 0 : 1);
         }
       }
     };
@@ -117,5 +126,5 @@ export default day(({ source, writeDebugFile }) => {
     return exhaustSand();
   };
 
-  return [() => simulateSandfall()];
+  return [() => simulateSandfall(false), () => simulateSandfall(true)];
 });
