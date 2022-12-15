@@ -1,16 +1,20 @@
 import { promises as fs } from 'fs';
 
-const readData = async (yearDay, source) => {
-  const path = `src/days/${yearDay}/${source}.txt`;
+const readData = async (id, source) => {
+  const path = `src/days/${id}/${source}.txt`;
   return (await fs.readFile(path, 'utf-8')).trim();
 };
 
 export default dayCallback => {
-  return yearDay => {
+  return id => {
+    const [year, day] = id.split('/');
+
     return {
-      yearDay,
+      id,
+      year,
+      day,
       solve: async source => {
-        const parts = dayCallback(await readData(yearDay, source));
+        const parts = dayCallback(await readData(id, source));
         return (parts ?? []).map(p => p());
       }
     };

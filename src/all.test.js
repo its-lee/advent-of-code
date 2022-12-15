@@ -6,7 +6,7 @@ jest.setTimeout(30000);
 
 getFilteredDays().forEach(yearDay => {
   test(`day #${yearDay.id}`, async () => {
-    const result = await yearDay.runner.solve(source);
+    const result = await yearDay.solve(source);
     const answers = await readAnswers(yearDay.year);
 
     const expectedParts = answers?.[yearDay.day]?.[source];
