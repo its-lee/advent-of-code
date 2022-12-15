@@ -1,15 +1,19 @@
-import { promises as fs, writeFileSync } from 'fs';
+import { promises as fs, writeFileSync, mkdirSync } from 'fs';
+import { dirname } from 'path';
 
 const readData = async (dir, source) => (await fs.readFile(`${dir}/${source}.txt`, 'utf-8')).trim();
 
-const writeData = (dir, data) => writeFileSync(`${dir}/debug.txt`, data);
+const writeData = (filepath, data) => {
+  mkdirSync(dirname(filepath), { recursive: true });
+  writeFileSync(filepath, data);
+};
 
 export default dayCallback => {
   return id => {
     const [year, day] = id.split('/');
     const dir = `src/days/${id}`;
 
-    const writeDebugFile = data => writeData(dir, data);
+    const writeDebugFile = (data, name = 'debug') => writeData(`${dir}/debug/${name}.txt`, data);
 
     return {
       id,
