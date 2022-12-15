@@ -28,7 +28,7 @@ export default day(({ source, writeDebugFile }) => {
       });
     });
 
-  const simulateSandfall = () => {
+  const computeGrid = () => {
     const computeGridDimensions = vectors =>
       [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
 
@@ -36,8 +36,13 @@ export default day(({ source, writeDebugFile }) => {
 
     // Initialise the grid as all air then add the rocks
     const grid = range(0, width).map(() => range(0, height).map(() => CONTENT.AIR));
-    // then add the rocks..
     rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
+
+    return grid;
+  };
+
+  const simulateSandfall = () => {
+    const grid = computeGrid();
 
     // eslint-disable-next-line no-unused-vars
     const print = () => {
