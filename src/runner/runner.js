@@ -17,21 +17,17 @@ export const getFilteredDays = (yearDayFilter = null) => {
 };
 
 export const runDays = async options => {
-  options = { source: 'input', ...options };
-  const { source } = options;
-
+  const source = 'input';
   const fails = [];
-  const addFail = (yearDay, message) => fails.push(`Day #${yearDay.id}: ${message}`);
 
-  const days = getFilteredDays();
-  for (const yearDay of days) {
-    const result = await yearDay.runner(yearDay, options.source);
+  for (const yearDay of getFilteredDays()) {
+    const result = await yearDay.runner(yearDay, options);
     const answers = await readAnswers(yearDay.year);
 
     result.parts.forEach((actual, partIndex) => {
       const expected = answers?.[yearDay.day]?.[source]?.[partIndex];
       if (expected !== undefined && expected !== actual) {
-        addFail(yearDay, `Part ${partIndex + 1} - returns ${actual} != ${expected}`);
+        fails.push(`Day #${yearDay.id}: Part ${partIndex + 1} - returns ${actual} != ${expected}`);
       }
     });
   }
