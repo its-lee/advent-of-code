@@ -10,5 +10,5 @@ export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {
   }
 
   const result = await yearDay.runner(yearDay, source);
-  console.log(JSON.stringify(result, null, 2));
+  result.forEach((value, index) => console.log(`Part ${index + 1}: ${value}`));
 };
