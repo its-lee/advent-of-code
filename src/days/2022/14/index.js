@@ -55,20 +55,15 @@ export default day(({ source, writeDebugFile }) => {
       }
     }
 
-    // if it's stuck, return null
-    // todo: bounds checks
-
     return null;
   };
 
   const applySand = () => {
     let sand = [500, 0];
-    let moveCount = 0;
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const movedSand = progressSand(sand);
       if (movedSand) {
-        ++moveCount;
         sand = movedSand;
       } else {
         break;
@@ -78,8 +73,6 @@ export default day(({ source, writeDebugFile }) => {
     if (sand) {
       grid[sand[0]][sand[1]] = CONTENT.SAND;
     }
-
-    return moveCount;
   };
 
   applySand();
