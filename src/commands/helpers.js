@@ -1,14 +1,3 @@
-export const computeYearDayId = (year, day) => [year, day].join('/');
-
-export const parseNumericParameter = value => {
-  const parsed = parseInt(value);
-  if (isNaN(parsed)) {
-    throw new Error(`A numeric parameter is required - received ${value}`);
-  }
-
-  return parsed;
-};
-
 export const parseSourceParameter = source => {
   const sources = {
     i: 'input',
