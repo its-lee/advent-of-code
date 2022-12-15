@@ -11,7 +11,9 @@ getFilteredDays().forEach(yearDay => {
 
     result.parts.forEach((actual, partIndex) => {
       const expected = answers?.[yearDay.day]?.[source]?.[partIndex];
-      expect(actual).toBe(expected);
+      if (expected !== undefined) {
+        expect(actual).toBe(expected);
+      }
     });
   });
 });
