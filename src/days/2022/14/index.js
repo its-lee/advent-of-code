@@ -38,9 +38,12 @@ export default day(source => {
   rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
   const print = () => {
+    const buffer = [];
     for (let y = 0; y < grid[0].length; ++y) {
-      console.log(grid.map(v => v[y]).join(''));
+      buffer.push(grid.map(v => v[y]).join(''));
     }
+
+    console.log(buffer.join('\n'));
   };
 
   print();
