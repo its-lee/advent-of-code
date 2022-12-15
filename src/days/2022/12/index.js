@@ -1,11 +1,11 @@
 import day from '../../../runner/day.js';
 
 import { charCode, parseGrid } from '../../../helpers/utility.js';
-import { relative } from '../../../helpers/vector.js';
+import { subtractVectors } from '../../../helpers/vector.js';
 
 export default day(({ source }) => {
   const areAdjacent = (a, b) =>
-    relative(a, b)
+    subtractVectors(b, a)
       .map(v => Math.abs(v))
       .reduce((acc, v) => acc + v, 0) === 1;
 

@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
-import { relative, addVectors, areEqualVectors } from '../../../helpers/vector.js';
+import { subtractVectors, addVectors, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ source, writeDebugFile }) => {
   const CONTENT = {
@@ -17,7 +17,7 @@ export default day(({ source, writeDebugFile }) => {
     })
     .map(pair => pair.map(coord => coord.split(',').map(v => parseInt(v))))
     .flatMap(([a, b]) => {
-      const r = relative(a, b);
+      const r = subtractVectors(b, a);
       const changingIndex = r.findIndex(Boolean);
       const changedValue = r[changingIndex];
 

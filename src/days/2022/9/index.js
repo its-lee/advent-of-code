@@ -1,7 +1,7 @@
 import day from '../../../runner/day.js';
 
 import { range, dedupe } from '../../../helpers/utility.js';
-import { relative, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
+import { subtractVectors, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
 
 export default day(({ source }) => {
   const headMoves = {
@@ -29,7 +29,7 @@ export default day(({ source }) => {
   const headPositions = computeHeadPositions();
 
   const moveTail = (head, tail) => {
-    const tailRelativeToHead = relative(tail, head);
+    const tailRelativeToHead = subtractVectors(head, tail);
 
     if (infinityNorm(tailRelativeToHead) <= 1) {
       // We're close enough..
