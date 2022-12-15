@@ -3,24 +3,6 @@ import { range } from '../helpers/utility.js';
 import { readAnswers } from './answers.js';
 import { computeYearDayId } from '../commands/helpers.js';
 
-const runDay = async (yearDay, runner, options) => {
-  const { tracePerformance, source } = options;
-
-  const timerLabel = `Ended day #${yearDay.id}`;
-  if (tracePerformance) {
-    console.log(`Started day #${yearDay.id}`);
-    console.time(timerLabel);
-  }
-
-  try {
-    return await runner(yearDay, source);
-  } finally {
-    if (tracePerformance) {
-      console.timeEnd(timerLabel);
-    }
-  }
-};
-
 const getFilteredDays = options => {
   const { yearFilter, dayFilter } = options;
 
@@ -47,7 +29,7 @@ const runEach = async options => {
 
     loaded.push({
       yearDay,
-      result: await runDay(yearDay, runner, options)
+      result: await runner(yearDay, options.source)
     });
   }
 
