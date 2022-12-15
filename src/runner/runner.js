@@ -10,7 +10,7 @@ export const getFilteredDays = (yearDayFilter = null) => {
         year,
         day,
         id: yearDay,
-        runner: days[yearDay]
+        runner: days[yearDay](yearDay)
       };
     });
 };

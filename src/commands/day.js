@@ -9,6 +9,6 @@ export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {
     throw new Error(`No such day ${yearDayFilter}`);
   }
 
-  const result = await yearDay.runner(yearDay, source);
+  const result = await yearDay.runner.solve(source);
   result.forEach((value, index) => console.log(`Part ${index + 1}: ${value}`));
 };
