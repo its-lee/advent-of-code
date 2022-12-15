@@ -95,13 +95,14 @@ export default day(({ source, writeDebugFile }) => {
   };
 
   const exhaustSand = () => {
-    let drops = 0;
+    let resting = 0;
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      drops++;
+      resting++;
       if (!applySand()) {
         // print();
-        return drops - 1;
+        // This one didn't reach a point where it could rest, so we need to remove 1.
+        return resting - 1;
       }
     }
   };
