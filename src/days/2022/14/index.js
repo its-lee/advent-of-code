@@ -37,5 +37,11 @@ export default day(source => {
   // then add the rocks..
   rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
-  console.log(grid);
+  const print = () => {
+    for (let y = 0; y < grid[0].length; ++y) {
+      console.log(grid.map(v => v[y]).join(''));
+    }
+  };
+
+  print();
 });
