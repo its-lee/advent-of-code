@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const [stringizedInitialState, moves] = source.split('\n\n');
 
   const computeInitialState = () => {
@@ -40,6 +40,5 @@ export default day(({ answer, source }) => {
       .reduce((acc, v) => acc + v);
   };
 
-  answer(computeMutatedTop(true));
-  answer(computeMutatedTop(false));
+  return [() => computeMutatedTop(true), () => computeMutatedTop(false)];
 });

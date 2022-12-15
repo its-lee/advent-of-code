@@ -9,11 +9,11 @@ getFilteredDays().forEach(yearDay => {
     const result = await yearDay.runner(yearDay, source);
     const answers = await readAnswers(yearDay.year);
 
-    result.parts.forEach((actual, partIndex) => {
-      const expected = answers?.[yearDay.day]?.[source]?.[partIndex];
-      if (expected !== undefined) {
-        expect(actual).toBe(expected);
-      }
+    const expectedParts = answers?.[yearDay.day]?.[source];
+
+    expectedParts.forEach((expected, partIndex) => {
+      const actual = result[partIndex];
+      expect(actual).toBe(expected);
     });
   });
 });

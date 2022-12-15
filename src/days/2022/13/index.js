@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const pairs = source
     .split('\n\n')
     .map(pair => pair.split('\n').map(eval))
@@ -30,25 +30,22 @@ export default day(({ answer, source }) => {
     return 0;
   };
 
-  const computeSumOfOrderedIndices = () => {
-    return pairs.filter(v => compare(...v.pair) === 1).reduce((acc, v) => acc + v.index + 1, 0);
-  };
+  return [
+    () => {
+      return pairs.filter(v => compare(...v.pair) === 1).reduce((acc, v) => acc + v.index + 1, 0);
+    },
+    () => {
+      const addedPackets = [[[2]], [[6]]];
+      const allPackets = [...pairs.flatMap(p => p.pair), ...addedPackets];
+      const sortedPackets = allPackets.sort((a, b) => -compare(a, b));
 
-  answer(computeSumOfOrderedIndices());
-
-  const computeDecoderKey = () => {
-    const addedPackets = [[[2]], [[6]]];
-    const allPackets = [...pairs.flatMap(p => p.pair), ...addedPackets];
-    const sortedPackets = allPackets.sort((a, b) => -compare(a, b));
-
-    return addedPackets
-      .map(ap =>
-        sortedPackets.findIndex(p => {
-          return p.length == ap.length && p[0].length === ap.length && p[0][0] === ap[0][0];
-        })
-      )
-      .reduce((acc, v) => acc * (v + 1), 1);
-  };
-
-  answer(computeDecoderKey());
+      return addedPackets
+        .map(ap =>
+          sortedPackets.findIndex(p => {
+            return p.length == ap.length && p[0].length === ap.length && p[0][0] === ap[0][0];
+          })
+        )
+        .reduce((acc, v) => acc * (v + 1), 1);
+    }
+  ];
 });

@@ -1,7 +1,7 @@
 import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const commands = source.split('\n');
   const SCREEN_WIDTH = 40;
 
@@ -30,8 +30,6 @@ export default day(({ answer, source }) => {
     }, 0);
   };
 
-  answer(computeInterestingScore());
-
   const computeDisplay = () => {
     const rows = [];
     computeRegisterValues().forEach((register, cycle) => {
@@ -48,7 +46,10 @@ export default day(({ answer, source }) => {
     return rows.map(row => row.join('')).join('\n');
   };
 
-  // console.log(computeDisplay());
-  // The actual answer (which you need to use your human eyes to see) is: BACEKLHF
-  answer(computeDisplay());
+  return [
+    () => computeInterestingScore(),
+    // console.log(computeDisplay());
+    // The actual answer (which you need to use your human eyes to see) is: BACEKLHF
+    () => computeDisplay()
+  ];
 });

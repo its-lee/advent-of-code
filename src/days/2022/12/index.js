@@ -3,7 +3,7 @@ import day from '../../../runner/day.js';
 import { charCode, parseGrid } from '../../../helpers/utility.js';
 import { relative } from '../../../helpers/vector.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const areAdjacent = (a, b) =>
     relative(a, b)
       .map(v => Math.abs(v))
@@ -97,16 +97,15 @@ export default day(({ answer, source }) => {
     return path?.length !== undefined ? path.length - 1 : undefined;
   };
 
-  answer(shortestPathLength(locateByChar('S')));
-
-  const shortestPathFromLowestPoints = () => {
-    return Math.min(
-      ...grid
-        .filter(c => c.value === 1)
-        .map(start => shortestPathLength(start))
-        .filter(l => l !== undefined)
-    );
-  };
-
-  answer(shortestPathFromLowestPoints());
+  return [
+    () => shortestPathLength(locateByChar('S')),
+    () => {
+      return Math.min(
+        ...grid
+          .filter(c => c.value === 1)
+          .map(start => shortestPathLength(start))
+          .filter(l => l !== undefined)
+      );
+    }
+  ];
 });

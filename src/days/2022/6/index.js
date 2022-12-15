@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const findPacketIndex = markerLength => {
     const cyclicBuffer = [];
 
@@ -18,6 +18,5 @@ export default day(({ answer, source }) => {
     return undefined;
   };
 
-  answer(findPacketIndex(4));
-  answer(findPacketIndex(14));
+  return [() => findPacketIndex(4), () => findPacketIndex(14)];
 });

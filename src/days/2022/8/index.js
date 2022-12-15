@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const grid = source.split('\n').map(row => row.split('').map(v => parseInt(v)));
   const cells = grid.flatMap((row, y) => row.map((value, x) => ({ value, x, y })));
 
@@ -27,8 +27,6 @@ export default day(({ answer, source }) => {
     });
   };
 
-  answer(getVisibleCells().length);
-
   const scoreCells = () => {
     return cells.map(({ value, x, y }) => {
       return computeDirections(cells, x, y)
@@ -40,5 +38,5 @@ export default day(({ answer, source }) => {
     });
   };
 
-  answer(Math.max(...scoreCells()));
+  return [() => getVisibleCells().length, () => Math.max(...scoreCells())];
 });

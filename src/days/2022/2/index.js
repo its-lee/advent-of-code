@@ -3,7 +3,7 @@ import day from '../../../runner/day.js';
 import { charCode } from '../../../helpers/utility.js';
 import { sumReducer } from '../../../helpers/reducers.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const parsedSource = source.split('\n').map(l => {
     let [a, b] = l.toLowerCase().split(' ').map(charCode);
     b -= 23;
@@ -19,15 +19,15 @@ export default day(({ answer, source }) => {
 
   const potentialMoves = [1, 2, 3];
 
-  answer(parsedSource.map(([them, us]) => us + gameScore(them, us)).reduce(...sumReducer()));
-
-  answer(
-    parsedSource
-      .map(([them, scoreHint]) => {
-        const requiredGameScore = (scoreHint - 1) * 3;
-        const moveScore = potentialMoves.find(us => gameScore(them, us) === requiredGameScore);
-        return requiredGameScore + moveScore;
-      })
-      .reduce(...sumReducer())
-  );
+  return [
+    () => parsedSource.map(([them, us]) => us + gameScore(them, us)).reduce(...sumReducer()),
+    () =>
+      parsedSource
+        .map(([them, scoreHint]) => {
+          const requiredGameScore = (scoreHint - 1) * 3;
+          const moveScore = potentialMoves.find(us => gameScore(them, us) === requiredGameScore);
+          return requiredGameScore + moveScore;
+        })
+        .reduce(...sumReducer())
+  ];
 });

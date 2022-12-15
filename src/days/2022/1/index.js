@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const sumOfTop = limit =>
     source
       .split('\n\n')
@@ -11,6 +11,5 @@ export default day(({ answer, source }) => {
       .slice(-limit)
       .reduce((prev, curr) => prev + curr, 0);
 
-  answer(sumOfTop(1));
-  answer(sumOfTop(3));
+  return [() => sumOfTop(1), () => sumOfTop(3)];
 });

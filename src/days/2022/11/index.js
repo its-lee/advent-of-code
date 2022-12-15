@@ -1,7 +1,7 @@
 import { range } from '../../../helpers/utility.js';
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const readLastInt = str =>
     str
       .split(' ')
@@ -86,7 +86,5 @@ export default day(({ answer, source }) => {
     return throwCounts.slice(0, 2).reduce((acc, v) => acc * v, 1);
   };
 
-  answer(computeScore(20, true));
-
-  answer(computeScore(10000, false));
+  return [() => computeScore(20, true), () => computeScore(10000, false)];
 });

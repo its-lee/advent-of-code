@@ -7,15 +7,7 @@ const readData = async ({ year, day }, source) => {
 
 export default dayCallback => {
   return async (yearDay, source) => {
-    const parts = [];
-
-    dayCallback({
-      source: await readData(yearDay, source),
-      answer(value) {
-        parts.push(value);
-      }
-    });
-
-    return { parts };
+    const parts = dayCallback(await readData(yearDay, source));
+    return (parts ?? []).map(p => p());
   };
 };

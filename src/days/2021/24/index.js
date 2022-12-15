@@ -1,6 +1,6 @@
 import day from '../../../runner/day.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   // eslint-disable-next-line no-unused-vars
   const compile = source => {
     const registers = ['w', 'x', 'y', 'z'];

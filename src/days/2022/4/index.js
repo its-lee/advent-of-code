@@ -4,26 +4,20 @@ import { range } from '../../../helpers/utility.js';
 import { intersect, union } from '../../../helpers/logic.js';
 import { sumReducer } from '../../../helpers/reducers.js';
 
-export default day(({ answer, source }) => {
-  const lines = source.split('\n');
-
+export default day(source => {
   const parseRanges = s =>
     s.split(',').map(r => {
       const [s, e] = r.split('-');
       return range(parseInt(s), parseInt(e) - parseInt(s) + 1);
     });
 
-  answer(
-    lines
-      .map(parseRanges)
-      .map(v => union(...v).length === Math.max(...v.map(a => a.length)))
-      .reduce(...sumReducer())
-  );
+  const ranges = source.split('\n').map(parseRanges);
 
-  answer(
-    lines
-      .map(parseRanges)
-      .map(v => !!intersect(...v).length)
-      .reduce(...sumReducer())
-  );
+  return [
+    () =>
+      ranges
+        .map(v => union(...v).length === Math.max(...v.map(a => a.length)))
+        .reduce(...sumReducer()),
+    () => ranges.map(v => !!intersect(...v).length).reduce(...sumReducer())
+  ];
 });

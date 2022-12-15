@@ -3,7 +3,7 @@ import day from '../../../runner/day.js';
 import { range, dedupe } from '../../../helpers/utility.js';
 import { relative, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
 
-export default day(({ answer, source }) => {
+export default day(source => {
   const headMoves = {
     R: [1, 0],
     L: [-1, 0],
@@ -67,6 +67,5 @@ export default day(({ answer, source }) => {
     return dedupePositions(tailPositions).length;
   };
 
-  answer(computeTailVisits(1));
-  answer(computeTailVisits(9));
+  return [() => computeTailVisits(1), () => computeTailVisits(9)];
 });
