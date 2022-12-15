@@ -32,80 +32,84 @@ export default day(({ source, writeDebugFile }) => {
     [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
   const [width, height] = computeGridDimensions(rocks);
 
-  // Initialise the grid as all air then add the rocks
-  const grid = range(0, width).map(() => range(0, height).map(() => CONTENT.AIR));
-  // then add the rocks..
-  rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
+  const simulateSandfall = () => {
+    // Initialise the grid as all air then add the rocks
+    const grid = range(0, width).map(() => range(0, height).map(() => CONTENT.AIR));
+    // then add the rocks..
+    rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
-  // eslint-disable-next-line no-unused-vars
-  const print = () => {
-    const buffer = [];
-    for (let y = 0; y < grid[0].length; ++y) {
-      buffer.push(grid.map(v => v[y]).join(''));
-    }
-
-    writeDebugFile(buffer.join('\n'));
-  };
-
-  const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
-
-  const progressSand = sand => {
-    for (const move of moves) {
-      const moved = move(sand);
-
-      // Bounds check: I don't really think this will happen by design of the provided
-      // input - but it's a hunch, so let's notify if it does happen, and work out how
-      // factor it in if it happens.
-      if (moved[0] < 0 || moved[0] >= width || moved[1] < 0 || moved[1] >= height) {
-        throw new Error(
-          `Sand moved out of range of the grid - (${moved}) vs (${width}, ${height})`
-        );
+    // eslint-disable-next-line no-unused-vars
+    const print = () => {
+      const buffer = [];
+      for (let y = 0; y < grid[0].length; ++y) {
+        buffer.push(grid.map(v => v[y]).join(''));
       }
 
-      if (grid[moved[0]][moved[1]] === CONTENT.AIR) {
-        return moved;
+      writeDebugFile(buffer.join('\n'));
+    };
+
+    const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
+
+    const progressSand = sand => {
+      for (const move of moves) {
+        const moved = move(sand);
+
+        // Bounds check: I don't really think this will happen by design of the provided
+        // input - but it's a hunch, so let's notify if it does happen, and work out how
+        // factor it in if it happens.
+        if (moved[0] < 0 || moved[0] >= width || moved[1] < 0 || moved[1] >= height) {
+          throw new Error(
+            `Sand moved out of range of the grid - (${moved}) vs (${width}, ${height})`
+          );
+        }
+
+        if (grid[moved[0]][moved[1]] === CONTENT.AIR) {
+          return moved;
+        }
       }
-    }
 
-    return null;
-  };
+      return null;
+    };
 
-  const applySand = () => {
-    let sand = [500, 0];
-    let rests = true;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      const movedSand = progressSand(sand);
-      if (movedSand) {
-        sand = movedSand;
-        if (sand[1] === height - 1) {
-          rests = false;
+    const applySand = () => {
+      let sand = [500, 0];
+      let rests = true;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        const movedSand = progressSand(sand);
+        if (movedSand) {
+          sand = movedSand;
+          if (sand[1] === height - 1) {
+            rests = false;
+            break;
+          }
+        } else {
           break;
         }
-      } else {
-        break;
       }
-    }
 
-    if (sand) {
-      grid[sand[0]][sand[1]] = CONTENT.SAND;
-    }
+      if (sand) {
+        grid[sand[0]][sand[1]] = CONTENT.SAND;
+      }
 
-    return rests;
+      return rests;
+    };
+
+    const exhaustSand = () => {
+      let resting = 0;
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        resting++;
+        if (!applySand()) {
+          // print();
+          // This one didn't reach a point where it could rest, so we need to remove 1.
+          return resting - 1;
+        }
+      }
+    };
+
+    return exhaustSand();
   };
 
-  const exhaustSand = () => {
-    let resting = 0;
-    // eslint-disable-next-line no-constant-condition
-    while (true) {
-      resting++;
-      if (!applySand()) {
-        // print();
-        // This one didn't reach a point where it could rest, so we need to remove 1.
-        return resting - 1;
-      }
-    }
-  };
-
-  return [() => exhaustSand()];
+  return [() => simulateSandfall()];
 });
