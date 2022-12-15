@@ -37,6 +37,15 @@ export default day(({ source, writeDebugFile }) => {
   // then add the rocks..
   rocks.forEach(([x, y]) => (grid[x][y] = CONTENT.ROCK));
 
+  const print = () => {
+    const buffer = [];
+    for (let y = 0; y < grid[0].length; ++y) {
+      buffer.push(grid.map(v => v[y]).join(''));
+    }
+
+    writeDebugFile(buffer.join('\n'));
+  };
+
   const moves = [p => [p[0], p[1] + 1], p => [p[0] - 1, p[1] + 1], p => [p[0] + 1, p[1] + 1]];
 
   const progressSand = sand => {
@@ -47,7 +56,9 @@ export default day(({ source, writeDebugFile }) => {
       // input - but it's a hunch, so let's notify if it does happen, and work out how
       // factor it in if it happens.
       if (moved[0] < 0 || moved[0] >= width || moved[1] < 0 || moved[1] >= height) {
-        throw new Error('Sand moved out of range of the grid');
+        throw new Error(
+          `Sand moved out of range of the grid - (${moved}) vs (${width}, ${height})`
+        );
       }
 
       if (grid[moved[0]][moved[1]] === CONTENT.AIR) {
@@ -60,11 +71,16 @@ export default day(({ source, writeDebugFile }) => {
 
   const applySand = () => {
     let sand = [500, 0];
+    let rests = true;
     // eslint-disable-next-line no-constant-condition
     while (true) {
       const movedSand = progressSand(sand);
       if (movedSand) {
         sand = movedSand;
+        if (sand[1] === height - 1) {
+          rests = false;
+          break;
+        }
       } else {
         break;
       }
@@ -73,30 +89,20 @@ export default day(({ source, writeDebugFile }) => {
     if (sand) {
       grid[sand[0]][sand[1]] = CONTENT.SAND;
     }
+
+    return rests;
   };
 
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-  applySand();
-
-  const print = () => {
-    const buffer = [];
-    for (let y = 0; y < grid[0].length; ++y) {
-      buffer.push(grid.map(v => v[y]).join(''));
+  const exhaustSand = () => {
+    let drops = 0;
+    while (true) {
+      drops++;
+      if (!applySand()) {
+        print();
+        return drops - 1;
+      }
     }
-
-    writeDebugFile(buffer.join('\n'));
   };
 
-  print();
+  console.log(exhaustSand());
 });
