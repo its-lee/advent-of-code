@@ -31,9 +31,7 @@ export default day(source => {
   };
 
   return [
-    () => {
-      return pairs.filter(v => compare(...v.pair) === 1).reduce((acc, v) => acc + v.index + 1, 0);
-    },
+    () => pairs.filter(v => compare(...v.pair) === 1).reduce((acc, v) => acc + v.index + 1, 0),
     () => {
       const addedPackets = [[[2]], [[6]]];
       const allPackets = [...pairs.flatMap(p => p.pair), ...addedPackets];
