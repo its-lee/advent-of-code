@@ -64,6 +64,7 @@ export default day(({ source, writeDebugFile }) => {
   const applySand = () => {
     let sand = [500, 0];
     let moveCount = 0;
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const movedSand = progressSand(sand);
       if (movedSand) {
