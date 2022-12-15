@@ -1,4 +1,4 @@
-import { getFilteredDays } from '../runner/runner.js';
+import { getFilteredDays } from '../runner/helpers.js';
 import { parseSourceParameter } from './helpers.js';
 
 export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {

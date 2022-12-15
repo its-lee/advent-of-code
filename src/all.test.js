@@ -1,5 +1,5 @@
 import { readAnswers } from './runner/answers.js';
-import { getFilteredDays } from './runner/runner.js';
+import { getFilteredDays } from './runner/helpers.js';
 
 const source = 'input';
 jest.setTimeout(30000);
