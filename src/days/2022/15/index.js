@@ -79,14 +79,16 @@ export default solution(({ source, isInput }) => {
       if (y % 100 === 0) {
         console.log((y / MAX_DISTANCE).toFixed(8) + '%');
       }
-      //console.time('hmm');
+      console.time('overall');
+      console.time('intervals');
       const intervals = getUnbeaconed(y);
+      console.timeEnd('intervals');
       for (let x = 0; x <= MAX_DISTANCE; ++x) {
         if (!intervals.some(([l, r]) => x >= l || x <= r)) {
           return [x, y];
         }
       }
-      //console.timeEnd('hmm');
+      console.timeEnd('overall');
     }
   };
 
