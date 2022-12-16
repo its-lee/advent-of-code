@@ -37,10 +37,26 @@ export default solution(({ source, isInput }) => {
     return intersection[0] <= intersection[1] ? intersection : null;
   };
 
+  // demo output should be [ -2, 24 ]
+  const intervalUnion = (a, b) => {
+    // always return an array of intervals here
+    const nonEmpties = [a, b].filter(Boolean);
+    if (nonEmpties.length < 2) {
+      return nonEmpties.length ? nonEmpties : [];
+    }
+
+    const intersection = intervalIntersection(a, b);
+    if (intersection) {
+      return [[Math.min(a[0], b[0]), Math.max(a[1], b[1])]];
+    } else {
+      return [a, b];
+    }
+  };
+
   [
-    // [null, null],
-    // [null, [0, 1]],
-    // [[0, 1], null],
+    [null, null],
+    [null, [0, 1]],
+    [[0, 1], null],
     [
       [0, 2],
       [4, 5]
@@ -67,15 +83,7 @@ export default solution(({ source, isInput }) => {
     ],
     [null, null],
     [null, null]
-  ].forEach(([l, r]) => console.log(l, r, intervalIntersection(l, r)));
-
-  // demo output should be [ -2, 24 ]
-  const intervalUnion = (a, b) => {
-    // check for either null here
-
-    // always return an array of intervals here
-    return [a, b];
-  };
+  ].forEach(([l, r]) => console.log(l, r, intervalUnion(l, r)));
 
   const intervalLength = a => (a ? a[1] - a[0] + 1 : 0);
   const intervalsLength = a => a.reduce((acc, i) => acc + intervalLength(i), 0);
