@@ -1,6 +1,11 @@
 import day from '../../../runner/day.js';
 import { range } from '../../../helpers/utility.js';
-import { subtractVectors, addVectors, areEqualVectors } from '../../../helpers/vector.js';
+import {
+  subtractVectors,
+  addVectors,
+  areEqualVectors,
+  computeDimensions
+} from '../../../helpers/vector.js';
 
 export default day(({ source, writeDebugFile }) => {
   const CONTENT = {
@@ -29,10 +34,7 @@ export default day(({ source, writeDebugFile }) => {
     });
 
   const simulateSandfall = hasFloor => {
-    const computeGridDimensions = vectors =>
-      [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);
-
-    const dimensions = computeGridDimensions(rocks);
+    const dimensions = computeDimensions(rocks);
     const width = dimensions[0] * (hasFloor ? 2 : 1);
     const height = dimensions[1] + (hasFloor ? 2 : 0);
 

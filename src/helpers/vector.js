@@ -7,3 +7,6 @@ export const manhattanNorm = p => p.reduce((acc, v) => acc + Math.abs(v), 0);
 export const subtractVectors = (a, b) => a.map((v, i) => v - b[i]);
 
 export const addVectors = (a, b) => b.map((v, i) => v + a[i]);
+
+export const computeDimensions = vectors =>
+  [0, 1].map(index => Math.max(...vectors.map(v => v[index])) + 1);

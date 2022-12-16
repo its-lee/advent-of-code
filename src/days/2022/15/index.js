@@ -1,5 +1,10 @@
 import day from '../../../runner/day.js';
-import { subtractVectors, manhattanNorm, addVectors } from '../../../helpers/vector.js';
+import {
+  subtractVectors,
+  manhattanNorm,
+  addVectors,
+  computeDimensions
+} from '../../../helpers/vector.js';
 
 export default day(({ source }) => {
   const buildCircle = (centre, radius) => {
@@ -34,6 +39,9 @@ export default day(({ source }) => {
 
   // Note that this contains duplicates - which aren't a problem for our purposes.
   const coordsWithoutSensors = sensorCircles.flatMap(v => v);
+
+  const [width] = computeDimensions(coordsWithoutSensors);
+
   console.log(coordsWithoutSensors);
 
   return [];
