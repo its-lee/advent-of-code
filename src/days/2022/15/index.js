@@ -1,5 +1,6 @@
 import solution from '../../../runner/solution.js';
 import { subtractVectors, manhattanNorm } from '../../../helpers/vector.js';
+import { intervalIntersection, intervalUnion, intervalsLength } from '../../../helpers/interval.js';
 import { range } from '../../../helpers/utility.js';
 
 export default solution(({ source, isInput }) => {
@@ -28,66 +29,6 @@ export default solution(({ source, isInput }) => {
     return [start, start + 2 * lineRadius];
   };
 
-  const intervalIntersection = (a, b) => {
-    if (!a || !b) {
-      return null;
-    }
-
-    const intersection = [Math.max(a[0], b[0]), Math.min(a[1], b[1])];
-    return intersection[0] <= intersection[1] ? intersection : null;
-  };
-
-  // demo output should be [ -2, 24 ]
-  const intervalUnion = (a, b) => {
-    // always return an array of intervals here
-    const nonEmpties = [a, b].filter(Boolean);
-    if (nonEmpties.length < 2) {
-      return nonEmpties.length ? nonEmpties : [];
-    }
-
-    const intersection = intervalIntersection(a, b);
-    if (intersection) {
-      return [[Math.min(a[0], b[0]), Math.max(a[1], b[1])]];
-    } else {
-      return [a, b];
-    }
-  };
-
-  [
-    [null, null],
-    [null, [0, 1]],
-    [[0, 1], null],
-    [
-      [0, 2],
-      [4, 5]
-    ],
-    [
-      [4, 5],
-      [0, 2]
-    ],
-    [
-      [0, 10],
-      [5, 15]
-    ],
-    [
-      [10, 15],
-      [0, 10]
-    ],
-    [
-      [0, 10],
-      [5, 8]
-    ],
-    [
-      [5, 8],
-      [0, 10]
-    ],
-    [null, null],
-    [null, null]
-  ].forEach(([l, r]) => console.log(l, r, intervalUnion(l, r)));
-
-  const intervalLength = a => (a ? a[1] - a[0] + 1 : 0);
-  const intervalsLength = a => a.reduce((acc, i) => acc + intervalLength(i), 0);
-
   const getUnbeaconed = y => {
     const intervals = readings
       .map(({ sensor, beacon }) => {
@@ -96,6 +37,7 @@ export default solution(({ source, isInput }) => {
       })
       .filter(Boolean);
 
+    // demo output should be [ -2, 24 ]
     console.log(intervals);
 
     return intervals;
