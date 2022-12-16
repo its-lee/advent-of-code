@@ -1,9 +1,9 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
 import { range, dedupe } from '../../../helpers/utility.js';
 import { subtractVectors, infinityNorm, areEqualVectors } from '../../../helpers/vector.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const headMoves = {
     R: [1, 0],
     L: [-1, 0],

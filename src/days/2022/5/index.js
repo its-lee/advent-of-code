@@ -1,6 +1,6 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const [stringizedInitialState, moves] = source.split('\n\n');
 
   const computeInitialState = () => {

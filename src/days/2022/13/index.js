@@ -1,6 +1,6 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const pairs = source
     .split('\n\n')
     .map(pair => pair.split('\n').map(eval))

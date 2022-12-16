@@ -1,7 +1,7 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 import { range } from '../../../helpers/utility.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const commands = source.split('\n');
   const SCREEN_WIDTH = 40;
 

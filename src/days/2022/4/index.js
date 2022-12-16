@@ -1,10 +1,10 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
 import { range } from '../../../helpers/utility.js';
 import { intersect, union } from '../../../helpers/logic.js';
 import { sumReducer } from '../../../helpers/reducers.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const parseRanges = s =>
     s.split(',').map(r => {
       const [s, e] = r.split('-');

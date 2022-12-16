@@ -1,6 +1,6 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const getNonRecursivePathSizes = () => {
     let currentPath = [];
     const pathSizes = {};

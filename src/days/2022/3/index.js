@@ -1,10 +1,10 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
 import { charCode } from '../../../helpers/utility.js';
 import { intersect } from '../../../helpers/logic.js';
 import { sumReducer, chunkReducer } from '../../../helpers/reducers.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const lines = source.split('\n');
 
   return [

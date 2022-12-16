@@ -1,9 +1,9 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
 import { charCode, parseGrid } from '../../../helpers/utility.js';
 import { subtractVectors } from '../../../helpers/vector.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const areAdjacent = (a, b) =>
     subtractVectors(b, a)
       .map(v => Math.abs(v))

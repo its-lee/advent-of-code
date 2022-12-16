@@ -1,7 +1,7 @@
 import { range } from '../../../helpers/utility.js';
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 
-export default day(({ source }) => {
+export default solution(({ source }) => {
   const readLastInt = str =>
     str
       .split(' ')

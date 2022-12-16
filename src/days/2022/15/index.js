@@ -1,8 +1,8 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 import { subtractVectors, manhattanNorm } from '../../../helpers/vector.js';
 import { range } from '../../../helpers/utility.js';
 
-export default day(({ source, isInput }) => {
+export default solution(({ source, isInput }) => {
   const SCAN_LINE = isInput ? 2000000 : 10;
   const MAX_DISTANCE = isInput ? 4000000 : 20;
 

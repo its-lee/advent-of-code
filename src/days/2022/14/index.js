@@ -1,4 +1,4 @@
-import day from '../../../runner/day.js';
+import solution from '../../../runner/solution.js';
 import { range } from '../../../helpers/utility.js';
 import {
   subtractVectors,
@@ -7,7 +7,7 @@ import {
   computeDimensions
 } from '../../../helpers/vector.js';
 
-export default day(({ source, writeDebugFile }) => {
+export default solution(({ source, writeDebugFile }) => {
   const CONTENT = {
     AIR: '.',
     ROCK: '#',
