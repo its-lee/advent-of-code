@@ -51,21 +51,22 @@ export default solution(({ source, isInput }) => {
   };
 
   const findBeacon = () => {
-    console.log(intervalsLength(getUnbeaconed(SCAN_LINE)));
-    return;
-
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
-      if (y % 100 === 0) {
-        console.log(((100 * y) / MAX_DISTANCE).toFixed(8) + '%');
-      }
-
       const intervals = getUnbeaconed(y);
-      if (intervals.length === 1) {
-        console.log(intervals);
-        return [y, intervals];
+      if (intervals.length === 2) {
+        const leftInterval = intervals.sort((a, b) => a[0] - b[0])[0];
+        const x = leftInterval[1] + 1;
+        console.log('intervals', intervals);
+        return [x, y];
       }
     }
   };
 
-  return [() => countUnbeaconed(), () => findBeacon()];
+  return [
+    () => countUnbeaconed(),
+    () => {
+      const [x, y] = findBeacon();
+      return 4000000 * x + y;
+    }
+  ];
 });
