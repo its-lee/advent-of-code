@@ -55,7 +55,9 @@ export default day(({ source, isInput }) => {
   const findBeacon = () => {
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       console.log(y);
+      console.time('hmm');
       getUnbeaconed(y, false);
+      console.timeEnd('hmm');
     }
   };
 
