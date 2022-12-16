@@ -21,6 +21,9 @@ export default solution(({ source }) => {
 
       i think we should brute force it after eliminating 0 valued nodes, updating the distances
       and adjacency appropriately.
+
+      either way, there's no value in these rooms apart from for travel - and we'd be optimising
+      any other algorithm that's used.
   */
 
   return [];
