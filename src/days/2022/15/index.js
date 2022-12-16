@@ -28,6 +28,58 @@ export default solution(({ source, isInput }) => {
     return [start, start + 2 * lineRadius];
   };
 
+  const intervalIntersection = (a, b) => {
+    if (!a || !b) {
+      return null;
+    }
+
+    const intersection = [Math.max(a[0], b[0]), Math.min(a[1], b[1])];
+    return intersection[0] <= intersection[1] ? intersection : null;
+  };
+
+  [
+    // [null, null],
+    // [null, [0, 1]],
+    // [[0, 1], null],
+    [
+      [0, 2],
+      [4, 5]
+    ],
+    [
+      [4, 5],
+      [0, 2]
+    ],
+    [
+      [0, 10],
+      [5, 15]
+    ],
+    [
+      [10, 15],
+      [0, 10]
+    ],
+    [
+      [0, 10],
+      [5, 8]
+    ],
+    [
+      [5, 8],
+      [0, 10]
+    ],
+    [null, null],
+    [null, null]
+  ].forEach(([l, r]) => console.log(l, r, intervalIntersection(l, r)));
+
+  // demo output should be [ -2, 24 ]
+  const intervalUnion = (a, b) => {
+    // check for either null here
+
+    // always return an array of intervals here
+    return [a, b];
+  };
+
+  const intervalLength = a => (a ? a[1] - a[0] + 1 : 0);
+  const intervalsLength = a => a.reduce((acc, i) => acc + intervalLength(i), 0);
+
   const getUnbeaconed = y => {
     const intervals = readings
       .map(({ sensor, beacon }) => {
