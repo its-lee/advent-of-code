@@ -28,7 +28,7 @@ export default solution(({ source, isInput }) => {
     return range(centre[0] - (radius - yDistance), xRadius);
   };
 
-  const getUnbeaconed = (y, excludeSensed) => {
+  const getUnbeaconed = y => {
     const unbeaconed = new Set();
 
     readings.forEach(({ sensor, beacon }) => {
@@ -36,27 +36,26 @@ export default solution(({ source, isInput }) => {
       intersectCircleWithLine(sensor, radius, y).forEach(v => unbeaconed.add(v));
     });
 
-    if (excludeSensed) {
-      // After the previous pass, we need to remove any items from the unbeaconed list which we know to be beacons.
-      readings.forEach(({ beacon }) => {
-        if (beacon[1] === y) {
-          unbeaconed.delete(beacon[0]);
-        }
-      });
-    }
-
     return unbeaconed;
   };
 
   const countUnbeaconed = () => {
-    return getUnbeaconed(SCAN_LINE, true).size;
+    const unbeaconedCount = getUnbeaconed(SCAN_LINE).size;
+    const uniqueBeaconCountOnLine = new Set(
+      readings.filter(({ beacon }) => beacon[1] === SCAN_LINE).map(({ beacon }) => beacon[0])
+    ).size;
+
+    // After the previous pass, we need to remove any items from the unbeaconed list which we know to be beacons.
+    return unbeaconedCount - uniqueBeaconCountOnLine;
   };
 
   const findBeacon = () => {
+    return 'hmm';
+
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       console.log(y);
       console.time('hmm');
-      getUnbeaconed(y, false);
+      getUnbeaconed(y);
       console.timeEnd('hmm');
     }
   };
