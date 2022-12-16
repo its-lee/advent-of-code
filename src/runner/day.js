@@ -20,7 +20,11 @@ export default dayCallback => {
       year,
       day,
       solve: async source => {
-        const parts = dayCallback({ source: await readData(dir, source), writeDebugFile });
+        const parts = dayCallback({
+          source: await readData(dir, source),
+          isInput: source === 'input',
+          writeDebugFile
+        });
         return (parts ?? []).map(p => p());
       }
     };

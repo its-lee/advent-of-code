@@ -2,7 +2,7 @@ import day from '../../../runner/day.js';
 import { subtractVectors, manhattanNorm } from '../../../helpers/vector.js';
 import { range } from '../../../helpers/utility.js';
 
-export default day(({ source }) => {
+export default day(({ source, isInput }) => {
   const readings = source.split('\n').map(l => {
     const [, sx, sy, bx, by] =
       /^Sensor at x=(-?\d+), y=(-?\d+): closest beacon is at x=(-?\d+), y=(-?\d+)$/
@@ -43,7 +43,7 @@ export default day(({ source }) => {
     return unbeaconed.size;
   };
 
-  const SCAN_LINE = 2000000;
+  const SCAN_LINE = isInput ? 2000000 : 10;
 
   return [() => countUnbeaconed(SCAN_LINE)];
 });
