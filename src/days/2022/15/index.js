@@ -18,7 +18,8 @@ export default solution(({ source, isInput }) => {
     };
   });
 
-  const intersectCircleWithLine = (centre, radius, lineY) => {
+  // todo: replace this
+  const intersectCircleWithLine_old = (centre, radius, lineY) => {
     const yDistance = Math.abs(lineY - centre[1]);
     if (yDistance > radius) {
       return [];
@@ -28,19 +29,20 @@ export default solution(({ source, isInput }) => {
     return range(centre[0] - (radius - yDistance), xRadius);
   };
 
-  const getUnbeaconed = y => {
+  // todo: replace this
+  const getUnbeaconed_old = y => {
     const unbeaconed = new Set();
 
     readings.forEach(({ sensor, beacon }) => {
       const radius = manhattanNorm(subtractVectors(sensor, beacon));
-      intersectCircleWithLine(sensor, radius, y).forEach(v => unbeaconed.add(v));
+      intersectCircleWithLine_old(sensor, radius, y).forEach(v => unbeaconed.add(v));
     });
 
     return unbeaconed;
   };
 
   const countUnbeaconed = () => {
-    const unbeaconedCount = getUnbeaconed(SCAN_LINE).size;
+    const unbeaconedCount = getUnbeaconed_old(SCAN_LINE).size;
     const uniqueBeaconCountOnLine = new Set(
       readings.filter(({ beacon }) => beacon[1] === SCAN_LINE).map(({ beacon }) => beacon[0])
     ).size;
@@ -55,7 +57,7 @@ export default solution(({ source, isInput }) => {
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       console.log(y);
       console.time('hmm');
-      getUnbeaconed(y);
+      getUnbeaconed_old(y);
       console.timeEnd('hmm');
     }
   };
