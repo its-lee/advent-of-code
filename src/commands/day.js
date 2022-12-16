@@ -22,6 +22,10 @@ export const handleDayCommand = async ([yearDayFilter, source = 'i']) => {
     throw new Error(`No such day ${yearDayFilter}`);
   }
 
+  const timingLabel = `${yearDayFilter} took`;
+  console.time(timingLabel);
   const result = await yearDay.solve(source);
+  console.timeEnd(timingLabel);
+
   result.forEach((value, index) => console.log(`Part ${index + 1}: ${value}`));
 };
