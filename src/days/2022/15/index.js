@@ -38,8 +38,6 @@ export default solution(({ source, isInput }) => {
       .filter(Boolean);
 
     // demo output should be [ -2, 24 ]
-    console.log(intervals);
-
     return intervals;
   };
 
@@ -77,13 +75,15 @@ export default solution(({ source, isInput }) => {
   };
 
   const findBeacon = () => {
-    getUnbeaconed(SCAN_LINE);
-    return 'hmm';
-
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       console.log(y);
       console.time('hmm');
-      getUnbeaconed(y);
+      const intervals = getUnbeaconed(y);
+      for (let x = 0; x <= MAX_DISTANCE; ++x) {
+        if (!intervals.some(([l, r]) => x >= l || x <= r)) {
+          return [x, y];
+        }
+      }
       console.timeEnd('hmm');
     }
   };
