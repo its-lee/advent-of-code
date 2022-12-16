@@ -28,7 +28,7 @@ export default solution(({ source, isInput }) => {
     return [start, start + 2 * lineRadius];
   };
 
-  const getUnbeaconed = y => {
+  const getCircleIntersectionsAtHeight = y => {
     const intervals = readings
       .map(({ sensor, beacon }) => {
         const radius = manhattanNorm(subtractVectors(sensor, beacon));
@@ -40,7 +40,7 @@ export default solution(({ source, isInput }) => {
   };
 
   const countUnbeaconed = () => {
-    const unbeaconedCount = intervalsLength(getUnbeaconed(SCAN_LINE));
+    const unbeaconedCount = intervalsLength(getCircleIntersectionsAtHeight(SCAN_LINE));
 
     const uniqueBeaconCountOnLine = new Set(
       readings.filter(({ beacon }) => beacon[1] === SCAN_LINE).map(({ beacon }) => beacon[0])
@@ -52,7 +52,7 @@ export default solution(({ source, isInput }) => {
 
   const findBeacon = () => {
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
-      const intervals = getUnbeaconed(y);
+      const intervals = getCircleIntersectionsAtHeight(y);
       if (intervals.length === 2) {
         const leftInterval = intervals.sort((a, b) => a[0] - b[0])[0];
         const x = leftInterval[1] + 1;
