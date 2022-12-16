@@ -18,6 +18,29 @@ export default solution(({ source, isInput }) => {
     };
   });
 
+  const intersectCircleWithLine = (centre, radius, lineY) => {
+    const lineRadius = radius - Math.abs(lineY - centre[1]);
+    if (lineRadius < 0) {
+      return null;
+    }
+
+    const start = centre[0] - lineRadius;
+    return [start, start + 2 * lineRadius];
+  };
+
+  const getUnbeaconed = y => {
+    const intervals = readings
+      .map(({ sensor, beacon }) => {
+        const radius = manhattanNorm(subtractVectors(sensor, beacon));
+        return intersectCircleWithLine(sensor, radius, y);
+      })
+      .filter(Boolean);
+
+    console.log(intervals);
+
+    return intervals;
+  };
+
   // todo: replace this
   const intersectCircleWithLine_old = (centre, radius, lineY) => {
     const yDistance = Math.abs(lineY - centre[1]);
@@ -52,12 +75,13 @@ export default solution(({ source, isInput }) => {
   };
 
   const findBeacon = () => {
+    getUnbeaconed(SCAN_LINE);
     return 'hmm';
 
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       console.log(y);
       console.time('hmm');
-      getUnbeaconed_old(y);
+      getUnbeaconed(y);
       console.timeEnd('hmm');
     }
   };
