@@ -1,6 +1,6 @@
 import solution from '../../../runner/solution.js';
 import { subtractVectors, manhattanNorm } from '../../../helpers/vector.js';
-import { intervalIntersection, intervalUnion, intervalsLength } from '../../../helpers/interval.js';
+import { intervalsUnion } from '../../../helpers/interval.js';
 import { range } from '../../../helpers/utility.js';
 
 export default solution(({ source, isInput }) => {
@@ -38,7 +38,7 @@ export default solution(({ source, isInput }) => {
       .filter(Boolean);
 
     // demo output should be [ -2, 24 ]
-    return intervals;
+    return intervalsUnion(intervals);
   };
 
   // todo: replace this
@@ -77,17 +77,21 @@ export default solution(({ source, isInput }) => {
   const findBeacon = () => {
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       if (y % 100 === 0) {
-        console.log((y / MAX_DISTANCE).toFixed(8) + '%');
+        console.log(((100 * y) / MAX_DISTANCE).toFixed(8) + '%');
       }
       //console.time('overall');
       //console.time('intervals');
       const intervals = getUnbeaconed(y);
-      //console.timeEnd('intervals');
-      for (let x = 0; x <= MAX_DISTANCE; ++x) {
-        if (!intervals.some(([l, r]) => x >= l || x <= r)) {
-          return [x, y];
-        }
+      if (intervals.length === 1) {
+        console.log(intervals);
+        return [y, intervals];
       }
+      //console.timeEnd('intervals');
+      // for (let x = 0; x <= MAX_DISTANCE; ++x) {
+      //   if (!intervals.some(([l, r]) => x >= l || x <= r)) {
+      //     return [x, y];
+      //   }
+      // }
       //console.timeEnd('overall');
     }
   };
