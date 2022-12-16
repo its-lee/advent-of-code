@@ -22,17 +22,16 @@ export const intervalUnion = (a, b) => {
   }
 };
 
-export const intervalsUnion = v => {
+const intervalsUnionPass = v => {
   const unioned = [];
-  let queue = v;
+  let queue = [...v];
 
   while (queue.length) {
-    // By construction of this algorithm, new items we pop from the queue won't intersect
-    // with what's already in the final unioned result - so we won't need to rewrite elements
-    // already added to the unioned array.
     const dequeued = queue.pop();
 
-    // Also deal with any which intersect this interval - so remove them from the queue too
+    // Also deal with any which intersect this interval - so remove them from the queue too.
+    //   We don't also fetch the intervals which intersect those and so on - instead we just run
+    // this pass again and again until the final union gets no smaller.
     const intersecting = queue.filter(i => intervalIntersection(i, dequeued));
     queue = queue.filter(q => !intersecting.includes(q));
 
@@ -43,6 +42,20 @@ export const intervalsUnion = v => {
   }
 
   return unioned;
+};
+
+export const intervalsUnion = v => {
+  let result = intervalsUnionPass(v);
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const passResult = intervalsUnionPass(result);
+    if (passResult.length === result.length) {
+      return result;
+    }
+
+    result = passResult;
+  }
 };
 
 export const intervalLength = a => (a ? a[1] - a[0] + 1 : 0);

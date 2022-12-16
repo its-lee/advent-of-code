@@ -1,7 +1,6 @@
 import solution from '../../../runner/solution.js';
 import { subtractVectors, manhattanNorm } from '../../../helpers/vector.js';
-import { intervalsUnion } from '../../../helpers/interval.js';
-import { range } from '../../../helpers/utility.js';
+import { intervalsUnion, intervalsLength } from '../../../helpers/interval.js';
 
 export default solution(({ source, isInput }) => {
   const SCAN_LINE = isInput ? 2000000 : 10;
@@ -37,35 +36,12 @@ export default solution(({ source, isInput }) => {
       })
       .filter(Boolean);
 
-    // demo output should be [ -2, 24 ]
     return intervalsUnion(intervals);
   };
 
-  // todo: replace this
-  const intersectCircleWithLine_old = (centre, radius, lineY) => {
-    const yDistance = Math.abs(lineY - centre[1]);
-    if (yDistance > radius) {
-      return [];
-    }
-
-    const xRadius = 2 * radius + 1 - 2 * yDistance;
-    return range(centre[0] - (radius - yDistance), xRadius);
-  };
-
-  // todo: replace this
-  const getUnbeaconed_old = y => {
-    const unbeaconed = new Set();
-
-    readings.forEach(({ sensor, beacon }) => {
-      const radius = manhattanNorm(subtractVectors(sensor, beacon));
-      intersectCircleWithLine_old(sensor, radius, y).forEach(v => unbeaconed.add(v));
-    });
-
-    return unbeaconed;
-  };
-
   const countUnbeaconed = () => {
-    const unbeaconedCount = getUnbeaconed_old(SCAN_LINE).size;
+    const unbeaconedCount = intervalsLength(getUnbeaconed(SCAN_LINE));
+
     const uniqueBeaconCountOnLine = new Set(
       readings.filter(({ beacon }) => beacon[1] === SCAN_LINE).map(({ beacon }) => beacon[0])
     ).size;
@@ -75,6 +51,9 @@ export default solution(({ source, isInput }) => {
   };
 
   const findBeacon = () => {
+    console.log(intervalsLength(getUnbeaconed(SCAN_LINE)));
+    return;
+
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
       if (y % 100 === 0) {
         console.log(((100 * y) / MAX_DISTANCE).toFixed(8) + '%');
