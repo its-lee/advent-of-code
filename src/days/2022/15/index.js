@@ -23,21 +23,6 @@ export default day(({ source }) => {
 
     const xRadius = 2 * radius + 1 - 2 * yDistance;
     return range(centre[0] - (radius - yDistance), xRadius);
-
-    /*
-      radius 2
-      yDistance  
-        0 - fine (5 wide),              c - 2
-        1 (below) - fine (3 wide),      c - 1
-        2 - fine (1 wide),              c - 0
-        >= 3 bad
-
-            *   
-      -----+++------
-          *****
-           ***
-            *
-    */
   };
 
   const SCAN_LINE = 2000000;
@@ -55,16 +40,5 @@ export default day(({ source }) => {
     }
   });
 
-  console.log(unbeaconed.size);
-
-  // Note that this contains duplicates - which aren't a problem for our purposes.
-  //const coordsWithoutSensors = sensorCircles.flatMap(v => v);
-  //const [width] = computeDimensions(readings.flatMap(r => [r.sensor, r.beacon]));
-  //console.log(width);
-
-  //console.log(coordsWithoutSensors);
-
-  // 5286569 too big
-
-  return [];
+  return [() => unbeaconed.size];
 });
