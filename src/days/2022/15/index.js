@@ -25,20 +25,25 @@ export default day(({ source }) => {
     return range(centre[0] - (radius - yDistance), xRadius);
   };
 
+  const countUnbeaconed = scanLine => {
+    const unbeaconed = new Set();
+
+    readings.forEach(({ sensor, beacon }) => {
+      const radius = manhattanNorm(subtractVectors(sensor, beacon));
+      intersectCircleWithLine(sensor, radius, scanLine).forEach(v => unbeaconed.add(v));
+    });
+
+    // After the previous pass, we need to remove any items from the unbeaconed list which we know to be beacons.
+    readings.forEach(({ beacon }) => {
+      if (beacon[1] === scanLine) {
+        unbeaconed.delete(beacon[0]);
+      }
+    });
+
+    return unbeaconed.size;
+  };
+
   const SCAN_LINE = 2000000;
-  const unbeaconed = new Set();
 
-  readings.forEach(({ sensor, beacon }) => {
-    const radius = manhattanNorm(subtractVectors(sensor, beacon));
-    intersectCircleWithLine(sensor, radius, SCAN_LINE).forEach(v => unbeaconed.add(v));
-  });
-
-  // After the previous pass, we need to remove any items from the unbeaconed list which we know to be beacons.
-  readings.forEach(({ beacon }) => {
-    if (beacon[1] === SCAN_LINE) {
-      unbeaconed.delete(beacon[0]);
-    }
-  });
-
-  return [() => unbeaconed.size];
+  return [() => countUnbeaconed(SCAN_LINE)];
 });
