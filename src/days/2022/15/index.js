@@ -76,15 +76,17 @@ export default solution(({ source, isInput }) => {
 
   const findBeacon = () => {
     for (let y = 0; y <= MAX_DISTANCE; ++y) {
-      console.log(y);
-      console.time('hmm');
+      if (y % 100 === 0) {
+        console.log((y / MAX_DISTANCE).toFixed(8) + '%');
+      }
+      //console.time('hmm');
       const intervals = getUnbeaconed(y);
       for (let x = 0; x <= MAX_DISTANCE; ++x) {
         if (!intervals.some(([l, r]) => x >= l || x <= r)) {
           return [x, y];
         }
       }
-      console.timeEnd('hmm');
+      //console.timeEnd('hmm');
     }
   };
 
