@@ -19,6 +19,8 @@ export default solution(({ source }) => {
       as many as possible etc
 
 
+      i think we should brute force it after eliminating 0 valued nodes, updating the distances
+      and adjacency appropriately.
   */
 
   return [];
