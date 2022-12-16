@@ -11,5 +11,13 @@ export default solution(({ source }) => {
 
   console.log(parsed);
 
+  /*
+    desirable:
+      opening big valves early (as the effect lasts over the 30 minute duration)
+      as many as possible etc
+
+
+  */
+
   return [];
 });
