@@ -9,6 +9,8 @@ export default solution(({ source }) => {
     return { valve, flow: parseInt(flow), to: to.split(', ') };
   });
 
+  const root = 'AA';
+
   console.log(parsed);
 
   /*
