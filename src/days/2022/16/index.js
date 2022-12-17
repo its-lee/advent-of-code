@@ -15,6 +15,10 @@ export default solution(({ source }) => {
   //         We also need to factor in the possibility of going to each node and wasting 1 minute
   //       turning it on or not.
 
+  const rootName = 'AA';
+
+  const isImportantNode = n => n.value || n.name === rootName;
+
   const buildNodes = () => {
     const nodes = source.split('\n').map(l => {
       const [, name, value, to] =
@@ -23,18 +27,18 @@ export default solution(({ source }) => {
       return { name, value: parseInt(value), to: to.split(', ') };
     });
 
-    const valuedNodes = nodes.filter(n => n.value);
+    const importantNodes = nodes.filter(isImportantNode);
 
     nodes.forEach(node => {
       // Find the shortest path to all valued nodes excluding ourselves
       node.adjacent = {};
-      if (!node.value) {
+      if (!importantNodes.includes(node)) {
         return;
       }
 
       const bfs = breadthFirstSearch();
       nodes.forEach(n => bfs.addVertex(n.name, n.to));
-      valuedNodes
+      importantNodes
         .filter(n => n.name !== node.name)
         .forEach(n => (node.adjacent[n.name] = bfs.computeLength(node.name, n.name)));
     });
@@ -42,25 +46,20 @@ export default solution(({ source }) => {
     return nodes;
   };
 
-  const root = 'AA';
   const allNodes = buildNodes();
   const nodes = allNodes
-    .filter(n => n.value)
+    .filter(isImportantNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  console.log(nodes);
-
-  let current = root;
-
-  const adjacent = nodes.reduce((acc, node) => ({ ...acc, [node.name]: node.valuedAdjacent }), {});
+  console.log(nodes[rootName]);
 
   // visit each path breadth-first (for no reason over depth-first other than we've done that recently),
   // terminating paths when they run out of time
 
   const paths = {};
 
-  const queue = [root];
-  const visited = { [root]: true };
+  const queue = [rootName];
+  const visited = { [rootName]: true };
 
   while (queue.length) {
     const v = queue.shift();
@@ -70,16 +69,16 @@ export default solution(({ source }) => {
     //   return this.buildPath(end, start);
     // }
 
-    const nonVisitedAdjacent = adjacent[v].filter(adjv => !visited[adjv]);
+    // const nonVisitedAdjacent = nodes[v].adjacent.filter(adjv => !visited[adjv]);
 
     // todo: if nonVisitedAdjacent is empty than we need to finish this path
 
-    nonVisitedAdjacent.forEach(adjv => {
-      visited[adjv] = true;
-      queue.push(adjv);
-      // todo: update our paths with their current times and overall values? factor in turning on / off valves
-      // paths[v] =
-    });
+    // nonVisitedAdjacent.forEach(adjv => {
+    //   visited[adjv] = true;
+    //   queue.push(adjv);
+    //   // todo: update our paths with their current times and overall values? factor in turning on / off valves
+    //   // paths[v] =
+    // });
   }
 
   return [];
