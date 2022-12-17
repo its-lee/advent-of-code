@@ -13,18 +13,13 @@ export default solution(({ source }) => {
 
   console.log(parsed);
 
-  /*
-    desirable:
-      opening big valves early (as the effect lasts over the 30 minute duration)
-      as many as possible etc
-
-
-      i think we should brute force it after eliminating 0 valued nodes, updating the distances
-      and adjacency appropriately.
-
-      either way, there's no value in these rooms apart from for travel - and we'd be optimising
-      any other algorithm that's used.
-  */
+  // Looking at the data, *most* nodes have a value of 0. The optimal solution would visit as many
+  // valued nodes (a value > 0) as possible, using the shortest paths when travelling.
+  //
+  // So, what we'll do is:
+  //   i) 'Eliminate' non-valued nodes by computing the minimum distance between the valued nodes.
+  //   ii) Determine every permutation of valued nodes (which is a far smaller set than the total nodes),
+  //       and maximise the total value over those permutations.
 
   return [];
 });
