@@ -20,23 +20,23 @@ export default solution(({ source }) => {
       const [, name, value, to] =
         /^Valve ([A-Z]+) has flow rate=(\d+); tunnels? leads? to valves? (.*)$/.exec(l);
 
-      return { name, value: parseInt(value), adjacent: to.split(', ') };
+      return { name, value: parseInt(value), to: to.split(', ') };
     });
 
     const valuedNodes = nodes.filter(n => n.value);
 
     nodes.forEach(node => {
       // Find the shortest path to all valued nodes excluding ourselves
-      node.valuedAdjacent = {};
+      node.adjacent = {};
       if (!node.value) {
         return;
       }
 
       const bfs = breadthFirstSearch();
-      nodes.forEach(n => bfs.addVertex(n.name, n.adjacent));
+      nodes.forEach(n => bfs.addVertex(n.name, n.to));
       valuedNodes
         .filter(n => n.name !== node.name)
-        .forEach(n => (node.valuedAdjacent[n.name] = bfs.computeLength(node.name, n.name)));
+        .forEach(n => (node.adjacent[n.name] = bfs.computeLength(node.name, n.name)));
     });
 
     return nodes;
@@ -65,22 +65,21 @@ export default solution(({ source }) => {
   };
 
   const root = 'AA';
-  const nodes = buildNodes();
-  const valuedNodes = nodes.filter(n => n.value);
-  const valuedNodeNames = valuedNodes.map(n => n.name);
+  const allNodes = buildNodes();
+  const nodes = allNodes
+    .filter(n => n.value)
+    .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  console.log(valuedNodes);
-  //computePermutations(valuedNodeNames.length);
+  console.log(nodes);
 
   let current = root;
 
-  const adjacent = valuedNodes.reduce(
-    (acc, node) => ({ ...acc, [node.name]: node.valuedAdjacent }),
-    {}
-  );
+  const adjacent = nodes.reduce((acc, node) => ({ ...acc, [node.name]: node.valuedAdjacent }), {});
 
   // visit each path breadth-first (for no reason over depth-first other than we've done that recently),
   // terminating paths when they run out of time
+
+  const paths = {};
 
   const queue = [root];
   const visited = { [root]: true };
@@ -100,6 +99,8 @@ export default solution(({ source }) => {
     nonVisitedAdjacent.forEach(adjv => {
       visited[adjv] = true;
       queue.push(adjv);
+      // todo: update our paths with their current times and overall values? factor in turning on / off valves
+      // paths[v] =
     });
   }
 
