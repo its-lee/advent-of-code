@@ -5,7 +5,9 @@ const source = 'input';
 jest.setTimeout(5 * 60000);
 
 getFilteredDays().forEach(yearDay => {
-  test(`day #${yearDay.id}`, async () => {
+  const name = `day #${yearDay.id}`;
+  test(name, async () => {
+    console.time(name);
     const result = await yearDay.solve(source);
     const answers = await readAnswers(yearDay.year);
 
@@ -15,5 +17,6 @@ getFilteredDays().forEach(yearDay => {
       const actual = result[partIndex];
       expect(actual).toBe(expected);
     });
+    console.timeEnd(name);
   });
 });

@@ -1,5 +1,7 @@
 import solution from '../../../runner/solution.js';
 
+import breadthFirstSearch from '../../../helpers/breadthFirstSearch.js';
+
 export default solution(({ source }) => {
   const nodes = source.split('\n').map(l => {
     const [, name, value, to] =
