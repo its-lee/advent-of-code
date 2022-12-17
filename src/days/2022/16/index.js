@@ -74,7 +74,7 @@ export default solution(({ source }) => {
     // todo: if nonVisitedAdjacent is empty than we need to finish this path
 
     // nonVisitedAdjacent.forEach(adjv => {
-    //   visited[adjv] = true;    // i don't think we want to ignore previously visited nodes are, as not all edge weights are equal..
+    //   visited[adjv] = true;    // i don't think we want to ignore previously visited nodes are, as not all edge weights are equal.. but we do want to avoid loops (i.e. BB -> CC -> BB)
     //   queue.push(adjv);
     //   // todo: update our paths with their current times and overall values? factor in turning on / off valves
     //   // paths[v] =
