@@ -12,6 +12,8 @@ export default solution(({ source }) => {
   //      from them so we don't need to look at them again).
   //   ii) Go through the possible paths of valued nodes (which is a far smaller tree than the
   //       total nodes), and maximise the total value over those paths.
+  //         We also need to factor in the possibility of going to each node and wasting 1 minute
+  //       turning it on or not.
 
   const buildNodes = () => {
     const nodes = source.split('\n').map(l => {
@@ -66,9 +68,9 @@ export default solution(({ source }) => {
   const nodes = buildNodes();
   const valuedNodeNames = nodes.filter(n => n.value).map(n => n.name);
 
-  console.log(valuedNodeNames);
+  console.log(nodes.filter(n => n.value));
   console.log(factorial(valuedNodeNames.length));
-  computePermutations(valuedNodeNames.length);
+  //computePermutations(valuedNodeNames.length);
 
   return [];
 });
