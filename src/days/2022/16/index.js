@@ -66,11 +66,42 @@ export default solution(({ source }) => {
 
   const root = 'AA';
   const nodes = buildNodes();
-  const valuedNodeNames = nodes.filter(n => n.value).map(n => n.name);
+  const valuedNodes = nodes.filter(n => n.value);
+  const valuedNodeNames = valuedNodes.map(n => n.name);
 
-  console.log(nodes.filter(n => n.value));
-  console.log(factorial(valuedNodeNames.length));
+  console.log(valuedNodes);
   //computePermutations(valuedNodeNames.length);
+
+  let current = root;
+
+  const adjacent = valuedNodes.reduce(
+    (acc, node) => ({ ...acc, [node.name]: node.valuedAdjacent }),
+    {}
+  );
+
+  // visit each path breadth-first (for no reason over depth-first other than we've done that recently),
+  // terminating paths when they run out of time
+
+  const queue = [root];
+  const visited = { [root]: true };
+
+  while (queue.length) {
+    const v = queue.shift();
+
+    // we need something like this to terminate!
+    // if (v === end) {
+    //   return this.buildPath(end, start);
+    // }
+
+    const nonVisitedAdjacent = adjacent[v].filter(adjv => !visited[adjv]);
+
+    // todo: if nonVisitedAdjacent is empty than we need to finish this path
+
+    nonVisitedAdjacent.forEach(adjv => {
+      visited[adjv] = true;
+      queue.push(adjv);
+    });
+  }
 
   return [];
 });
