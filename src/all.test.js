@@ -2,7 +2,7 @@ import { readAnswers } from './runner/answers.js';
 import { getFilteredDays } from './runner/helpers.js';
 
 const source = 'input';
-jest.setTimeout(60000);
+jest.setTimeout(5 * 60000);
 
 getFilteredDays().forEach(yearDay => {
   test(`day #${yearDay.id}`, async () => {
