@@ -49,6 +49,11 @@ export default () => {
       }
 
       return undefined;
+    },
+    computeLength(start, end) {
+      const path = this.compute(start, end);
+      // We don't include the start in the length computation
+      return path?.length !== undefined ? path.length - 1 : undefined;
     }
   };
 };

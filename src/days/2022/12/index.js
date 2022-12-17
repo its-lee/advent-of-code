@@ -37,11 +37,7 @@ export default solution(({ source }) => {
   const locateByChar = m => grid.find(({ char }) => char === m);
   const end = locateByChar('E');
 
-  const shortestPathLength = start => {
-    const path = search.compute(start.index, end.index);
-    // don't include the start in the length computation
-    return path?.length !== undefined ? path.length - 1 : undefined;
-  };
+  const shortestPathLength = start => search.computeLength(start.index, end.index);
 
   return [
     () => shortestPathLength(locateByChar('S')),
