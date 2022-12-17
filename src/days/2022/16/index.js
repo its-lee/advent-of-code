@@ -40,10 +40,35 @@ export default solution(({ source }) => {
     return nodes;
   };
 
+  const factorial = v => (v <= 1 ? 1 : v * factorial(v - 1));
+
+  const computePermutations = values => {
+    const base = values;
+    const permutationCount = factorial(base);
+
+    for (let i = 0; i < permutationCount; ++i) {
+      if (i % 1000 === 0) {
+        console.log(((100 * i) / permutationCount).toFixed(8));
+      }
+
+      const indices = i
+        .toString(base)
+        .split('')
+        .map(i => parseInt(i, base));
+
+      //console.log(indices);
+    }
+
+    return;
+  };
+
   const root = 'AA';
   const nodes = buildNodes();
+  const valuedNodeNames = nodes.filter(n => n.value).map(n => n.name);
 
-  console.log(nodes);
+  console.log(valuedNodeNames);
+  console.log(factorial(valuedNodeNames.length));
+  computePermutations(valuedNodeNames.length);
 
   return [];
 });
