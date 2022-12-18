@@ -121,6 +121,8 @@ export default solution(({ source }) => {
     }
   };
 
+  // Demo solution is DD -> BB -> JJ -> HH -> EE -> CC (on minute 24) = 1651
+
   const exhaustedPaths = exhaustPaths().sort((a, b) => a.totalFlow - b.totalFlow);
   console.log(exhaustedPaths[0]);
 
