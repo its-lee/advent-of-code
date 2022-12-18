@@ -74,12 +74,13 @@ export default solution(({ source }) => {
         }
 
         const current = nodes[next.name];
+        const flowRate = path.flowRate + current.flowRate;
         return {
           current,
           visited: [...path.visited, path.current.name],
-          flowRate: path.flowRate + current.flowRate,
+          flowRate,
           // todo: totalFlow - this is going to be off by 1 * multiples etc
-          totalFlow: path.totalFlow + (next.time * path.flowRate + 1 * current.flowRate),
+          totalFlow: path.totalFlow + (next.time - 1) * path.flowRate + flowRate,
           timeLeft,
           noTimeForMoreNodesOrVisitedAll: false
         };
@@ -121,9 +122,9 @@ export default solution(({ source }) => {
     }
   };
 
-  // Demo solution is DD -> BB -> JJ -> HH -> EE -> CC (on minute 24) = 1651
+  // Demo solution is AA -> DD -> BB -> JJ -> HH -> EE -> CC (on minute 24) = 1651
 
-  const exhaustedPaths = exhaustPaths().sort((a, b) => a.totalFlow - b.totalFlow);
+  const exhaustedPaths = exhaustPaths().sort((a, b) => b.totalFlow - a.totalFlow);
   console.log(exhaustedPaths[0]);
 
   return [];
