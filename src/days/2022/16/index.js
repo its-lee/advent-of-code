@@ -70,20 +70,20 @@ export default solution(({ source }) => {
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
         const timeLeft = path.timeLeft - next.time;
-        const haveNotVisitedAll = path.visited.length !== Object.keys(nodes).length - 2;
-        console.log(path.visited.length, Object.keys(nodes).length - 2, haveNotVisitedAll);
+        const visitedAll = path.visited.length === Object.keys(nodes).length - 2;
+        //console.log(path.visited.length, Object.keys(nodes).length - 2, visitedAll);
 
-        return timeLeft >= 0 || haveNotVisitedAll
+        return timeLeft < 0 || visitedAll
           ? {
+              ...path,
+              noTimeForMoreNodesOrVisitedAll: true
+            }
+          : {
               current: nodes[next.name],
               visited: [...path.visited, path.current.name],
               // todo: update score here for time passed
               timeLeft,
               noTimeForMoreNodesOrVisitedAll: false
-            }
-          : {
-              ...path,
-              noTimeForMoreNodesOrVisitedAll: true
             };
       });
   };
@@ -109,7 +109,7 @@ export default solution(({ source }) => {
       const noTimeForMoreNodesOrVisitedAllPaths = newPaths.filter(
         p => p.noTimeForMoreNodesOrVisitedAll
       );
-      console.log(noTimeForMoreNodesOrVisitedAllPaths.length);
+      //console.log(noTimeForMoreNodesOrVisitedAllPaths.length);
       exhaustedPaths.push(...noTimeForMoreNodesOrVisitedAllPaths);
 
       // todo: we now need to add score for the time left on some of these.
