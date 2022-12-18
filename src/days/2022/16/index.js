@@ -71,20 +71,21 @@ export default solution(({ source }) => {
       .map(next => {
         const timeLeft = path.timeLeft - next.time;
         const visitedAll = path.visited.length === Object.keys(nodes).length - 2;
-        //console.log(path.visited.length, Object.keys(nodes).length - 2, visitedAll);
 
-        return timeLeft < 0 || visitedAll
-          ? {
-              ...path,
-              noTimeForMoreNodesOrVisitedAll: true
-            }
-          : {
-              current: nodes[next.name],
-              visited: [...path.visited, path.current.name],
-              // todo: update score here for time passed
-              timeLeft,
-              noTimeForMoreNodesOrVisitedAll: false
-            };
+        if (timeLeft < 0 || visitedAll) {
+          return { ...path, noTimeForMoreNodesOrVisitedAll: true };
+        }
+
+        const current = nodes[next.name];
+        return {
+          current,
+          visited: [...path.visited, path.current.name],
+          flowRate: path.flowRate + current.flowRate,
+          // todo: totalFlow - this is going to be off by 1 * multiples etc
+          totalFlow: path.totalFlow + (next.time * path.flowRate + 1 * current.flowRate),
+          timeLeft,
+          noTimeForMoreNodesOrVisitedAll: false
+        };
       });
   };
 
@@ -100,29 +101,31 @@ export default solution(({ source }) => {
       }
     ];
 
-    const exhaustedPaths = [];
+    let exhaustedPaths = [];
 
     while (true) {
       const newPaths = paths.flatMap(p => extendPath(p));
-      //console.log(newPaths.reverse());
 
       const noTimeForMoreNodesOrVisitedAllPaths = newPaths.filter(
         p => p.noTimeForMoreNodesOrVisitedAll
       );
-      //console.log(noTimeForMoreNodesOrVisitedAllPaths.length);
-      exhaustedPaths.push(...noTimeForMoreNodesOrVisitedAllPaths);
+      exhaustedPaths = exhaustedPaths.concat(noTimeForMoreNodesOrVisitedAllPaths);
 
-      // todo: we now need to add score for the time left on some of these.
+      exhaustedPaths.forEach(p => {
+        p.totalFlow += p.flowRate * p.timeLeft;
+        p.timeLeft = 0;
+      });
+
       paths = newPaths.filter(p => !p.noTimeForMoreNodesOrVisitedAll);
 
       if (!paths.length) {
-        console.log('returning', paths.length);
-        return exhaustedPaths; // todo: exit here with results.
+        return exhaustedPaths;
       }
     }
   };
 
-  console.log(exhaustPaths());
+  const exhaustedPaths = exhaustPaths().sort((a, b) => a.totalFlow - b.totalFlow);
+  console.log(exhaustedPaths[0]);
 
   return [];
 });
