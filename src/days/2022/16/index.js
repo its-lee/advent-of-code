@@ -22,7 +22,6 @@ export default solution(({ source }) => {
          
           We also need to factor in the possibility of going to each node and wasting 1 minute
           turning it on or not.
-
   */
 
   const rootName = 'AA';
