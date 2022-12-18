@@ -41,7 +41,7 @@ export default solution(({ source }) => {
 
     nodes.forEach(node => {
       // Find the shortest path to all valued nodes excluding ourselves
-      node.adjacent = {};
+      node.adjacent = [];
       if (!importantNodes.includes(node)) {
         return;
       }
@@ -50,7 +50,9 @@ export default solution(({ source }) => {
       nodes.forEach(n => bfs.addVertex(n.name, n.to));
       importantNodes
         .filter(n => n.name !== node.name)
-        .forEach(n => (node.adjacent[n.name] = bfs.computeLength(node.name, n.name) + 1));
+        .forEach(n => {
+          node.adjacent.push({ name: n.name, time: bfs.computeLength(node.name, n.name) + 1 });
+        });
     });
 
     return nodes;
@@ -61,35 +63,35 @@ export default solution(({ source }) => {
     .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  console.log(nodes[rootName]);
+  const paths = [
+    {
+      node: nodes[rootName],
+      visited: [],
+      timeLeft: 30 // todo: terminate with this & also after visiting all
+      // score: 0 todo: compute this
+    }
+  ];
 
-  // visit each path breadth-first (for no reason over depth-first other than we've done that recently),
-  // terminating paths when they run out of time
+  const extendPaths = paths => {
+    return paths.flatMap(n => {
+      return n.node.adjacent
+        .filter(a => !n.visited.includes(a.name))
+        .map(next => {
+          return {
+            node: nodes[next.name],
+            visited: [...n.visited, n.node.name],
+            timeLeft: n.timeLeft - next.time
+          };
+        });
+    });
+  };
 
-  const paths = {};
+  const newPaths = extendPaths(paths);
+  // we need to find any paths that have run out of time, splice them out of the array
+  // but we need to do this before they get scores added.
+  //   we also need to add on any more points that they would have gotten by time passing
 
-  const queue = [rootName];
-  const visited = { [rootName]: true };
-
-  while (queue.length) {
-    const v = queue.shift();
-
-    // we need something like this to terminate!
-    // if (v === end) {
-    //   return this.buildPath(end, start);
-    // }
-
-    // const nonVisitedAdjacent = nodes[v].adjacent.filter(adjv => !visited[adjv]);
-
-    // todo: if nonVisitedAdjacent is empty than we need to finish this path
-
-    // nonVisitedAdjacent.forEach(adjv => {
-    //   visited[adjv] = true;    // i don't think we want to ignore previously visited nodes are, as not all edge weights are equal.. but we do want to avoid loops (i.e. BB -> CC -> BB)
-    //   queue.push(adjv);
-    //   // todo: update our paths with their current times and overall values? factor in turning on / off valves
-    //   // paths[v] =
-    // });
-  }
+  console.log(firstGenNodes);
 
   return [];
 });
