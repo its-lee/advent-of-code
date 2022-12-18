@@ -67,7 +67,7 @@ export default solution(({ source }) => {
     {
       node: nodes[rootName],
       visited: [],
-      timeLeft: 30 // todo: terminate with this & also after visiting all
+      timeLeft: 30, // todo: terminate with this & also after visiting all
       // score: 0 todo: compute this
       noTimeForMoreNodes: false
     }
@@ -106,7 +106,7 @@ export default solution(({ source }) => {
 
   const newPaths2 = timeLeftPaths.flatMap(p => extendPath(p));
 
-  // .. and so on, until no newPaths.filter(p => !p.noTimeForMoreNodes); is empty 
+  // .. and so on, until no newPaths.filter(p => !p.noTimeForMoreNodes); is empty
 
   console.log(firstGenNodes);
 
