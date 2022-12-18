@@ -27,7 +27,7 @@ export default solution(({ source }) => {
 
   const rootName = 'AA';
 
-  const isValuedNode = n => n.value || n.name === rootName;
+  const isValuedNode = n => n.flowRate || n.name === rootName;
 
   const buildNodes = () => {
     const nodes = source.split('\n').map(l => {
@@ -64,21 +64,26 @@ export default solution(({ source }) => {
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
   const extendPath = path => {
+    //console.log(path);
+
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
         const timeLeft = path.timeLeft - next.time;
-        return timeLeft >= 0
+        const haveNotVisitedAll = path.visited.length !== Object.keys(nodes).length - 2;
+        console.log(path.visited.length, Object.keys(nodes).length - 2, haveNotVisitedAll);
+
+        return timeLeft >= 0 || haveNotVisitedAll
           ? {
               current: nodes[next.name],
               visited: [...path.visited, path.current.name],
               // todo: update score here for time passed
               timeLeft,
-              noTimeForMoreNodes: false
+              noTimeForMoreNodesOrVisitedAll: false
             }
           : {
               ...path,
-              noTimeForMoreNodes: true
+              noTimeForMoreNodesOrVisitedAll: true
             };
       });
   };
@@ -91,7 +96,7 @@ export default solution(({ source }) => {
         timeLeft: 30,
         flowRate: 0,
         totalFlow: 0,
-        noTimeForMoreNodes: false
+        noTimeForMoreNodesOrVisitedAll: false
       }
     ];
 
@@ -99,14 +104,19 @@ export default solution(({ source }) => {
 
     while (true) {
       const newPaths = paths.flatMap(p => extendPath(p));
-      // check for noTimeForMoreNodes = true if there are some
-      const noTimeLeftPaths = newPaths.filter(p => p.noTimeForMoreNodes);
-      exhaustedPaths.push(...noTimeLeftPaths);
+      //console.log(newPaths.reverse());
+
+      const noTimeForMoreNodesOrVisitedAllPaths = newPaths.filter(
+        p => p.noTimeForMoreNodesOrVisitedAll
+      );
+      console.log(noTimeForMoreNodesOrVisitedAllPaths.length);
+      exhaustedPaths.push(...noTimeForMoreNodesOrVisitedAllPaths);
 
       // todo: we now need to add score for the time left on some of these.
-      paths = newPaths.filter(p => !p.noTimeForMoreNodes);
+      paths = newPaths.filter(p => !p.noTimeForMoreNodesOrVisitedAll);
 
       if (!paths.length) {
+        console.log('returning', paths.length);
         return exhaustedPaths; // todo: exit here with results.
       }
     }
