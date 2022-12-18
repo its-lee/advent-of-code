@@ -3,21 +3,31 @@ import solution from '../../../runner/solution.js';
 import breadthFirstSearch from '../../../helpers/breadthFirstSearch.js';
 
 export default solution(({ source }) => {
-  // Looking at the data, *most* nodes have a value of 0. The optimal solution would visit as many
-  // valued nodes (a value > 0) as possible, using the shortest paths when travelling.
-  //
-  // So, what we'll do is:
-  //   i) 'Eliminate' non-valued nodes by computing the minimum distance between the valued nodes
-  //      (we're not really eliminating them - more that we're extracting all necessary information
-  //      from them so we don't need to look at them again).
-  //   ii) Go through the possible paths of valued nodes (which is a far smaller tree than the
-  //       total nodes), and maximise the total value over those paths.
-  //         We also need to factor in the possibility of going to each node and wasting 1 minute
-  //       turning it on or not.
+  /*
+    Looking at the data, *most* nodes have a value of 0. The optimal solution would visit as many
+    valued nodes (a value > 0) as possible, using the shortest paths when travelling.
+  
+    So, what we'll do is:
+      i) 'Eliminate' non-valued nodes by computing the minimum distance between the valued nodes
+          (we're not really eliminating them - more that we're extracting all necessary information
+          from them so we don't need to look at them again). 
+        
+          We add 1 to the shortest paths to accommodate for the 'activation' time required. You 
+          might think we'd be missing paths where you visit one of these valued-nodes but then
+          go to another valued node. But those paths would always yield equal or lower overall
+          score as they're not using paths to valued nodes that are any shorter.
+  
+      ii) Go through the possible paths of valued nodes (which is a far smaller tree than the
+          total nodes), and maximise the total value over those paths.
+         
+          We also need to factor in the possibility of going to each node and wasting 1 minute
+          turning it on or not.
+
+  */
 
   const rootName = 'AA';
 
-  const isImportantNode = n => n.value || n.name === rootName;
+  const isValuedNode = n => n.value || n.name === rootName;
 
   const buildNodes = () => {
     const nodes = source.split('\n').map(l => {
@@ -27,7 +37,7 @@ export default solution(({ source }) => {
       return { name, value: parseInt(value), to: to.split(', ') };
     });
 
-    const importantNodes = nodes.filter(isImportantNode);
+    const importantNodes = nodes.filter(isValuedNode);
 
     nodes.forEach(node => {
       // Find the shortest path to all valued nodes excluding ourselves
@@ -40,7 +50,7 @@ export default solution(({ source }) => {
       nodes.forEach(n => bfs.addVertex(n.name, n.to));
       importantNodes
         .filter(n => n.name !== node.name)
-        .forEach(n => (node.adjacent[n.name] = bfs.computeLength(node.name, n.name)));
+        .forEach(n => (node.adjacent[n.name] = bfs.computeLength(node.name, n.name) + 1));
     });
 
     return nodes;
@@ -48,7 +58,7 @@ export default solution(({ source }) => {
 
   const allNodes = buildNodes();
   const nodes = allNodes
-    .filter(isImportantNode)
+    .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
   console.log(nodes[rootName]);
