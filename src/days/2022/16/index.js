@@ -64,8 +64,6 @@ export default solution(({ source }) => {
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
   const extendPath = path => {
-    //console.log(path);
-
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
