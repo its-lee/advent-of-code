@@ -31,10 +31,10 @@ export default solution(({ source }) => {
 
   const buildNodes = () => {
     const nodes = source.split('\n').map(l => {
-      const [, name, value, to] =
+      const [, name, flowRate, to] =
         /^Valve ([A-Z]+) has flow rate=(\d+); tunnels? leads? to valves? (.*)$/.exec(l);
 
-      return { name, value: parseInt(value), to: to.split(', ') };
+      return { name, flowRate: parseInt(flowRate), to: to.split(', ') };
     });
 
     const importantNodes = nodes.filter(isValuedNode);
@@ -64,14 +64,15 @@ export default solution(({ source }) => {
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
   const extendPath = path => {
-    return path.node.adjacent
+    return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
         const timeLeft = path.timeLeft - next.time;
         return timeLeft >= 0
           ? {
-              node: nodes[next.name],
-              visited: [...path.visited, path.node.name],
+              current: nodes[next.name],
+              visited: [...path.visited, path.current.name],
+              // todo: update score here for time passed
               timeLeft,
               noTimeForMoreNodes: false
             }
@@ -85,10 +86,11 @@ export default solution(({ source }) => {
   const exhaustPaths = () => {
     let paths = [
       {
-        node: nodes[rootName],
+        current: nodes[rootName],
         visited: [],
-        timeLeft: 30, // todo: terminate with this & also after visiting all
-        // score: 0 todo: compute this
+        timeLeft: 30,
+        flowRate: 0,
+        totalFlow: 0,
         noTimeForMoreNodes: false
       }
     ];
@@ -97,11 +99,7 @@ export default solution(({ source }) => {
 
     while (true) {
       const newPaths = paths.flatMap(p => extendPath(p));
-      // we need to find any paths that have run out of time, splice them out of the array
-      // but we need to do this before they get scores added.
-      //   we also need to add on any more points that they would have gotten by time passing
-
-      // check for noTimeForMoreNodes = true if there is some
+      // check for noTimeForMoreNodes = true if there are some
       const noTimeLeftPaths = newPaths.filter(p => p.noTimeForMoreNodes);
       exhaustedPaths.push(...noTimeLeftPaths);
 
