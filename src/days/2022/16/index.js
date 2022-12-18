@@ -69,27 +69,44 @@ export default solution(({ source }) => {
       visited: [],
       timeLeft: 30 // todo: terminate with this & also after visiting all
       // score: 0 todo: compute this
+      noTimeForMoreNodes: false
     }
   ];
 
-  const extendPaths = paths => {
-    return paths.flatMap(n => {
-      return n.node.adjacent
-        .filter(a => !n.visited.includes(a.name))
-        .map(next => {
-          return {
-            node: nodes[next.name],
-            visited: [...n.visited, n.node.name],
-            timeLeft: n.timeLeft - next.time
-          };
-        });
-    });
+  const extendPath = path => {
+    path.node.adjacent
+      .filter(a => !path.visited.includes(a.name))
+      .map(next => {
+        const timeLeft = path.timeLeft - next.time;
+        return timeLeft >= 0
+          ? {
+              node: nodes[next.name],
+              visited: [...path.visited, path.node.name],
+              timeLeft,
+              noTimeForMoreNodes: false
+            }
+          : {
+              ...path,
+              noTimeForMoreNodes: true
+            };
+      });
   };
 
-  const newPaths = extendPaths(paths);
+  const newPaths = paths.flatMap(p => extendPath(p));
   // we need to find any paths that have run out of time, splice them out of the array
   // but we need to do this before they get scores added.
   //   we also need to add on any more points that they would have gotten by time passing
+
+  // check for noTimeForMoreNodes = true if there is some
+  const noTimeLeftPaths = newPaths.filter(p => p.noTimeForMoreNodes);
+  // todo: we now need to add score for the time left on some of these.
+  const timeLeftPaths = newPaths.filter(p => !p.noTimeForMoreNodes);
+
+  // step 2..
+
+  const newPaths2 = timeLeftPaths.flatMap(p => extendPath(p));
+
+  // .. and so on, until no newPaths.filter(p => !p.noTimeForMoreNodes); is empty 
 
   console.log(firstGenNodes);
 
