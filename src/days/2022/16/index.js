@@ -1,6 +1,7 @@
 import solution from '../../../runner/solution.js';
 
 import breadthFirstSearch from '../../../helpers/breadthFirstSearch.js';
+import { intersect } from '../../../helpers/logic.js';
 
 export default solution(({ source }) => {
   /*
@@ -126,17 +127,54 @@ export default solution(({ source }) => {
     }
   };
 
+  const findPathWithTopTotalFlow = v => v.sort((a, b) => b.totalFlow - a.totalFlow)[0];
+
+  const computeMaxSinglePersonTotalFlow = () =>
+    findPathWithTopTotalFlow(exhaustPaths(30)).totalFlow;
+
+  const maxSinglePersonTotalFlow = computeMaxSinglePersonTotalFlow();
+
   return [
-    () => {
-      return exhaustPaths(30).sort((a, b) => b.totalFlow - a.totalFlow)[0].totalFlow;
-    },
+    () => maxSinglePersonTotalFlow,
     () => {
       const paths = exhaustPaths(26).map(p => ({
         visited: [...p.visited, p.current.name],
         totalFlow: p.totalFlow
       }));
 
-      console.log(paths);
+      const pathCount = paths.length;
+      let pathIndex = 0;
+      const pairPaths = [];
+      for (const path of paths) {
+        pathIndex++;
+        if (pathIndex % 100 === 0) {
+          console.log(path.visited.join('/'));
+          console.log((pathIndex / pathCount) * 100, '%');
+        }
+
+        for (const otherPath of paths) {
+          if (
+            path === otherPath ||
+            path.totalFlow + otherPath.totalFlow < maxSinglePersonTotalFlow ||
+            intersect(path.visited, otherPath.visited).length
+          ) {
+            continue;
+          }
+
+          console.log('found one!');
+          console.log(path.visited.join('/'), otherPath.visited.join('/'));
+          pairPaths.push([path, otherPath]);
+        }
+      }
+
+      const pairedPaths = pairPaths.map(([left, right]) => ({
+        left,
+        right,
+        totalFlow: left.totalFlow + right.totalFlow
+      }));
+
+      const top = findPathWithTopTotalFlow(pairedPaths);
+      console.log(top);
     }
   ];
 });
