@@ -153,16 +153,24 @@ export default solution(({ source }) => {
         }
 
         for (const otherPath of paths) {
-          if (path.totalFlow + otherPath.totalFlow < maxSinglePersonTotalFlow) {
-            console.log(
-              `skipping as ${path.totalFlow + otherPath.totalFlow} < ${maxSinglePersonTotalFlow}`
-            );
+          const totalFlow = path.totalFlow + otherPath.totalFlow;
+          if (totalFlow < maxSinglePersonTotalFlow) {
+            if (totalFlow > 1600) {
+              console.log(`skipping as ${totalFlow} < ${maxSinglePersonTotalFlow}`);
+            }
             continue;
           }
 
           const intersection = intersect(path.visited, otherPath.visited);
-          if (intersection.length) {
-            //console.log(`skipping as the intersection has length ${intersection.length}`);
+          if (intersection.length > 1) {
+            if (intersection.length < 4) {
+              console.log(
+                `skipping as the intersection has length ${intersection.length}`,
+                path.visited,
+                otherPath.visited,
+                intersection
+              );
+            }
             continue;
           }
 
