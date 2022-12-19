@@ -1,22 +1,23 @@
 import { readAnswers } from './runner/answers.js';
 import { getFilteredDays } from './runner/helpers.js';
 
-const source = 'input';
-jest.setTimeout(5 * 60000);
+const sources = ['demo', 'input'];
+jest.setTimeout(5 * 60 * 1000);
 
 getFilteredDays().forEach(yearDay => {
-  const name = `day #${yearDay.id}`;
-  test(name, async () => {
-    console.time(name);
-    const result = await yearDay.solve(source);
-    const answers = await readAnswers(yearDay.year);
+  sources.forEach(source => {
+    const name = `day #${yearDay.id}, from '${source}' data`;
+    test(name, async () => {
+      console.time(name);
+      const result = await yearDay.solve(source);
+      const answers = await readAnswers(yearDay.year);
 
-    const expectedParts = answers?.[yearDay.day]?.[source];
-
-    expectedParts.forEach((expected, partIndex) => {
-      const actual = result[partIndex];
-      expect(actual).toBe(expected);
+      const expectedParts = answers?.[yearDay.day]?.[source] || [];
+      expectedParts.forEach((expected, partIndex) => {
+        const actual = result[partIndex];
+        expect(actual).toBe(expected);
+      });
+      console.timeEnd(name);
     });
-    console.timeEnd(name);
   });
 });
