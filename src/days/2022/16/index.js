@@ -59,15 +59,15 @@ export default solution(({ source }) => {
     .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  const extendPath = (path, timeLimit) => {
+  const extendPath = path => {
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
-        const timePassed = path.timePassed + next.time;
+        const timeRemaining = path.timeRemaining - next.time;
 
         // If we would run out of time by moving to this node - or if already we've visited all nodes, then we
         // should stay where we are.
-        if (timePassed > timeLimit) {
+        if (timeRemaining < 0) {
           return { ...path, stopTraversingNodes: true };
         }
 
@@ -78,7 +78,7 @@ export default solution(({ source }) => {
           visited: [...path.visited, path.current.name],
           flowRate,
           totalFlow: path.totalFlow + (next.time - 1) * path.flowRate + flowRate,
-          timePassed,
+          timeRemaining,
           stopTraversingNodes: false
         };
       });
@@ -89,7 +89,7 @@ export default solution(({ source }) => {
       {
         current: nodes[rootName],
         visited: [],
-        timePassed: 0,
+        timeRemaining: timeLimit,
         flowRate: 0,
         totalFlow: 0,
         stopTraversingNodes: false
@@ -114,8 +114,8 @@ export default solution(({ source }) => {
       exhaustedPaths = exhaustedPaths.concat(stoppedPaths);
 
       exhaustedPaths.forEach(p => {
-        p.totalFlow += p.flowRate * (timeLimit - p.timePassed - 1);
-        p.timePassed = timeLimit;
+        p.totalFlow += p.flowRate * (p.timeRemaining - 1);
+        p.timeRemaining = 0;
       });
 
       paths = newPaths.filter(p => !p.stopTraversingNodes);
