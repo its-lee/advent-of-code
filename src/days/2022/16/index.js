@@ -66,7 +66,7 @@ export default solution(({ source }) => {
         const timePassed = path.timePassed + next.time;
 
         if (timePassed > 30) {
-          return { ...path, noTimeForMoreNodesOrVisitedAll: true };
+          return { ...path, stopTraversingNodes: true };
         }
 
         const current = nodes[next.name];
@@ -77,7 +77,7 @@ export default solution(({ source }) => {
           flowRate,
           totalFlow: path.totalFlow + (next.time - 1) * path.flowRate + flowRate,
           timePassed,
-          noTimeForMoreNodesOrVisitedAll: false
+          stopTraversingNodes: false
         };
       });
   };
@@ -90,7 +90,7 @@ export default solution(({ source }) => {
         timePassed: 0,
         flowRate: 0,
         totalFlow: 0,
-        noTimeForMoreNodesOrVisitedAll: false
+        stopTraversingNodes: false
       }
     ];
 
@@ -102,23 +102,21 @@ export default solution(({ source }) => {
         .flatMap(p => extendPath(p))
         .map(p => {
           if (p.visited.length === Object.keys(nodes).length - 1) {
-            p.noTimeForMoreNodesOrVisitedAll = true;
+            p.stopTraversingNodes = true;
           }
 
           return p;
         });
 
-      const noTimeForMoreNodesOrVisitedAllPaths = newPaths.filter(
-        p => p.noTimeForMoreNodesOrVisitedAll
-      );
-      exhaustedPaths = exhaustedPaths.concat(noTimeForMoreNodesOrVisitedAllPaths);
+      const stoppedPaths = newPaths.filter(p => p.stopTraversingNodes);
+      exhaustedPaths = exhaustedPaths.concat(stoppedPaths);
 
       exhaustedPaths.forEach(p => {
         p.totalFlow += p.flowRate * (30 - p.timePassed - 1);
         p.timePassed = 30;
       });
 
-      paths = newPaths.filter(p => !p.noTimeForMoreNodesOrVisitedAll);
+      paths = newPaths.filter(p => !p.stopTraversingNodes);
 
       if (!paths.length) {
         return exhaustedPaths;
