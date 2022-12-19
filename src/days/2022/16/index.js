@@ -154,7 +154,6 @@ export default solution(({ source }) => {
 
         for (const otherPath of paths) {
           if (
-            path === otherPath ||
             path.totalFlow + otherPath.totalFlow < maxSinglePersonTotalFlow ||
             intersect(path.visited, otherPath.visited).length
           ) {
