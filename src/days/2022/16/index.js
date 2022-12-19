@@ -62,7 +62,7 @@ export default solution(({ source }) => {
     .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  console.log(nodes);
+  // console.log(nodes);
 
   const extendPath = path => {
     return path.current.adjacent
