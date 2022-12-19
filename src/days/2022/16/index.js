@@ -18,10 +18,7 @@ export default solution(({ source }) => {
           score as they're not using paths to valued nodes that are any shorter.
   
       ii) Go through the possible paths of valued nodes (which is a far smaller tree than the
-          total nodes), and maximise the total value over those paths.
-         
-          We also need to factor in the possibility of going to each node and wasting 1 minute
-          turning it on or not.
+          total nodes), and maximise the total value over those paths via some tree traversal
   */
 
   const rootName = 'AA';
@@ -62,8 +59,6 @@ export default solution(({ source }) => {
     .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
-  // console.log(nodes);
-
   const extendPath = path => {
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
@@ -74,23 +69,12 @@ export default solution(({ source }) => {
           return { ...path, noTimeForMoreNodesOrVisitedAll: true };
         }
 
-        const pathStr = [...path.visited, path.current.name].join('/');
-
-        if ('AA/DD/BB/JJ/HH/EE'.startsWith(pathStr) && pathStr.length > 2) {
-          console.log(pathStr);
-          console.log(timePassed, 'adding', next.name);
-          console.log('at time', timePassed);
-          console.log('totalFlow', path.totalFlow);
-        }
-
         const current = nodes[next.name];
         const flowRate = path.flowRate + current.flowRate;
         return {
-          pathStr,
           current,
           visited: [...path.visited, path.current.name],
           flowRate,
-          // todo: totalFlow - this is going to be off by 1 * multiples etc
           totalFlow: path.totalFlow + (next.time - 1) * path.flowRate + flowRate,
           timePassed,
           noTimeForMoreNodesOrVisitedAll: false
@@ -112,15 +96,13 @@ export default solution(({ source }) => {
 
     let exhaustedPaths = [];
 
+    // eslint-disable-next-line no-constant-condition
     while (true) {
       const newPaths = paths
         .flatMap(p => extendPath(p))
         .map(p => {
-          //console.log('p.visited', p.visited.length);
-          //console.log('Object.keys(nodes).length - 1', Object.keys(nodes).length - 1);
           if (p.visited.length === Object.keys(nodes).length - 1) {
             p.noTimeForMoreNodesOrVisitedAll = true;
-            //console.log('run out of places to go', p);
           }
 
           return p;
@@ -130,7 +112,6 @@ export default solution(({ source }) => {
         p => p.noTimeForMoreNodesOrVisitedAll
       );
       exhaustedPaths = exhaustedPaths.concat(noTimeForMoreNodesOrVisitedAllPaths);
-      console.log('adding', noTimeForMoreNodesOrVisitedAllPaths.length);
 
       exhaustedPaths.forEach(p => {
         p.totalFlow += p.flowRate * (30 - p.timePassed - 1);
@@ -145,13 +126,9 @@ export default solution(({ source }) => {
     }
   };
 
-  //console.log(JSON.stringify(nodes, null, 2));
-
-  // Demo solution is AA -> DD -> BB -> JJ -> HH -> EE -> CC (on minute 24) = 1651
-
-  const exhaustedPaths = exhaustPaths().sort((a, b) => b.totalFlow - a.totalFlow);
-  console.log('exhaustedPaths[0]', exhaustedPaths[0]);
-  //console.log(JSON.stringify(exhaustedPaths[0], null, 2));
-
-  return [];
+  return [
+    () => {
+      return exhaustPaths().sort((a, b) => b.totalFlow - a.totalFlow)[0].totalFlow;
+    }
+  ];
 });
