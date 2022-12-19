@@ -68,21 +68,31 @@ export default solution(({ source }) => {
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
-        const timeLeft = path.timeLeft - next.time;
+        const timePassed = path.timePassed + next.time;
 
-        if (timeLeft < 0) {
+        if (timePassed > 30) {
           return { ...path, noTimeForMoreNodesOrVisitedAll: true };
+        }
+
+        const pathStr = [...path.visited, path.current.name].join('/');
+
+        if ('AA/DD/BB/JJ/HH/EE'.startsWith(pathStr) && pathStr.length > 2) {
+          console.log(pathStr);
+          console.log(timePassed, 'adding', next.name);
+          console.log('at time', timePassed);
+          console.log('totalFlow', path.totalFlow);
         }
 
         const current = nodes[next.name];
         const flowRate = path.flowRate + current.flowRate;
         return {
+          pathStr,
           current,
           visited: [...path.visited, path.current.name],
           flowRate,
           // todo: totalFlow - this is going to be off by 1 * multiples etc
           totalFlow: path.totalFlow + (next.time - 1) * path.flowRate + flowRate,
-          timeLeft,
+          timePassed,
           noTimeForMoreNodesOrVisitedAll: false
         };
       });
@@ -93,7 +103,7 @@ export default solution(({ source }) => {
       {
         current: nodes[rootName],
         visited: [],
-        timeLeft: 30,
+        timePassed: 0,
         flowRate: 0,
         totalFlow: 0,
         noTimeForMoreNodesOrVisitedAll: false
@@ -123,8 +133,8 @@ export default solution(({ source }) => {
       console.log('adding', noTimeForMoreNodesOrVisitedAllPaths.length);
 
       exhaustedPaths.forEach(p => {
-        p.totalFlow += p.flowRate * p.timeLeft;
-        p.timeLeft = 0;
+        p.totalFlow += p.flowRate * (30 - p.timePassed - 1);
+        p.timePassed = 30;
       });
 
       paths = newPaths.filter(p => !p.noTimeForMoreNodesOrVisitedAll);
