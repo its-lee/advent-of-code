@@ -142,7 +142,11 @@ export default solution(({ source }) => {
         totalFlow: p.totalFlow
       }));
 
-      // Fastest path in this scheme is 'AA', 'DD', 'BB', 'JJ', 'HH', 'EE', 'CC' = 1327
+      // Highest scoring path in this scheme for one person with demo data is AA,DD,BB,JJ,HH,EE,CC = 1327
+
+      // Highest scoring path with 2 is:
+      // AA,JJ,BB,CC
+      // AA,DD,HH,EE
 
       const pathCount = paths.length;
       let pathIndex = 0;
@@ -158,7 +162,7 @@ export default solution(({ source }) => {
           const totalFlow = path.totalFlow + otherPath.totalFlow;
           if (totalFlow < maxSinglePersonTotalFlow) {
             if (totalFlow > 1600) {
-              console.log(`skipping as ${totalFlow} < ${maxSinglePersonTotalFlow}`);
+              // console.log(`skipping as ${totalFlow} < ${maxSinglePersonTotalFlow}`);
             }
             continue;
           }
@@ -166,21 +170,23 @@ export default solution(({ source }) => {
           const intersection = intersect(path.visited, otherPath.visited);
           if (intersection.length > 1) {
             if (intersection.length < 4) {
-              console.log(
-                `skipping as the intersection has length ${intersection.length}`,
-                path.visited,
-                otherPath.visited,
-                intersection
-              );
+              // console.log(
+              //   `skipping as the intersection has length ${intersection.length}`,
+              //   path.visited,
+              //   otherPath.visited,
+              //   intersection
+              // );
             }
             continue;
           }
 
-          console.log('found one!');
-          console.log(path.visited.join('/'), otherPath.visited.join('/'));
+          //console.log('found one!');
+          //console.log(path.visited.join('/'), otherPath.visited.join('/'));
           pairPaths.push([path, otherPath]);
         }
       }
+
+      console.log('pairPaths.length', pairPaths.length);
 
       const pairedPaths = pairPaths.map(([left, right]) => ({
         left,
