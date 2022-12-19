@@ -131,8 +131,12 @@ export default solution(({ source }) => {
       return exhaustPaths(30).sort((a, b) => b.totalFlow - a.totalFlow)[0].totalFlow;
     },
     () => {
-      const paths = exhaustPaths(26);
-      console.log(paths.length);
+      const paths = exhaustPaths(26).map(p => ({
+        visited: [...p.visited, p.current.name],
+        totalFlow: p.totalFlow
+      }));
+
+      console.log(paths);
     }
   ];
 });
