@@ -62,14 +62,15 @@ export default solution(({ source }) => {
     .filter(isValuedNode)
     .reduce((acc, node) => ({ ...acc, [node.name]: node }), {});
 
+  console.log(nodes);
+
   const extendPath = path => {
     return path.current.adjacent
       .filter(a => !path.visited.includes(a.name))
       .map(next => {
         const timeLeft = path.timeLeft - next.time;
-        const visitedAll = path.visited.length === Object.keys(nodes).length - 2;
 
-        if (timeLeft < 0 || visitedAll) {
+        if (timeLeft < 0) {
           return { ...path, noTimeForMoreNodesOrVisitedAll: true };
         }
 
@@ -102,12 +103,24 @@ export default solution(({ source }) => {
     let exhaustedPaths = [];
 
     while (true) {
-      const newPaths = paths.flatMap(p => extendPath(p));
+      const newPaths = paths
+        .flatMap(p => extendPath(p))
+        .map(p => {
+          //console.log('p.visited', p.visited.length);
+          //console.log('Object.keys(nodes).length - 1', Object.keys(nodes).length - 1);
+          if (p.visited.length === Object.keys(nodes).length - 1) {
+            p.noTimeForMoreNodesOrVisitedAll = true;
+            //console.log('run out of places to go', p);
+          }
+
+          return p;
+        });
 
       const noTimeForMoreNodesOrVisitedAllPaths = newPaths.filter(
         p => p.noTimeForMoreNodesOrVisitedAll
       );
       exhaustedPaths = exhaustedPaths.concat(noTimeForMoreNodesOrVisitedAllPaths);
+      console.log('adding', noTimeForMoreNodesOrVisitedAllPaths.length);
 
       exhaustedPaths.forEach(p => {
         p.totalFlow += p.flowRate * p.timeLeft;
@@ -122,12 +135,13 @@ export default solution(({ source }) => {
     }
   };
 
-  console.log(JSON.stringify(nodes, null, 2));
+  //console.log(JSON.stringify(nodes, null, 2));
 
   // Demo solution is AA -> DD -> BB -> JJ -> HH -> EE -> CC (on minute 24) = 1651
 
   const exhaustedPaths = exhaustPaths().sort((a, b) => b.totalFlow - a.totalFlow);
-  console.log(exhaustedPaths[0]);
+  console.log('exhaustedPaths[0]', exhaustedPaths[0]);
+  //console.log(JSON.stringify(exhaustedPaths[0], null, 2));
 
   return [];
 });
