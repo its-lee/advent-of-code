@@ -153,10 +153,16 @@ export default solution(({ source }) => {
         }
 
         for (const otherPath of paths) {
-          if (
-            path.totalFlow + otherPath.totalFlow < maxSinglePersonTotalFlow ||
-            intersect(path.visited, otherPath.visited).length
-          ) {
+          if (path.totalFlow + otherPath.totalFlow < maxSinglePersonTotalFlow) {
+            console.log(
+              `skipping as ${path.totalFlow + otherPath.totalFlow} < ${maxSinglePersonTotalFlow}`
+            );
+            continue;
+          }
+
+          const intersection = intersect(path.visited, otherPath.visited);
+          if (intersection.length) {
+            //console.log(`skipping as the intersection has length ${intersection.length}`);
             continue;
           }
 
