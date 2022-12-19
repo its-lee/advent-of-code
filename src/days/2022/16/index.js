@@ -65,7 +65,9 @@ export default solution(({ source }) => {
       .map(next => {
         const timePassed = path.timePassed + next.time;
 
-        if (timePassed > 30) {
+        // If we would run out of time by moving to this node - or if already we've visited all nodes, then we
+        // should stay where we are.
+        if (timePassed > 30 || path.visited.length === Object.keys(nodes).length - 2) {
           return { ...path, stopTraversingNodes: true };
         }
 
@@ -98,15 +100,7 @@ export default solution(({ source }) => {
 
     // eslint-disable-next-line no-constant-condition
     while (true) {
-      const newPaths = paths
-        .flatMap(p => extendPath(p))
-        .map(p => {
-          if (p.visited.length === Object.keys(nodes).length - 1) {
-            p.stopTraversingNodes = true;
-          }
-
-          return p;
-        });
+      const newPaths = paths.flatMap(p => extendPath(p));
 
       const stoppedPaths = newPaths.filter(p => p.stopTraversingNodes);
       exhaustedPaths = exhaustedPaths.concat(stoppedPaths);
