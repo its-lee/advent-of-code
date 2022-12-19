@@ -142,6 +142,8 @@ export default solution(({ source }) => {
         totalFlow: p.totalFlow
       }));
 
+      // Fastest path in this scheme is 'AA', 'DD', 'BB', 'JJ', 'HH', 'EE', 'CC' = 1327
+
       const pathCount = paths.length;
       let pathIndex = 0;
       const pairPaths = [];
