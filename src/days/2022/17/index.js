@@ -94,32 +94,34 @@ export default solution(({ source }) => {
       }
     };
 
+    const printWell = () => {
+      for (let y = highestBlock; y >= 0; --y) {
+        const line = [];
+        for (let x = 0; x < 7; ++x) {
+          line.push(well[x][y]);
+        }
+        console.log(line.join(''));
+      }
+    };
+
     for (let shapeIndex = 0; shapeIndex < maxShapes; ++shapeIndex) {
       const shapeTypeIndex = shapeIndex % SHAPES_TYPES.length;
-      console.log(shapeIndex, shapeTypeIndex);
       let newShape = addNewShape(SHAPES_TYPES[shapeTypeIndex]);
+      console.log({ newShape });
 
       const droppedShape = dropShape(newShape);
+      console.log({ droppedShape });
       highestBlock = Math.max(highestBlock, getHighestPointOnShape(droppedShape));
 
       writeShapeToWell(droppedShape);
+      printWell();
     }
 
-    return [well, highestBlock];
-  };
-
-  const printWell = ([well, highestBlock]) => {
-    for (let y = 0; y <= highestBlock; ++y) {
-      const line = [];
-      for (let x = 0; x < 7; ++x) {
-        line.push(well[x][y]);
-      }
-      console.log(line.join(''));
-    }
+    return highestBlock;
   };
 
   // todo: work out the correct number to pass in here
-  printWell(simulate(10));
+  simulate(1);
 
   return [];
 });
