@@ -35,6 +35,13 @@ export default solution(({ source }) => {
     ],
     [
       [0, 0],
+      [1, 0],
+      [2, 0],
+      [2, 1],
+      [2, 2]
+    ],
+    [
+      [0, 0],
       [0, 1],
       [0, 2],
       [0, 3]
@@ -88,8 +95,8 @@ export default solution(({ source }) => {
     };
 
     for (let shapeIndex = 0; shapeIndex < maxShapes; ++shapeIndex) {
-      // todo: check this index
       const shapeTypeIndex = shapeIndex % SHAPES_TYPES.length;
+      console.log(shapeIndex, shapeTypeIndex);
       let newShape = addNewShape(SHAPES_TYPES[shapeTypeIndex]);
 
       const droppedShape = dropShape(newShape);
@@ -98,11 +105,21 @@ export default solution(({ source }) => {
       writeShapeToWell(droppedShape);
     }
 
-    return well;
+    return [well, highestBlock];
+  };
+
+  const printWell = ([well, highestBlock]) => {
+    for (let y = 0; y <= highestBlock; ++y) {
+      const line = [];
+      for (let x = 0; x < 7; ++x) {
+        line.push(well[x][y]);
+      }
+      console.log(line.join(''));
+    }
   };
 
   // todo: work out the correct number to pass in here
-  simulate(10);
+  printWell(simulate(10));
 
   return [];
 });
