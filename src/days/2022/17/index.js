@@ -121,7 +121,7 @@ export default solution(({ source }) => {
   };
 
   // todo: work out the correct number to pass in here
-  simulate(1);
+  simulate(2);
 
   return [];
 });
