@@ -61,7 +61,7 @@ export default solution(({ source }) => {
 
     const well = createWell();
     const movementQueue = getMovementQueue();
-    let movementQueueIndex = 0;
+    let nextMovementQueueIndex = 0;
     let highestBlock = -1;
 
     const addNewShape = shapeType => shapeType.map(s => [2 + s[0], highestBlock + 4 + s[1]]);
@@ -81,9 +81,8 @@ export default solution(({ source }) => {
     const writeShapeToWell = shape => shape.forEach(([x, y]) => (well[x][y] = CONTENT.BLOCK));
 
     const getNextMovement = () => {
-      const index = movementQueueIndex % movementQueue.length;
-      const movement = movementQueue[index];
-      ++movementQueueIndex;
+      const movement = movementQueue[nextMovementQueueIndex];
+      nextMovementQueueIndex = (nextMovementQueueIndex + 1) % movementQueue.length;
       return movement;
     };
 
