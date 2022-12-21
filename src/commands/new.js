@@ -36,7 +36,7 @@ const regenerateDaysIndex = async () => {
 
 const updateAnswersFile = async (year, day) => {
   const answers = await readAnswers(year);
-  answers[day] = { input: [] };
+  answers[day] = { demo: [], input: [] };
   await writeAnswers(year, answers);
 };
 
