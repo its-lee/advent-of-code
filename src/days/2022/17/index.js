@@ -40,6 +40,7 @@ export default solution(({ source }) => {
     const movementQueue = getMovementQueue();
     let nextMovementQueueIndex = 0;
     let highestBlock = -1;
+    let removedBlocks = 0;
 
     const addNewShape = shapeType => shapeType.map((x, y) => [x, highestBlock + 4 + y]);
 
@@ -83,6 +84,19 @@ export default solution(({ source }) => {
       }
     };
 
+    const findLastIndex = (a, v) => {
+      let i = well.length - 1;
+      while (i >= 0) {
+        if (a[i] === v) {
+          return i;
+        }
+
+        i--;
+      }
+
+      return undefined;
+    };
+
     // eslint-disable-next-line no-unused-vars
     const printWell = () =>
       [...well]
@@ -99,14 +113,28 @@ export default solution(({ source }) => {
       highestBlock = Math.max(highestBlock, getHighestPointOnShape(droppedShape));
 
       writeShapeToWell(droppedShape);
+
+      // Every so often, check to see if there's any tetrises (horizontal line). They're rare but crucial,
+      // as whenever we see one, we can ignore any blocks below them. This is one factor that allows
+      // us not to keep GBs of data in RAM.
+      if (shapeIndex % 1000 === 0) {
+        const y = findLastIndex(well, 127);
+        if (y) {
+          // console.log('found tetris', y, well[y]);
+          const blocksToRemove = y + 1;
+          well.splice(0, blocksToRemove);
+          highestBlock -= blocksToRemove;
+          removedBlocks += blocksToRemove;
+        }
+      }
     }
 
     //printWell();
 
     // For the height, we need to add 1 to translate from an index.
-    return highestBlock + 1;
+    return removedBlocks + highestBlock + 1;
   };
 
   // todo: optimise by looking for the latest possible tetris at each stage.
-  return [() => computeHeight(2022)];
+  return [() => computeHeight(2022) /*, () => computeHeight(5 * 1000000)*/];
 });
