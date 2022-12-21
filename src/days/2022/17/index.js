@@ -61,18 +61,18 @@ export default solution(({ source }) => {
     const well = createWell();
     const movementQueue = getMovementQueue();
 
-    let highestBlock = 0;
+    let highestBlock = -1;
 
-    const addNewShape = shapeType => shapeType.map(s => [2 + s[0], highestBlock + 3 + s[1]]);
+    const addNewShape = shapeType => shapeType.map(s => [2 + s[0], highestBlock + 4 + s[1]]);
 
     const moveShapeDown = shape => shape.map(s => [s[0], s[1] - 1]);
 
     const moveShapeSideways = (shape, isLeft) => shape.map(s => [s[0] + (isLeft ? -1 : 1), s[1]]);
 
     const hasShapeCollided = shape => {
-      return shape.some(([x, y]) => {
-        return x < 0 || x >= WELL_WIDTH || y < 0 || well[x][y] === CONTENT.BLOCK;
-      });
+      return shape.some(
+        ([x, y]) => x < 0 || x >= WELL_WIDTH || y < 0 || well[x][y] === CONTENT.BLOCK
+      );
     };
 
     const getHighestPointOnShape = shape => Math.max(...shape.map(s => s[1]));
@@ -82,15 +82,21 @@ export default solution(({ source }) => {
     const dropShape = shape => {
       // eslint-disable-next-line no-constant-condition
       while (true) {
-        const down = moveShapeDown(shape);
-        if (hasShapeCollided(down)) {
-          return shape;
-        }
-
-        const downThenSideways = moveShapeSideways(down, movementQueue.shift());
+        const movement = movementQueue.shift();
+        const sideways = moveShapeSideways(shape, movement);
+        console.log('moving', movement, 'to', sideways);
 
         // If a sideways movement is blocked, we just ignore its effect.
-        shape = hasShapeCollided(downThenSideways) ? down : downThenSideways;
+        shape = hasShapeCollided(sideways) ? shape : sideways;
+
+        const down = moveShapeDown(shape);
+        console.log('moving down to', down);
+
+        if (hasShapeCollided(down)) {
+          return shape;
+        } else {
+          shape = down;
+        }
       }
     };
 
@@ -106,14 +112,20 @@ export default solution(({ source }) => {
 
     for (let shapeIndex = 0; shapeIndex < maxShapes; ++shapeIndex) {
       const shapeTypeIndex = shapeIndex % SHAPES_TYPES.length;
-      let newShape = addNewShape(SHAPES_TYPES[shapeTypeIndex]);
-      console.log({ newShape });
+      const newShape = addNewShape(SHAPES_TYPES[shapeTypeIndex]);
+      if (shapeIndex === 1) {
+        //console.log('writing', newShape);
+        //writeShapeToWell(newShape);
+        //console.log('next moves', movementQueue.slice(0, 5));
+      }
+      //console.log({ newShape });
 
       const droppedShape = dropShape(newShape);
-      console.log({ droppedShape });
+      //console.log({ droppedShape });
       highestBlock = Math.max(highestBlock, getHighestPointOnShape(droppedShape));
 
       writeShapeToWell(droppedShape);
+      console.log('@ shapeIndex', shapeIndex, highestBlock);
       printWell();
     }
 
@@ -121,7 +133,7 @@ export default solution(({ source }) => {
   };
 
   // todo: work out the correct number to pass in here
-  simulate(2);
+  console.log(simulate(10));
 
   return [];
 });
