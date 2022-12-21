@@ -46,7 +46,7 @@ export default solution(({ source }) => {
 
       const addNewShape = shapeType => shapeType.map((x, y) => [x, highestBlock + 4 + y]);
 
-      const moveShapeDown = shape => shape.map((x, y) => [x, y - 1]);
+      const moveShapeDown = shape => shape.map(([x, y]) => [x, y - 1]);
 
       const moveShapeSidewaysOrIgnore = (shape, isLeft) => {
         // If a sideways movement is blocked, we just ignore its effect.
