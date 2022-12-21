@@ -137,6 +137,7 @@ export default solution(({ source }) => {
   return [
     () => maxSinglePersonTotalFlow,
     () => {
+      /*
       const paths = exhaustPaths(26).map(p => ({
         visited: [...p.visited, p.current.name],
         totalFlow: p.totalFlow
@@ -196,6 +197,7 @@ export default solution(({ source }) => {
 
       const top = findPathWithTopTotalFlow(pairedPaths);
       console.log(top);
+      */
     }
   ];
 });
