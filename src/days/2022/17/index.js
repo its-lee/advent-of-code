@@ -60,6 +60,7 @@ export default solution(({ source }) => {
   const simulate = maxShapes => {
     const well = createWell();
     const movementQueue = getMovementQueue();
+    let movementQueueIndex = 0;
 
     let highestBlock = -1;
 
@@ -79,18 +80,25 @@ export default solution(({ source }) => {
 
     const writeShapeToWell = shape => shape.forEach(([x, y]) => (well[x][y] = CONTENT.BLOCK));
 
+    const getNextMovement = () => {
+      const index = movementQueueIndex % movementQueue.length;
+      const movement = movementQueue[index];
+      ++movementQueueIndex;
+      return movement;
+    };
+
     const dropShape = shape => {
       // eslint-disable-next-line no-constant-condition
       while (true) {
-        const movement = movementQueue.shift();
+        const movement = getNextMovement();
         const sideways = moveShapeSideways(shape, movement);
-        console.log('moving', movement, 'to', sideways);
+        //console.log('moving', movement, 'to', sideways);
 
         // If a sideways movement is blocked, we just ignore its effect.
         shape = hasShapeCollided(sideways) ? shape : sideways;
 
         const down = moveShapeDown(shape);
-        console.log('moving down to', down);
+        //console.log('moving down to', down);
 
         if (hasShapeCollided(down)) {
           return shape;
@@ -125,15 +133,16 @@ export default solution(({ source }) => {
       highestBlock = Math.max(highestBlock, getHighestPointOnShape(droppedShape));
 
       writeShapeToWell(droppedShape);
-      console.log('@ shapeIndex', shapeIndex, highestBlock);
-      printWell();
+      //console.log('@ shapeIndex', shapeIndex, highestBlock);
+      //printWell();
     }
 
-    return highestBlock;
+    // For the height, we need to add 1 to translate from an index.
+    return highestBlock + 1;
   };
 
   // todo: work out the correct number to pass in here
-  console.log(simulate(10));
+  console.log(simulate(2022));
 
   return [];
 });
