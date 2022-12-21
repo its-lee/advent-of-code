@@ -3,12 +3,12 @@ import solution from '../../../runner/solution.js';
 import { range } from '../../../helpers/utility.js';
 
 export default solution(({ source }) => {
-  const MOVEMENTS = {
+  const movements = {
     '<': true,
     '>': false
   };
 
-  const getMovementQueue = () => source.split('').map(c => MOVEMENTS[c]);
+  const getMovementQueue = () => source.split('').map(c => movements[c]);
 
   const CONTENT = { AIR: '.', BLOCK: '#' };
 
@@ -53,11 +53,11 @@ export default solution(({ source }) => {
   const computeHeight = maxShapes => {
     // We need a safe height for array lengths which is higher than the max number of shapes
     // we'll drop (< 2100) * the max height of a shape (5).
-    const WELL_MAX_HEIGHT = maxShapes * 5;
-    const WELL_WIDTH = 7;
+    const wellMaxHeight = maxShapes * 5;
+    const wellWidth = 7;
 
     const createWell = () =>
-      range(0, WELL_WIDTH).map(() => range(0, WELL_MAX_HEIGHT).map(() => CONTENT.AIR));
+      range(0, wellWidth).map(() => range(0, wellMaxHeight).map(() => CONTENT.AIR));
 
     const well = createWell();
     const movementQueue = getMovementQueue();
@@ -72,7 +72,7 @@ export default solution(({ source }) => {
 
     const hasShapeCollided = shape => {
       return shape.some(
-        ([x, y]) => x < 0 || x >= WELL_WIDTH || y < 0 || well[x][y] === CONTENT.BLOCK
+        ([x, y]) => x < 0 || x >= wellWidth || y < 0 || well[x][y] === CONTENT.BLOCK
       );
     };
 
