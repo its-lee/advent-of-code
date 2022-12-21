@@ -57,7 +57,7 @@ export default solution(({ source }) => {
   const createWell = () =>
     range(0, WELL_WIDTH).map(() => range(0, WELL_MAX_HEIGHT).map(() => CONTENT.AIR));
 
-  const simulate = maxShapes => {
+  const computeHeight = maxShapes => {
     const well = createWell();
     const movementQueue = getMovementQueue();
     let movementQueueIndex = 0;
@@ -92,13 +92,11 @@ export default solution(({ source }) => {
       while (true) {
         const movement = getNextMovement();
         const sideways = moveShapeSideways(shape, movement);
-        //console.log('moving', movement, 'to', sideways);
 
         // If a sideways movement is blocked, we just ignore its effect.
         shape = hasShapeCollided(sideways) ? shape : sideways;
 
         const down = moveShapeDown(shape);
-        //console.log('moving down to', down);
 
         if (hasShapeCollided(down)) {
           return shape;
@@ -108,6 +106,7 @@ export default solution(({ source }) => {
       }
     };
 
+    // eslint-disable-next-line no-unused-vars
     const printWell = () => {
       for (let y = highestBlock; y >= 0; --y) {
         const line = [];
@@ -121,28 +120,16 @@ export default solution(({ source }) => {
     for (let shapeIndex = 0; shapeIndex < maxShapes; ++shapeIndex) {
       const shapeTypeIndex = shapeIndex % SHAPES_TYPES.length;
       const newShape = addNewShape(SHAPES_TYPES[shapeTypeIndex]);
-      if (shapeIndex === 1) {
-        //console.log('writing', newShape);
-        //writeShapeToWell(newShape);
-        //console.log('next moves', movementQueue.slice(0, 5));
-      }
-      //console.log({ newShape });
 
       const droppedShape = dropShape(newShape);
-      //console.log({ droppedShape });
       highestBlock = Math.max(highestBlock, getHighestPointOnShape(droppedShape));
 
       writeShapeToWell(droppedShape);
-      //console.log('@ shapeIndex', shapeIndex, highestBlock);
-      //printWell();
     }
 
     // For the height, we need to add 1 to translate from an index.
     return highestBlock + 1;
   };
 
-  // todo: work out the correct number to pass in here
-  console.log(simulate(2022));
-
-  return [];
+  return [() => computeHeight(2022)];
 });
