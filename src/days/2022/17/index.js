@@ -10,10 +10,6 @@ export default solution(({ source }) => {
 
   const getMovementQueue = () => source.split('').map(c => MOVEMENTS[c]);
 
-  // We need a safe height for array lengths which is higher than the max number of shapes
-  // we'll drop (< 2100) * the max height of a shape (5).
-  const WELL_MAX_HEIGHT = 2100 * 5;
-  const WELL_WIDTH = 7;
   const CONTENT = { AIR: '.', BLOCK: '#' };
 
   // Per shape:
@@ -54,14 +50,18 @@ export default solution(({ source }) => {
     ]
   ];
 
-  const createWell = () =>
-    range(0, WELL_WIDTH).map(() => range(0, WELL_MAX_HEIGHT).map(() => CONTENT.AIR));
-
   const computeHeight = maxShapes => {
+    // We need a safe height for array lengths which is higher than the max number of shapes
+    // we'll drop (< 2100) * the max height of a shape (5).
+    const WELL_MAX_HEIGHT = maxShapes * 5;
+    const WELL_WIDTH = 7;
+
+    const createWell = () =>
+      range(0, WELL_WIDTH).map(() => range(0, WELL_MAX_HEIGHT).map(() => CONTENT.AIR));
+
     const well = createWell();
     const movementQueue = getMovementQueue();
     let movementQueueIndex = 0;
-
     let highestBlock = -1;
 
     const addNewShape = shapeType => shapeType.map(s => [2 + s[0], highestBlock + 4 + s[1]]);
