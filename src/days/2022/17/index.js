@@ -85,7 +85,11 @@ export default solution(({ source }) => {
 
       // eslint-disable-next-line no-unused-vars
       const printWell = () =>
-        [...well].reverse().forEach(x => console.log(x.toString(2).padStart(7, '0')));
+        [...well]
+          .reverse()
+          .forEach(x =>
+            console.log(x.toString(2).padStart(7, '0').replaceAll('0', '.').replaceAll('1', '#'))
+          );
 
       for (let shapeIndex = 0; shapeIndex < maxShapes; ++shapeIndex) {
         const shapeTypeIndex = shapeIndex % shapeTypes.length;
@@ -104,7 +108,7 @@ export default solution(({ source }) => {
     };
 
     // todo: optimise by looking for the latest possible tetris at each stage.
-    return [() => computeHeight(1)];
+    return [() => computeHeight(2022)];
   } else {
     const movements = {
       '<': true,
