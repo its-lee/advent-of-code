@@ -83,7 +83,6 @@ export default solution(({ source }) => {
         }
       };
 
-      // todo: redo this
       // eslint-disable-next-line no-unused-vars
       const printWell = () =>
         [...well].reverse().forEach(x => console.log(x.toString(2).padStart(7, '0')));
