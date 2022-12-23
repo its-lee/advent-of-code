@@ -1,6 +1,7 @@
 import solution from '../../../runner/solution.js';
 
 import { range } from '../../../helpers/utility.js';
+import breadthFirstSearch from '../../../helpers/breadthFirstSearch.js';
 
 export default solution(({ source }) => {
   const blocks = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
@@ -28,7 +29,7 @@ export default solution(({ source }) => {
     ([x, y, z]) => [x, y, ++z]
   ];
 
-  const findAdjacentCoordinates = c => adjacent.map(a => a(c));
+  const findAdjacentCoordinates = c => adjacent.map(a => a(c.position));
 
   const getNodeName = position => position.join(',');
 
@@ -48,7 +49,6 @@ export default solution(({ source }) => {
   const computeSurfaceArea = grid =>
     toLinearForm(grid)
       .filter(c => c.value)
-      .map(c => c.position)
       .reduce(
         (acc, c) =>
           acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
@@ -60,7 +60,27 @@ export default solution(({ source }) => {
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
-      const maxRadius = Math.max(...getDimensions(blocks));
+      const linearGrid = toLinearForm(grid);
+
+      const bfs = breadthFirstSearch();
+
+      linearGrid.forEach(c => {
+        if (c.value) {
+          return;
+        }
+
+        const adjacentNames = findAdjacentCoordinates(c)
+          .filter(([x, y, z]) => grid[x]?.[y]?.[z] === 0)
+          .map(p => getNodeName(p));
+
+        bfs.addVertex(c.name, adjacentNames);
+      });
+
+      const startingNode = linearGrid
+        .filter(({ position: [x, y, z] }) => x === 0 || y === 0 || z === 0)
+        .find(c => !c.value);
+
+      console.log(bfs.compute(startingNode.name).visited);
 
       return 0;
 

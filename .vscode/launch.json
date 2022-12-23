@@ -5,7 +5,7 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "command": "npm run day 2022/17 d",
+      "command": "npm run day 2022/18 i",
       "name": "Run",
       "request": "launch",
       "type": "node-terminal"
