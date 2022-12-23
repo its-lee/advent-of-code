@@ -30,57 +30,63 @@ export default solution(({ source }) => {
 
   const findAdjacentCoordinates = c => adjacent.map(a => a(c));
 
-  const computeSurfaceArea = (coords, grid) =>
-    coords.reduce(
-      (acc, c) => acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
-      0
-    );
+  const toLinearForm = grid =>
+    grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => [[x, y, z], v])));
+
+  const computeSurfaceArea = grid =>
+    toLinearForm(grid)
+      .filter(c => c[1])
+      .map(c => c[0])
+      .reduce(
+        (acc, c) =>
+          acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
+        0
+      );
 
   return [
     () => {
       const grid = createGrid();
 
-      return computeSurfaceArea(coords, grid);
+      return computeSurfaceArea(grid);
     },
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
       const maxRadius = Math.max(...getDimensions(coords));
 
-      const mapGrid = cb =>
-        grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => cb([x, y, z], v))));
+      return 0;
 
-      const findInteriorPoints = () => {
-        return mapGrid((c, v) => {
-          if (v === 1) {
-            return null;
-          }
+      // const findInteriorPoints = () => {
+      //   return mapGrid(grid, (c, v) => {
+      //     if (v === 1) {
+      //       return null;
+      //     }
 
-          let continuedRadialMap = [...adjacent];
-          let radius = 1;
+      //     let continuedRadialMap = [...adjacent];
+      //     let radius = 1;
 
-          while (radius < maxRadius) {
-            const valuesAtRadius = continuedRadialMap
-              .map(a => a(c, radius))
-              .map(([x, y, z]) => grid[x]?.[y]?.[z]);
+      //     while (radius < maxRadius) {
+      //       const valuesAtRadius = continuedRadialMap
+      //         .map(a => a(c, radius))
+      //         .map(([x, y, z]) => grid[x]?.[y]?.[z]);
 
-            // Don't continue going in directions where we've found a wall
-            continuedRadialMap = continuedRadialMap.filter((_, i) => !valuesAtRadius[i]);
+      //       // Don't continue going in directions where we've found a wall
+      //       continuedRadialMap = continuedRadialMap.filter((_, i) => !valuesAtRadius[i]);
 
-            if (!continuedRadialMap.length) {
-              return c;
-            }
+      //       if (!continuedRadialMap.length) {
+      //         return c;
+      //       }
 
-            ++radius;
-          }
+      //       ++radius;
+      //     }
 
-          return null;
-        }).filter(Boolean);
-      };
+      //     return null;
+      //   }).filter(Boolean);
+      // };
 
-      findInteriorPoints().forEach(([x, y, z]) => (grid[x][y][z] = 1));
+      // findInteriorPoints().forEach(([x, y, z]) => (grid[x][y][z] = 1));
 
-      return computeSurfaceArea([...coords, ...findInteriorPoints()], grid);
+      // return computeSurfaceArea(grid);
     }
   ];
 });
