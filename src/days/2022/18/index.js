@@ -5,7 +5,7 @@ import { range } from '../../../helpers/utility.js';
 export default solution(({ source }) => {
   const coords = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
 
-  const createGrid = coords => {
+  const createGrid = () => {
     const [xLength, yLength, zLength] = [0, 1, 2].map(i => Math.max(...coords.map(v => v[i])) + 1);
 
     const grid = range(0, xLength).map(() =>
@@ -16,8 +16,6 @@ export default solution(({ source }) => {
 
     return grid;
   };
-
-  const grid = createGrid(coords);
 
   const radialMap = [
     ([x, y, z], d) => [x - d, y, z],
@@ -35,41 +33,48 @@ export default solution(({ source }) => {
       0
     );
 
-  const mapGrid = cb =>
-    grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => cb([x, y, z], v))));
-
-  const findInteriorPoints = () => {
-    return mapGrid((c, v) => {
-      if (v === 1) {
-        return null;
-      }
-
-      // todo: replace this number, we need to compute it!
-      let continuedRadialMap = [...radialMap];
-
-      let radius = 1;
-      while (radius < 100) {
-        const valuesAtRadius = continuedRadialMap
-          .map(a => a(c, radius))
-          .map(([x, y, z]) => grid[x]?.[y]?.[z]);
-
-        // Don't continue going in directions where we've found a wall
-        continuedRadialMap = continuedRadialMap.filter((_, i) => !valuesAtRadius[i]);
-
-        if (!continuedRadialMap.length) {
-          return c;
-        }
-
-        ++radius;
-      }
-
-      return null;
-    }).filter(Boolean);
-  };
-
   return [
-    () => computeSurfaceArea(coords, grid),
     () => {
+      const grid = createGrid();
+
+      return computeSurfaceArea(coords, grid);
+    },
+    () => {
+      // We're going to mutate this, so we'll keep our own copy of it.
+      const grid = createGrid();
+
+      const mapGrid = cb =>
+        grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => cb([x, y, z], v))));
+
+      const findInteriorPoints = () => {
+        return mapGrid((c, v) => {
+          if (v === 1) {
+            return null;
+          }
+
+          // todo: replace this number, we need to compute it!
+          let continuedRadialMap = [...radialMap];
+
+          let radius = 1;
+          while (radius < 100) {
+            const valuesAtRadius = continuedRadialMap
+              .map(a => a(c, radius))
+              .map(([x, y, z]) => grid[x]?.[y]?.[z]);
+
+            // Don't continue going in directions where we've found a wall
+            continuedRadialMap = continuedRadialMap.filter((_, i) => !valuesAtRadius[i]);
+
+            if (!continuedRadialMap.length) {
+              return c;
+            }
+
+            ++radius;
+          }
+
+          return null;
+        }).filter(Boolean);
+      };
+
       console.log(findInteriorPoints());
     }
   ];
