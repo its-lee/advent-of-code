@@ -31,12 +31,19 @@ export default solution(({ source }) => {
   const findAdjacentCoordinates = c => adjacent.map(a => a(c));
 
   const toLinearForm = grid =>
-    grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => [[x, y, z], v])));
+    grid.flatMap((xs, x) =>
+      xs.flatMap((ys, y) =>
+        ys.map((value, z) => ({
+          position: [x, y, z],
+          value
+        }))
+      )
+    );
 
   const computeSurfaceArea = grid =>
     toLinearForm(grid)
-      .filter(c => c[1])
-      .map(c => c[0])
+      .filter(c => c.value)
+      .map(c => c.position)
       .reduce(
         (acc, c) =>
           acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
