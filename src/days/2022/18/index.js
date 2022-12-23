@@ -30,16 +30,20 @@ export default solution(({ source }) => {
 
   const findAdjacentCoordinates = c => adjacent.map(a => a(c));
 
+  const getNodeName = position => position.join(',');
+
   const toLinearForm = grid =>
-    grid.flatMap((xs, x) =>
-      xs.flatMap((ys, y) =>
-        ys.map((value, z) => ({
-          position: [x, y, z],
-          value,
-          name: [x, y, z].join(',')
-        }))
+    grid
+      .flatMap((xs, x) =>
+        xs.flatMap((ys, y) =>
+          ys.map((value, z) => ({
+            position: [x, y, z],
+            value,
+            name: [x, y, z].join(',')
+          }))
+        )
       )
-    );
+      .map(c => ({ ...c, name: getNodeName(c.position) }));
 
   const computeSurfaceArea = grid =>
     toLinearForm(grid)
