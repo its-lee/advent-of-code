@@ -46,17 +46,19 @@ export default solution(({ source }) => {
       )
       .map(c => ({ ...c, name: getNodeName(c.position) }));
 
-  const computeSurfaceArea = grid =>
+  const computeSurfaceArea = (grid, values) =>
     toLinearForm(grid)
-      .filter(c => c.value)
+      .filter(c => !values.includes(c.value))
       .reduce(
         (acc, c) =>
-          acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
+          acc +
+          findAdjacentCoordinates(c).filter(([x, y, z]) => values.includes(grid[x]?.[y]?.[z]))
+            .length,
         0
       );
 
   return [
-    () => computeSurfaceArea(createGrid()),
+    () => computeSurfaceArea(createGrid(), [0, undefined]),
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
@@ -83,6 +85,8 @@ export default solution(({ source }) => {
       const exteriorAir = bfs
         .compute(startingNode.name)
         .visited.map(name => linearGrid.find(c => c.name === name));
+
+      // computeSurfaceArea(exteriorAir);
 
       console.log(exteriorAir);
 
