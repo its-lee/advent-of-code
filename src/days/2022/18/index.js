@@ -19,8 +19,6 @@ export default solution(({ source }) => {
 
   const grid = createGrid(coords);
 
-  console.log(grid);
-
   const adjacentMap = [
     ([x, y, z]) => [--x, y, z],
     ([x, y, z]) => [++x, y, z],
@@ -40,7 +38,5 @@ export default solution(({ source }) => {
     return surfaceArea;
   };
 
-  console.log(computeSurfaceArea(coords, grid));
-
-  return [];
+  return [() => computeSurfaceArea(coords, grid)];
 });
