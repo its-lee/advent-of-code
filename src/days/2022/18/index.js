@@ -3,7 +3,7 @@ import solution from '../../../runner/solution.js';
 import { range } from '../../../helpers/utility.js';
 
 export default solution(({ source }) => {
-  const parsed = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
+  const coords = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
 
   const createGrid = coords => {
     const [xLength, yLength, zLength] = [0, 1, 2].map(i => Math.max(...coords.map(v => v[i])) + 1);
@@ -17,9 +17,30 @@ export default solution(({ source }) => {
     return grid;
   };
 
-  const grid = createGrid(parsed);
+  const grid = createGrid(coords);
 
   console.log(grid);
+
+  const adjacentMap = [
+    ([x, y, z]) => [--x, y, z],
+    ([x, y, z]) => [++x, y, z],
+    ([x, y, z]) => [x, --y, z],
+    ([x, y, z]) => [x, ++y, z],
+    ([x, y, z]) => [x, y, --z],
+    ([x, y, z]) => [x, y, ++z]
+  ];
+
+  const computeSurfaceArea = (coords, grid) => {
+    let surfaceArea = 0;
+
+    coords.forEach(c => {
+      surfaceArea += adjacentMap.map(a => a(c)).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length;
+    });
+
+    return surfaceArea;
+  };
+
+  console.log(computeSurfaceArea(coords, grid));
 
   return [];
 });
