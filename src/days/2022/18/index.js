@@ -3,18 +3,18 @@ import solution from '../../../runner/solution.js';
 import { range } from '../../../helpers/utility.js';
 
 export default solution(({ source }) => {
-  const coords = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
+  const blocks = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
 
-  const getDimensions = coords => [0, 1, 2].map(i => Math.max(...coords.map(v => v[i])) + 1);
+  const getDimensions = blocks => [0, 1, 2].map(i => Math.max(...blocks.map(v => v[i])) + 1);
 
   const createGrid = () => {
-    const [xLength, yLength, zLength] = getDimensions(coords);
+    const [xLength, yLength, zLength] = getDimensions(blocks);
 
     const grid = range(0, xLength).map(() =>
       range(0, yLength).map(() => range(0, zLength).map(() => 0))
     );
 
-    coords.forEach(([x, y, z]) => (grid[x][y][z] = 1));
+    blocks.forEach(([x, y, z]) => (grid[x][y][z] = 1));
 
     return grid;
   };
@@ -56,7 +56,7 @@ export default solution(({ source }) => {
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
-      const maxRadius = Math.max(...getDimensions(coords));
+      const maxRadius = Math.max(...getDimensions(blocks));
 
       return 0;
 
