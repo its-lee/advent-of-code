@@ -80,7 +80,11 @@ export default solution(({ source }) => {
         .filter(({ position: [x, y, z] }) => x === 0 || y === 0 || z === 0)
         .find(c => !c.value);
 
-      console.log(bfs.compute(startingNode.name).visited);
+      const exteriorAir = bfs
+        .compute(startingNode.name)
+        .visited.map(name => linearGrid.find(c => c.name === name));
+
+      console.log(exteriorAir);
 
       return 0;
 
