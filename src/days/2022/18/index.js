@@ -5,8 +5,10 @@ import { range } from '../../../helpers/utility.js';
 export default solution(({ source }) => {
   const coords = source.split('\n').map(l => l.split(',').map(v => parseInt(v)));
 
+  const getDimensions = coords => [0, 1, 2].map(i => Math.max(...coords.map(v => v[i])) + 1);
+
   const createGrid = () => {
-    const [xLength, yLength, zLength] = [0, 1, 2].map(i => Math.max(...coords.map(v => v[i])) + 1);
+    const [xLength, yLength, zLength] = getDimensions(coords);
 
     const grid = range(0, xLength).map(() =>
       range(0, yLength).map(() => range(0, zLength).map(() => 0))
@@ -42,6 +44,7 @@ export default solution(({ source }) => {
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
+      const maxRadius = Math.max(...getDimensions(coords));
 
       const mapGrid = cb =>
         grid.flatMap((xs, x) => xs.flatMap((ys, y) => ys.map((v, z) => cb([x, y, z], v))));
@@ -52,11 +55,10 @@ export default solution(({ source }) => {
             return null;
           }
 
-          // todo: replace this number, we need to compute it!
           let continuedRadialMap = [...radialMap];
-
           let radius = 1;
-          while (radius < 100) {
+
+          while (radius < maxRadius) {
             const valuesAtRadius = continuedRadialMap
               .map(a => a(c, radius))
               .map(([x, y, z]) => grid[x]?.[y]?.[z]);
