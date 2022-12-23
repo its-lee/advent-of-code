@@ -83,43 +83,11 @@ export default solution(({ source }) => {
         .compute(startingNode.name)
         .visited.map(name => linearGrid.find(c => c.name === name));
 
-      // computeSurfaceArea(exteriorAir);
-
-      console.log(exteriorAir);
-
-      return 0;
-
-      // const findInteriorPoints = () => {
-      //   return mapGrid(grid, (c, v) => {
-      //     if (v === 1) {
-      //       return null;
-      //     }
-
-      //     let continuedRadialMap = [...adjacent];
-      //     let radius = 1;
-
-      //     while (radius < maxRadius) {
-      //       const valuesAtRadius = continuedRadialMap
-      //         .map(a => a(c, radius))
-      //         .map(([x, y, z]) => grid[x]?.[y]?.[z]);
-
-      //       // Don't continue going in directions where we've found a wall
-      //       continuedRadialMap = continuedRadialMap.filter((_, i) => !valuesAtRadius[i]);
-
-      //       if (!continuedRadialMap.length) {
-      //         return c;
-      //       }
-
-      //       ++radius;
-      //     }
-
-      //     return null;
-      //   }).filter(Boolean);
-      // };
-
-      // findInteriorPoints().forEach(([x, y, z]) => (grid[x][y][z] = 1));
-
-      // return computeSurfaceArea(grid);
+      return computeSurfaceArea(
+        exteriorAir.map(c => c.position),
+        grid,
+        [1]
+      );
     }
   ];
 });
