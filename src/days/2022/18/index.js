@@ -29,7 +29,7 @@ export default solution(({ source }) => {
     ([x, y, z]) => [x, y, ++z]
   ];
 
-  const findAdjacentCoordinates = c => adjacent.map(a => a(c.position));
+  const findAdjacentCoordinates = c => adjacent.map(a => a(c));
 
   const getNodeName = position => position.join(',');
 
@@ -46,19 +46,16 @@ export default solution(({ source }) => {
       )
       .map(c => ({ ...c, name: getNodeName(c.position) }));
 
-  const computeSurfaceArea = (grid, values) =>
-    toLinearForm(grid)
-      .filter(c => !values.includes(c.value))
-      .reduce(
-        (acc, c) =>
-          acc +
-          findAdjacentCoordinates(c).filter(([x, y, z]) => values.includes(grid[x]?.[y]?.[z]))
-            .length,
-        0
-      );
+  const computeSurfaceArea = (coords, grid, values) =>
+    coords.reduce(
+      (acc, c) =>
+        acc +
+        findAdjacentCoordinates(c).filter(([x, y, z]) => values.includes(grid[x]?.[y]?.[z])).length,
+      0
+    );
 
   return [
-    () => computeSurfaceArea(createGrid(), [0, undefined]),
+    () => computeSurfaceArea(blocks, createGrid(), [0, undefined]),
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
@@ -71,7 +68,7 @@ export default solution(({ source }) => {
           return;
         }
 
-        const adjacentNames = findAdjacentCoordinates(c)
+        const adjacentNames = findAdjacentCoordinates(c.position)
           .filter(([x, y, z]) => grid[x]?.[y]?.[z] === 0)
           .map(p => getNodeName(p));
 
