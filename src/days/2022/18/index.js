@@ -77,7 +77,9 @@ export default solution(({ source }) => {
         }).filter(Boolean);
       };
 
-      console.log(findInteriorPoints());
+      findInteriorPoints().forEach(([x, y, z]) => (grid[x][y][z] = 1));
+
+      return computeSurfaceArea([...coords, ...findInteriorPoints()], grid);
     }
   ];
 });
