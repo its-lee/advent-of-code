@@ -28,15 +28,11 @@ export default solution(({ source }) => {
     ([x, y, z]) => [x, y, ++z]
   ];
 
-  const computeSurfaceArea = (coords, grid) => {
-    let surfaceArea = 0;
-
-    coords.forEach(c => {
-      surfaceArea += adjacentMap.map(a => a(c)).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length;
-    });
-
-    return surfaceArea;
-  };
+  const computeSurfaceArea = (coords, grid) =>
+    coords.reduce(
+      (acc, c) => acc + adjacentMap.map(a => a(c)).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
+      0
+    );
 
   return [() => computeSurfaceArea(coords, grid)];
 });
