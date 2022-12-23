@@ -27,16 +27,23 @@ export default () => {
     // We essentially look at all length 1 paths from the start, then length 2 etc etc and check
     // each time if they reach the end. Because we're looking in path length order, we'll have the
     // shortest path if we find one.
-    compute(start, end) {
+    //
+    // You can default `end` to undefined to run a traversal on the tree to find all visited nodes.
+    compute(start, end = undefined) {
       const queue = [start];
       const visited = { [start]: true };
       const predecessors = { [start]: null };
 
+      const buildResult = (shortestPath = undefined) => ({
+        shortestPath,
+        visited: Object.keys(visited)
+      });
+
       while (queue.length) {
         const v = queue.shift();
 
-        if (v === end) {
-          return this.buildPath(end, start, predecessors);
+        if (end !== undefined && v === end) {
+          return buildResult(this.buildPath(end, start, predecessors));
         }
 
         this.adjacent[v]
@@ -48,10 +55,10 @@ export default () => {
           });
       }
 
-      return undefined;
+      return buildResult();
     },
     computeLength(start, end) {
-      const path = this.compute(start, end);
+      const path = this.compute(start, end).shortestPath;
       // We don't include the start in the length computation
       return path?.length !== undefined ? path.length - 1 : undefined;
     }

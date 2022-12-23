@@ -19,19 +19,20 @@ export default solution(({ source }) => {
     return grid;
   };
 
-  const radialMap = [
-    ([x, y, z], d) => [x - d, y, z],
-    ([x, y, z], d) => [x + d, y, z],
-    ([x, y, z], d) => [x, y - d, z],
-    ([x, y, z], d) => [x, y + d, z],
-    ([x, y, z], d) => [x, y, z - d],
-    ([x, y, z], d) => [x, y, z + d]
+  const adjacent = [
+    ([x, y, z]) => [--x, y, z],
+    ([x, y, z]) => [++x, y, z],
+    ([x, y, z]) => [x, --y, z],
+    ([x, y, z]) => [x, ++y, z],
+    ([x, y, z]) => [x, y, --z],
+    ([x, y, z]) => [x, y, ++z]
   ];
+
+  const findAdjacentCoordinates = c => adjacent.map(a => a(c));
 
   const computeSurfaceArea = (coords, grid) =>
     coords.reduce(
-      (acc, c) =>
-        acc + radialMap.map(a => a(c, 1)).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
+      (acc, c) => acc + findAdjacentCoordinates(c).filter(([x, y, z]) => !grid[x]?.[y]?.[z]).length,
       0
     );
 
@@ -55,7 +56,7 @@ export default solution(({ source }) => {
             return null;
           }
 
-          let continuedRadialMap = [...radialMap];
+          let continuedRadialMap = [...adjacent];
           let radius = 1;
 
           while (radius < maxRadius) {

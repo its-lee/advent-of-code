@@ -1,7 +1,6 @@
 import solution from '../../../runner/solution.js';
 
 import breadthFirstSearch from '../../../helpers/breadthFirstSearch.js';
-import { intersect } from '../../../helpers/logic.js';
 
 export default solution(({ source }) => {
   /*
