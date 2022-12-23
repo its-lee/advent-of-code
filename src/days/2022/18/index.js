@@ -35,7 +35,8 @@ export default solution(({ source }) => {
       xs.flatMap((ys, y) =>
         ys.map((value, z) => ({
           position: [x, y, z],
-          value
+          value,
+          name: [x, y, z].join(',')
         }))
       )
     );
@@ -51,11 +52,7 @@ export default solution(({ source }) => {
       );
 
   return [
-    () => {
-      const grid = createGrid();
-
-      return computeSurfaceArea(grid);
-    },
+    () => computeSurfaceArea(createGrid()),
     () => {
       // We're going to mutate this, so we'll keep our own copy of it.
       const grid = createGrid();
