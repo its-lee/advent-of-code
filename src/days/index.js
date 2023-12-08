@@ -10,6 +10,7 @@ import { default as index20228 } from './2022/8/index.js';
 import { default as index20229 } from './2022/9/index.js';
 import { default as index202210 } from './2022/10/index.js';
 import { default as index202211 } from './2022/11/index.js';
+import { default as index20231 } from './2023/1/index.js';
 import { default as index202212 } from './2022/12/index.js';
 import { default as index202213 } from './2022/13/index.js';
 import { default as index202124 } from './2021/24/index.js';
@@ -31,6 +32,7 @@ const days = {
   '2022/9': index20229,
   '2022/10': index202210,
   '2022/11': index202211,
+  '2023/1': index20231,
   '2022/12': index202212,
   '2022/13': index202213,
   '2021/24': index202124,
