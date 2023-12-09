@@ -29,8 +29,6 @@ export default solution(({ source }) => {
         return g.draws.every(d => colours.every(colour => d[colour] <= test[colour]));
       })
       .reduce((acc, g) => acc + g.game, 0);
-
-    console.log(games);
   };
 
   return [() => sumIdsOfValidGames()];
