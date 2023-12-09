@@ -1,8 +1,0 @@
-{
-  "transform": {
-    "^.+\\.js$": "babel-jest"
-  },
-  "testMatch": [
-    "**/*.test.js"
-  ]
-}
