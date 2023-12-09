@@ -22,14 +22,22 @@ export default solution(({ source }) => {
   const test = { red: 12, green: 13, blue: 14 };
 
   const sumIdsOfValidGames = () => {
-    const games = parseGames();
-
-    return games
+    return parseGames()
       .filter(g => {
         return g.draws.every(d => colours.every(colour => d[colour] <= test[colour]));
       })
       .reduce((acc, g) => acc + g.game, 0);
   };
 
-  return [() => sumIdsOfValidGames()];
+  const sumPowerOfMinimumCubesOfGames = () => {
+    return parseGames()
+      .map(g =>
+        colours.reduce((acc, c) => {
+          return acc * Math.max(...g.draws.map(d => d[c]));
+        }, 1)
+      )
+      .reduce((acc, power) => acc + power, 0);
+  };
+
+  return [() => sumIdsOfValidGames(), () => sumPowerOfMinimumCubesOfGames()];
 });
