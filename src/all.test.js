@@ -1,8 +1,9 @@
+import { test, expect } from 'vitest';
+
 import { readAnswers } from './runner/answers.js';
 import { getFilteredDays } from './runner/helpers.js';
 
 const sources = ['demo', 'input'];
-jest.setTimeout(5 * 60 * 1000);
 
 const ignoredIds = [
   // These are currently failing with type errors :(
